@@ -16,6 +16,8 @@ Well, at the bottom of this README file is the [Creative Commons 4.0 Attribution
 
 If you're a student or teacher I highly recommend that you make your own notes.
 
+If you want to read any of these files, they are in Markdown format. Use a Markdown editor like [MarkdownPad](http://markdownpad.com/) or insert a plugin to your favorite text editor.
+
 Original bringing for this knowledge goes to following professors at Georgia State University:
 
  - [Dr. Jeremy Brazas](http://www2.gsu.edu/~jbrazas/)
@@ -29,7 +31,7 @@ I've had a ton of teachers from all over the place that I've not mentioned here,
 
 
 
-
+dsds
 <br>
 <hr>
 
