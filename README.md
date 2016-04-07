@@ -1,3 +1,21 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**<sup>1</sup>
+
+- [Directory](#directory)
+- [Why is this here?](#why-is-this-here)
+- [What do you plan on doing with it?](#what-do-you-plan-on-doing-with-it)
+- [Will it be updated regularly?](#will-it-be-updated-regularly)
+- [What can I do with it?](#what-can-i-do-with-it)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Directory
+=================
+
+
+
+
 ## Why is this here?
 
 Ehh, I decided to take all my crap notes I've gained through all my years of schooling and put it all for the world to see. It is also a museum for my terrible handwriting.
@@ -27,11 +45,8 @@ Original bringing for this knowledge goes to following professors at Georgia Sta
 
 I've had a ton of teachers from all over the place that I've not mentioned here, but thank you for all you did to make me stand where I am today.
 
+> 1  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-
-
-
-dsds
 <br>
 <hr>
 
