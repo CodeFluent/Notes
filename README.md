@@ -45,7 +45,7 @@ Original bringing for this knowledge goes to following professors at Georgia Sta
 
 I've had a ton of teachers from all over the place that I've not mentioned here, but thank you for all you did to make me stand where I am today.
 
-> 1  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+> 1.  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 <br>
 <hr>
