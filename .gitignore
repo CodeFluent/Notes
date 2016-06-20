@@ -1,3 +1,8 @@
 
-# Exceptions
-Philosophy/
+# Ignore everything
+*
+
+# Except
+!CS-2010/
+!CS-2310/
+!CS-3210/
