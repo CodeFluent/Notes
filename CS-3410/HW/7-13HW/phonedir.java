@@ -17,7 +17,7 @@
  */
 
 // TODO: Solution desc.
-
+// TODO: Looks at Recursion and identifiers for next quiz.
 /*
   Example Commands:
 
@@ -31,3 +31,20 @@
       s - Select a record from the record list to become the current record
 
  */
+
+Phone dir class
+|           |
+|           |
+Entry       Dir
+Firstname   add
+Lastname    delete
+Node next   search
+
+
+- Create LinkedList
+- Person current = null
+
+while(!quit)
+show all the options
+
+switch - case with all add del functions as case char functions
