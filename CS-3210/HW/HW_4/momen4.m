@@ -6,25 +6,38 @@
 
 !Variables and Macros
 
+// define(x_r, g1)
 
 
 .section ".data"
 
+!for scanf for scanMessage
+format: .asciz "%d\n"
+nl: .asciz "\n"
+input: .word 0
+
+!to print numbers
+output: .asciz " "
+
+!for scanf for askQuestion
+format2: .asciz "%s"
+
+
+
 helloMessage: .asciz "This program prints the Fibonacci sequence.\n"
 scanMessage: .asciz "Enter a limit on the largest number to be displayed: "
-
-format: .asciz "%d%c"
-nl: .byte 0
-input: .word 0
 
 divMessage: .asciz "The last number %d is divisible by %d.\n"
 
 askQuestion: .asciz "Do you want to print a different sequence (Y/N)?: "
-format2: "%s"
 
 goodbye: .asciz "Goodbye."
 
-test: "Number is %d"
+
+!testing printf
+test: .asciz "Number is %d"
+
+
 
 
 .align 4
@@ -33,6 +46,8 @@ test: "Number is %d"
 
 main:
   save %sp, -96, %sp
+
+  mov 0, x_r                    !intialize x_r as 0
 
   set helloMessage, %o0         !print hello message
   call printf
@@ -48,10 +63,58 @@ main:
   call scanf
   nop
 
+  !works until here
+
+  /*set input, %l0
   set test, %o0
   call printf
-  ld [%o1], %o1
+  ld [%l0] , %o1
+  nop*/
 
+  !assume input is in %l0
+
+loop:
+  cmp x_r, %l0
+  bg,a end
+  nop
+
+  mov %l0, x_r                  !move our max to to x_r
+
+if:
+  cmp %x_r, 1                   !compare input to 1 as base case
+  bg then                       !branch if greater than 1
+  nop
+
+  !print out the base case
+  mov %x_r, %o1
+  set output, %o0
+  call printf
+  nop
+
+
+then:
+  sub %x_r, 1, %o0               !fib(n-1)
+  call if
+  nop
+
+  mov %o0, %l3                   !save for fib(n-1) + fib(n-2)
+
+  sub %x_r, 2, %o0               !fib(n-2)
+  call if
+  nop
+
+  add %o0, %l3, %x_r             !fib(n-1) + fib(n-2)
+
+  !print result
+  set output, %o0
+  call printf
+  mov %x_r, %o1
+
+
+
+end:
+  !divisible function
+  !next action function
 
   ret
   restore
