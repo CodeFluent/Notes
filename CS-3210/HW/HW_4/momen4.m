@@ -6,14 +6,15 @@
 
 !Variables and Macros
 
-// define(x_r, g1)
+define(x_r, g1)
 
 
 .section ".data"
 
 !for scanf for scanMessage
 format: .asciz "%d\n"
-nl: .asciz "\n"
+
+
 input: .word 0
 
 !to print numbers
@@ -47,7 +48,7 @@ test: .asciz "Number is %d"
 main:
   save %sp, -96, %sp
 
-  mov 0, x_r                    !intialize x_r as 0
+  mov 0, %x_r                    !intialize x_r as 0
 
   set helloMessage, %o0         !print hello message
   call printf
@@ -57,22 +58,20 @@ main:
   call printf
   nop
 
-  set format, %o0               !get input
+  set format, %o0              !get input
   set input, %o1
-  set nl, %o2
   call scanf
   nop
 
   !works until here
 
-  /*set input, %l0
+  /*
+  set input, %o1
   set test, %o0
   call printf
-  ld [%l0] , %o1
-  nop*/
+  nop
 
   !assume input is in %l0
-
 loop:
   cmp x_r, %l0
   bg,a end
@@ -115,6 +114,6 @@ then:
 end:
   !divisible function
   !next action function
-
+*/
   ret
   restore

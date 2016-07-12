@@ -32,19 +32,19 @@
 
  */
 
-Phone dir class
-|           |
-|           |
-Entry       Dir
-Firstname   add
-Lastname    delete
-Node next   search
-
-
-- Create LinkedList
-- Person current = null
-
-while(!quit)
-show all the options
-
-switch - case with all add del functions as case char functions
+// Phone dir class
+// |           |
+// |           |
+// Entry       Dir
+// Firstname   addb
+// Lastname    delete
+// Node next   search
+//
+//
+// - Create LinkedList
+// - Person current = null
+//
+// while(!quit)
+// show all the options
+//
+// switch - case with all add del functions as case char functions
