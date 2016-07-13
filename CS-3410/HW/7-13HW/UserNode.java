@@ -9,15 +9,26 @@ public class UserNode {
   private String lastname = " ";
   private String phoneNumber = " ";
 
-
+/*
+ * The constructor for UserNode assumes that it is always the head of the list unless otherwise. It will automatically be set to null.
+ *
+ */
   public UserNode() {
     next = null;
   }
 
+ /**
+  * getFirstName() returns the user's name.
+  * @return {String}
+  */
   public String getFirstName() {
     return firstname;
   }
 
+ /**
+  * Takes a String name and sets it as the Firstname of the UserNode.
+  * @param name is to set the user's firstname in Usernode.
+  */
   public void setFirstName(String name) {
     name = firstname;
   }
