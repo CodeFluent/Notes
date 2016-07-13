@@ -84,7 +84,7 @@ main:
   call printf
   nop
 
-  mov 1, %prevVal                        !begin first evaluation
+  mov 1, %prevVal                         !begin first evaluation
   mov 0, %prevPrevVal
 
 loop:
@@ -92,14 +92,25 @@ loop:
   mov %prevVal, %prevPrevVal              !swap values for next run fib(n-2)
   mov %currVal, %prevVal                  !swap values for next run fib(n-1)
 
+printLoop:
+
+  cmp %currVal, %max_value                !compare to see if we print the current value
+  bg div
+  nop
+
   mov %currVal, %o1                       !print currVal
   set output, %o0
   call printf
   nop
 
-  cmp %currVal, %max_value
-  bl loop
+  ba loop                                 !branch to loop always
   nop
+
+
+
+div:
+  mov %prevPrevVal, %l1
+  
 
 
   ret
