@@ -110,7 +110,12 @@ printLoop:
 
 div:
   mov %prevPrevVal, %l1
-  
+  !divisible by 16 if last 4 bits are 0.
+  !divisible by 8 if last 3 bits are 0.
+  !divisible by 4 if last 2 bits are 0.
+  !divisible by 2 if last bit is 0.
+
+  !use a shift operator? go to 1 and read back the bit position? 2^highest bit position will be the answer?
 
 
   ret
