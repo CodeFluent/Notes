@@ -13,7 +13,7 @@ public static void main(String[] args) {
          prevVal = currVal;
          System.out.print(currVal+" ");
          n++;
-     }while(n<5);//n is the number of terms
+     }while(n<10);//n is the number of terms
 
 
 }
