@@ -4,10 +4,10 @@
 
 public class UserNode {
 
-  private UserNode next;
-  private String firstname = " ";
-  private String lastname = " ";
-  private String phoneNumber = " ";
+  public static  UserNode next;
+  public static  String firstname;
+  public static  String lastname;
+  public static  String phoneNumber;
 
 /*
  * The constructor for UserNode assumes that it is always the head of the list unless otherwise. It will automatically be set to null.
@@ -15,6 +15,7 @@ public class UserNode {
  */
   public UserNode() {
     next = null;
+
   }
 
  /**
@@ -30,7 +31,7 @@ public class UserNode {
   * @param name is to set the user's firstname in Usernode.
   */
   public void setFirstName(String name) {
-    name = firstname;
+    firstname = name;
   }
 
   public String getLastName() {
@@ -38,7 +39,7 @@ public class UserNode {
   }
 
   public void setLastName(String lname) {
-    lname = lastname;
+    lastname = lname;
   }
 
   public String getPhoneNumber() {
@@ -46,15 +47,19 @@ public class UserNode {
   }
 
   public void setPhoneNumber(String phone) {
-    phone = phoneNumber;
+    phoneNumber = phone;
   }
 
   public UserNode getNext() {
     return next;
   }
 
-  public UserNode setNext(UserNode nextNode) {
-    nextNode = next;
+  public void setNext(UserNode nextNode) {
+    next = nextNode;
+  }
+
+  public String toString () {
+      return firstname + " " + lastname + " " + phoneNumber;
   }
 
 
