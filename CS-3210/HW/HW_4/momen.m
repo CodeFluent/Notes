@@ -6,7 +6,7 @@
 
 !Variables and Macros
 
-define(x_r, g1)
+
 define(max_value, g2)
 define(prevVal, g3)
 define(prevPrevVal,g4)
@@ -30,15 +30,21 @@ scanMessage: .asciz "Enter the limit on the largest number to be displayed: "
 
 
 
-divMessage: .asciz "The last number %d is divisible by %d.\n"
+divMessage: .asciz "\nThe last number %d is divisible by %d.\n"
 
 askQuestion: .asciz "Do you want to print a different sequence (Y/N)?: "
+
+yesnoin: .byte 0
+format2: .asciz "%c\n"
+nl2: .asciz "\n"
 
 goodbye: .asciz "Goodbye."
 
 
 !testing printf
 test: .asciz "Number is %d"
+
+testchar: .asciz "HEKLSAFASFSA is %c"
 
 
 
@@ -50,11 +56,21 @@ test: .asciz "Number is %d"
 main:
   save %sp, -96, %sp
 
-  mov 0, %x_r                   !intialize x_r as 0
 
   set helloMessage, %o0         !print hello message
   call printf
   nop
+
+heyo:
+  iflush %o0
+  iflush %o1
+  iflush %o2
+
+  clr %o0
+  clr %o1
+  clr %o2
+
+
 
   set scanMessage, %o0          !print scan message
   call printf
@@ -95,7 +111,7 @@ loop:
 printLoop:
 
   cmp %currVal, %max_value                !compare to see if we print the current value
-  bg div
+  bg setting
   nop
 
   mov %currVal, %o1                       !print currVal
@@ -107,16 +123,61 @@ printLoop:
   nop
 
 
-
+setting:
+  set 1, %i2
 div:
   mov %prevPrevVal, %l1
-  !divisible by 16 if last 4 bits are 0.
-  !divisible by 8 if last 3 bits are 0.
-  !divisible by 4 if last 2 bits are 0.
-  !divisible by 2 if last bit is 0.
+  andcc %prevPrevVal, %i2, %g0
+  bne end
+  nop
+  ba div
+  add %i2, %i2, %i2                       !increment the mask
 
-  !use a shift operator? go to 1 and read back the bit position? 2^highest bit position will be the answer?
+end:
+  set divMessage, %o0
+  mov %i2, %o2
+  call printf
+  mov %prevPrevVal, %o1
 
 
-  ret
-  restore
+here:
+ set askQuestion, %o0
+ call printf
+ nop
+
+ set format2, %o0
+ set yesnoin, %o1
+ set nl2, %o2
+ call scanf
+ nop
+
+
+ cmp %o1, 'y'
+ bne heyo        !works with bne, but then goes to heyo and prints the sequence and the last divisible again. need to flush the values from o1 and o2.
+ nop
+
+
+ set goodbye, %o0
+ call printf
+ nop
+
+ !example input/output
+
+/*
+This program prints the Fibonacci sequence.
+Enter the limit on the largest number to be displayed: 50
+1 1 2 3 5 8 13 21 34
+The last number 34 is divisible by 2.
+Do you want to print a different sequence (Y/N)?: y
+Enter the limit on the largest number to be displayed: 1 1 2 3 5 8 13 21 34
+The last number 34 is divisible by 2.
+Do you want to print a different sequence (Y/N)?: 144
+Enter the limit on the largest number to be displayed: 1 1 2 3 5 8 13 21 34 55 89 144
+The last number 144 is divisible by 16.
+Do you want to print a different sequence (Y/N)?:
+*/
+
+
+
+ret
+restore
