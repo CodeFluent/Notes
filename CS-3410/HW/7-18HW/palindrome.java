@@ -1,4 +1,7 @@
 import java.util.Scanner;
+import java.util.Stack;
+import java.util.Queue;
+import java.util.LinkedList;
 import java.io.File;
 import java.io.FileNotFoundException;
 
@@ -23,19 +26,63 @@ import java.io.FileNotFoundException;
 public class palindrome {
 
     public static void inputIO () {
+
+        System.out.println();
+
         // Provide keyboard input to give file name
         Scanner keyboard = new Scanner(System.in);
         System.out.println("Please provide the path of the file: ");
         String userFile = keyboard.nextLine();
+
+        boolean isPal = true;
+        String input = " ";
+        String process = " ";
 
         try {
             // Create new File object to take in file.
             // Make new Scanner to take in file for processing.
             File file = new File(userFile);
             Scanner inputFile = new Scanner(file);
-            String 
+
 
             while (inputFile.hasNext()) {
+
+                // Store input word into a String
+                input = inputFile.next();
+                input = input.replaceAll("[^a-zA-z]", "");
+
+                process = input.toLowerCase();
+
+                // Declare data structures.
+                // We do this inside the while loop to intialize a new, clean data structure each time.
+                Stack <Character> stack = new Stack <Character> ();
+                Queue <Character> queue = new LinkedList <Character>();
+
+                Character analyze = new Character ('a');
+                for(int i = 0; i < process.length(); i++) {
+                    analyze = process.charAt(i);
+                    // analyze = input.replaceAll("[^a-zA-z]", "").toLowerCase().charAt(i);
+                    queue.add(analyze);
+                    stack.push(analyze);
+                }
+                // stack and queue now have all the characters in the input String.
+
+
+                while(!queue.isEmpty()) {
+                    // if the queue and stack characters don't match, the word is not a palindrome.
+                    if(!queue.remove().equals(stack.pop())) {
+                        isPal = false;
+                    }
+                }
+
+                // check isPal
+                if (isPal) {
+                    System.out.println();
+                    System.out.println(input + " is a palindrome.");
+                } else {
+                    System.out.println();
+                    System.out.println(input + " is not a palindrome.");
+                }
 
             }
 
@@ -49,6 +96,6 @@ public class palindrome {
 
 
     public static void main (String [] args) {
-
+        inputIO();
     }
 }
