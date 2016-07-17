@@ -25,6 +25,14 @@ import java.io.FileNotFoundException;
 
 public class palindrome {
 
+    // inputIO() handles most of the program input and output as well as processing the input through regex expressions.
+    // It asks and takes user input, then uses String.replaceAll to clean it before passing it off to the Queue and the Stack.
+    // In the queue and the stack, the characters of the String are inserted and then forced out for comparison. The value of isPal changes if the comparison shows that the characters from the front of the queue and the top of the stack differ.
+    // isPal is checked to see if it is true or not at the end and outputs a message saying whether or not the input was a palindrome.
+    //
+    // @pre File is a valid file with words inside.
+    // @post Processes the file and determines whether the words are palindromes or not.
+
     public static void inputIO () {
 
         System.out.println();
