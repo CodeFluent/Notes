@@ -151,9 +151,9 @@ here:
  call scanf
  nop
 
-
+!works with bne, but then goes to heyo and prints the sequence and the last divisible again. need to flush the values from o1 and o2.
  cmp %o1, 'y'
- bne heyo        !works with bne, but then goes to heyo and prints the sequence and the last divisible again. need to flush the values from o1 and o2.
+ bne heyo
  nop
 
 
