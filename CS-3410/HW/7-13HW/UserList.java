@@ -9,8 +9,7 @@ public class UserList {
   private int length;
 
 public UserList () {
-	head = null;
-	length = 0;
+
   }
 
 /**
