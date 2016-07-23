@@ -35,8 +35,8 @@ divMessage: .asciz "\nThe last number %d is divisible by %d.\n"
 askQuestion: .asciz "Do you want to print a different sequence (Y/N)?: "
 
 yesnoin: .byte 0
-format2: .asciz "%c\n"
-nl2: .asciz "\n"
+format2:  "%c"
+nl2: .byte 0
 
 goodbye: .asciz "Goodbye."
 
