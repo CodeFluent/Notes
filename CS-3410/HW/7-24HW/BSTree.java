@@ -1,5 +1,6 @@
 import java.util.Random;
 import java.util.ArrayList;
+
 /**
  *     @author Wasfi Momen wmomen1@student.gsu.edu
 
@@ -27,24 +28,26 @@ public class BSTree {
         int randomint = 0;
 
         // initialize array
-        int [] array = new int [100];
+        int [] array = new int [5];
 
 
         // Fill ArrayList with 100 values.
         System.out.print("New values in ArrayList:\n [");
-        for(int i = 0; i <= 1; i++) {
+        for(int i = 0; i <= 4; i++) {
             randomint = rand.nextInt( max - min + 1) + min;
             array[i] = randomint;
             System.out.print(" " + randomint);
         }
         System.out.print(" ]");
 
-        
+
         for(int i = 0; i < array.length - 1; i++) {
             int k = array[i];
-            // System.out.println(k);
-            btree.addNode(k);
+            btree.insert(k);
         }
+
+        // btree.inOrder(btree.root);
+
 
     }
 }
