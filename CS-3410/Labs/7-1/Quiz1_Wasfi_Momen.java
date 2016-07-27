@@ -33,7 +33,7 @@ public class Quiz1_Wasfi_Momen {
                 temp = a1.get(last_one);
                 a1.set(last_one, a1.get(i));
                 a1.set(i, temp);
-            }k
+            }
         }
 
         // Print the ArrayList.

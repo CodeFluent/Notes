@@ -1,16 +1,20 @@
-.section ".data"
-  enterStr: .asciz "\nPlease enter in a string of a maximum of 30 letters: "
-  enterChar: .asciz "\nPlease enter a letter: "
 
-  upCaseStr: .asciz "\nThe string in uppercase is: %s "
-  lengthStr: .asciz  "\nThe length of the string is %d character\n"
-  appear: .asciz "\nThe letter %c appears %d times"
-  revisedStr: .asciz "\nThe revised string is: %s "
 
-  newStr: .asciz "\nWould you like to enter another string? (y/n)? "
-  lowerN: .asciz "\nGoodbye.\n"
-  upperN: .asciz "\nGoodbye.\n"
-yeah
+
+
+  .section ".data"
+
+  stringMessage: .asciz "Please enter in a string of a maximum of 30 letters: "
+  letterMessage: .asciz "Please enter a letter: "
+
+  upCaseStr: .asciz "The string in uppercase is: %s "
+  lengthMessage: .asciz  "The length of the string is %d character"
+  lettersIn: .asciz "The letter %c appears %d times in the string."
+  revisedMessage: .asciz "The revised string is: %s "
+
+  sequenceMessage: .asciz "Would you like to enter another string? (y/n)? "
+  goodbyeMessage: .asciz "Goodbye."
+
   format: .asciz "%s "
   format2: .asciz "%s "
   format3: .asciz "%c "
@@ -59,7 +63,7 @@ main:
    save  %sp, -96, %sp
 
 loadStr:
-        set     enterStr, %o0
+        set     stringMessage, %o0
         call    printf
         nop
         set     format, %o0
@@ -70,7 +74,7 @@ loadStr:
         call    findLength
         nop
         mov     %o0, %o1
-        set     lengthStr, %o0
+        set     lengthMessage, %o0
         call    printf
         nop
           !!!!!!!!!!!!!!!!!!!!!!!!
