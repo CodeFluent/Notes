@@ -1,5 +1,4 @@
 import java.util.Random;
-import java.util.ArrayList;
 
 /**
  *     @author Wasfi Momen wmomen1@student.gsu.edu
@@ -13,12 +12,13 @@ import java.util.ArrayList;
      Program Use: Program will generate Random numbers and print them to the screen. Then, the tree will be printed to the screen.
  */
 
-public class BSTree {
 
+
+public class whatev {
 
 
     public static void main(String [] args) {
-        TreeNode root = null;
+        Node root = null;
         Tree btree = new Tree();
 
         // set up random integers from 1 to 99.
@@ -28,12 +28,12 @@ public class BSTree {
         int randomint = 0;
 
         // initialize array
-        int [] array = new int [5];
+        int [] array = new int [101];
 
 
-        // Fill ArrayList with 100 values.
-        System.out.print("New values in ArrayList:\n [");
-        for(int i = 0; i <= 4; i++) {
+        // Fill array with 100 values.
+        System.out.print("New values in the array:\n [");
+        for(int i = 0; i <= 100; i++) {
             randomint = rand.nextInt( max - min + 1) + min;
             array[i] = randomint;
             System.out.print(" " + randomint);
@@ -41,12 +41,18 @@ public class BSTree {
         System.out.print(" ]");
 
 
+
         for(int i = 0; i < array.length - 1; i++) {
             root = btree.insert(root, array[i]);
         }
-
-        //  btree.inOrder(root);
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println("Values displayed in inOrder transverse: \n");
+        btree.inOrder(root);
+        System.out.println();
 
 
     }
+
 }

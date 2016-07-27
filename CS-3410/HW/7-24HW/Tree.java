@@ -1,13 +1,12 @@
 public class Tree {
 
-    static TreeNode root;
 
-    public Tree () {
-        root = null;
-    }
-
-
-    public static void insert(int here) {
+    /**
+     * insert() takes an integer parameter and places a new TreeNode accordingly based on if the data of the node is greater than, less than or equal to
+     * @param here integer parameter that will be put into a new TreeNode and placed into the tree.
+     * @post will place a new TreeNode with the integer parameter into the correct position in the Tree.
+     */
+    public TreeNode insert(TreeNode root, int here) {
 
         // TreeNode newNode = new TreeNode(here);
         //
@@ -51,30 +50,38 @@ public class Tree {
         //     }
 
         if(root == null) {
-            root = new TreeNode(here);
-            System.out.println("Root");
-            return;
+            root = new TreeNode();
+            root.value = here;
         }
-        if(root.value < here) {
-            root.rightChild = new TreeNode(here);
-            System.out.println("Right");
-            return;
+        // here is greater than or equal to root.value, new TreeNode is placed in the right subtree.
+        else if(here < root.value) {
+            root.leftChild = insert(root.leftChild, here);
         } else {
-            root.leftChild = new TreeNode(here);
-            System.out.println("Left");
-            return;
+            root.rightChild = insert(root.rightChild, here);
         }
+
+        //  else if(root.value <= here) {
+        //     root.rightChild = insert(root.rightChild, here);
+        // } else {
+        //     // here is less than root.value, new TreeNode is placed in the left subtree.
+        //     root.leftChild = insert(root.leftChild, here);
+        // }
+
+        return root;
 
     }
 
-    
 
-    public static void inOrder (TreeNode focus) {
+    // LPR
+    public void inOrder (TreeNode focus) {
 
-        if(focus != null) {
-            inOrder(focus.leftChild);
-            System.out.println(focus);
-            inOrder(focus.rightChild);
+        if(focus == null) {
+            return;
+
         }
+
+        inOrder(focus.leftChild);
+        System.out.println(focus);
+        inOrder(focus.rightChild);
     }
 }
