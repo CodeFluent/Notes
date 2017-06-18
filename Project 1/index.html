@@ -9,58 +9,15 @@
       // Set a callback to run when the Google Visualization API is loaded.
       google.charts.setOnLoadCallback(drawSheetName);
 
-    //   // Callback that creates and populates a data table,
-    //   // instantiates a dashboard, a range slider and a pie chart,
-    //   // passes in the data and draws it.
-    //   function drawDashboard() {
-      //
-    //     // Create our data table.
-    //     var data = google.visualization.arrayToDataTable([
-    //       ['Name', 'Donuts eaten'],
-    //       ['Michael' , 5],
-    //       ['Elisa', 7],
-    //       ['Robert', 3],
-    //       ['John', 2],
-    //       ['Jessica', 6],
-    //       ['Aaron', 1],
-    //       ['Margareth', 8]
-    //     ]);
-      //
-
-
-
-        // // Create a pie chart, passing some options
-        // var pieChart = new google.visualization.ChartWrapper({
-        //   'chartType': 'PieChart',
-        //   'containerId': 'chart_div',
-        //   'options': {
-        //     'width': 300,
-        //     'height': 300,
-        //     'pieSliceText': 'value',
-        //     'legend': 'right'
-        //   }
-        // });
-      //
-    //     // Establish dependencies, declaring that 'filter' drives 'pieChart',
-    //     // so that the pie chart will only display entries that are let through
-    //     // given the chosen slider range.
-    //     dashboard.bind(donutRangeSlider, pieChart);
-      //
-    //     // Draw the dashboard.
-    //     dashboard.draw(data);
-    //   }
-      //
       function drawSheetName() {
           var queryString = encodeURIComponent('SELECT A, F');
 
           var query = new google.visualization.Query('https://docs.google.com/spreadsheets/d/1XAwhoVufdOgI3dC6Jiq0gFhZ4PN90Am1iYzDtSUQS-s/edit?usp=sharing&tq=' + queryString);
 
-        //   var query = new google.visualization.Query('https://docs.google.com/spreadsheets/d/1XWJLkAwch5GXAt_7zOFDcg8Wm8Xv29_8PWuuW15qmAE/gviz/tq?sheet=Sheet1&headers=1&tq=' + queryString);
-
-          query.send(handleSampleDataQueryResponse);
+          query.send(handlePieChartData);
       }
 
-      function handleSampleDataQueryResponse(response) {
+      function handlePieChartData(response) {
           if(response.isError()) {
               alert('Error in query' + response.getMessage() + ' ' + response.getDetailedMessage());
               return;
@@ -114,32 +71,39 @@
             //   Log for confirmation.
         //    console.log(pieChartData);
 
-            var pieChartOptions = {'title' : 'Percentage of Toilets per State in Austrailia',
-                                   'width' : 600,
-                                   'height': 800
-                               };
+            // Create a pie chart, passing some options
+            var pieChart = new google.visualization.ChartWrapper({
+              'chartType': 'PieChart',
+              'containerId': 'pie_chart_div',
+              'options': {
+                'title' : 'Number of Toilets per State',
+                'width': 600,
+                'height': 800,
+                'pieSliceText': 'value',
+                'legend': 'right'
+              }
+            });
 
-            var pieChart = new google.visualization.PieChart(document.getElementById('pie_chart_div'));
-            pieChart.draw(pieChartData, pieChartOptions);
+        // Create a dashboard.
+        var dashboard = new google.visualization.Dashboard(
+            document.getElementById('dashboard_div'));
 
-        //    // Create a range slider, passing some options
-        //    var donutRangeSlider = new google.visualization.ControlWrapper({
-        //      'controlType': 'NumberRangeFilter',
-        //      'containerId': 'filter_div',
-        //      'options': {
-        //        'filterColumnLabel': 'Donuts eaten'
-        //      }
-        //    });
+        // Create a range slider, passing some options
+        var donutRangeSlider = new google.visualization.ControlWrapper({
+          'controlType': 'NumberRangeFilter',
+          'containerId': 'filter_div',
+          'options': {
+            'filterColumnLabel': 'Number of Toilets'
+          }
+        });
 
-        //    // Create a dashboard.
-        //    var dashboard = new google.visualization.Dashboard(
-        //        document.getElementById('dashboard_div'));
+        // Establish dependencies, declaring that 'filter' drives 'pieChart',
+        // so that the pie chart will only display entries that are let through
+        // given the chosen slider range.
+        dashboard.bind(donutRangeSlider, pieChart);
 
-        //    var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-        //    chart.draw(data, { height: 400 });
-        //
-            //  dashboard.bind(donutRangeSlider, pieChart);
-            //  dashboard.draw(data);
+        // Draw the dashboard.
+        dashboard.draw(pieChartData);
       }
 
     </script>
@@ -147,6 +111,10 @@
 
   <body>
     <!--Div that will hold the dashboard-->
-    <div id="pie_chart_div"></div>
+    <div id="dashboard_div">
+        <div id="filter_div"></div>
+        <div id="pie_chart_div"></div>
+    </div>
+
   </body>
 </html>
