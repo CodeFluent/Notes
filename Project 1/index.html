@@ -67,11 +67,10 @@
           }
            var data = response.getDataTable();
            console.log(data);
-           console.log(data.getValue(1,1));
 
            // get the states from the response and put into an array.
            var states = data.getDistinctValues(1);
-        //    console.log(states);
+        //    console.log(states); // see the states array
 
            // get the occurences of states from the response and put into an array.
            var occurencesOfState = [];
@@ -79,22 +78,49 @@
            var numberOfOccurrences = 0;
            var state;
 
+           // for each of the states in the states array,
            for (var i=0; i < states.length; i++) {
                 state = states[i];
                for(var j=0; j < totalRows; j++) {
+                   // get the value of the row within the column,
+                   // see if that value is equal to the value in the states array,
+                   // and increment the numberOfOccurrences.
                    if(data.getValue(j,1) === state) {
                        numberOfOccurrences++;
-                       console.log(state);
                    }
+                   // numberOfOccurrences is now set to another array
+                   // in the same index of the state in the states array
                    occurencesOfState[i] = numberOfOccurrences;
                }
            }
-           console.log(occurencesOfState);
+            // Log for confirmation.
+            // console.log(states);
+            // console.log(occurencesOfState);
+
+            var string_states = [];
+            for(var y=0; y < states.length;y++){
+                string_states[y] = states[y].toString();
+            }
+
            // create the datatable for the piechart
-        //    var pieChartTable = new google.visualization.DataTable();
-        //    data.addColumn('string', 'State');
-        //    data.addColumn('number', 'Number of Toilets');
-           // https://stackoverflow.com/questions/28165195/how-to-dynamically-add-row-to-google-chart-with-for-loop
+           var pieChartData = new google.visualization.DataTable();
+           pieChartData.addColumn('string', 'State');
+           pieChartData.addColumn('number', 'Number of Toilets');
+
+           for(var x=0;x < states.length; x++) {
+               pieChartData.addRow([string_states[x], occurencesOfState[x]]);
+           }
+
+            //   Log for confirmation.
+        //    console.log(pieChartData);
+
+            var pieChartOptions = {'title' : 'Percentage of Toilets per State in Austrailia',
+                                   'width' : 600,
+                                   'height': 800
+                               };
+
+            var pieChart = new google.visualization.PieChart(document.getElementById('pie_chart_div'));
+            pieChart.draw(pieChartData, pieChartOptions);
 
         //    // Create a range slider, passing some options
         //    var donutRangeSlider = new google.visualization.ControlWrapper({
@@ -121,10 +147,6 @@
 
   <body>
     <!--Div that will hold the dashboard-->
-    <div id="dashboard_div">
-      <!--Divs that will hold each control and chart-->
-      <div id="filter_div"></div>
-      <div id="chart_div"></div>
-    </div>
+    <div id="pie_chart_div"></div>
   </body>
 </html>
