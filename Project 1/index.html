@@ -10,11 +10,17 @@
       google.charts.setOnLoadCallback(drawSheetName);
 
       function drawSheetName() {
-          var queryString = encodeURIComponent('SELECT A, F');
+          var pieChart_queryString = encodeURIComponent('SELECT A, F'); // per state how many number of toilets
+          var pieChart_query = new google.visualization.Query('https://docs.google.com/spreadsheets/d/1XAwhoVufdOgI3dC6Jiq0gFhZ4PN90Am1iYzDtSUQS-s/edit?usp=sharing&tq=' + pieChart_queryString);
+          pieChart_query.send(handlePieChartData);
 
-          var query = new google.visualization.Query('https://docs.google.com/spreadsheets/d/1XAwhoVufdOgI3dC6Jiq0gFhZ4PN90Am1iYzDtSUQS-s/edit?usp=sharing&tq=' + queryString);
+          var scatterPlot_queryString = encodeURIComponent('SELECT G, M'); // x=postcode , y=facilityType
+          var scatterPlot_query = new google.visualization.Query('https://docs.google.com/spreadsheets/d/1XAwhoVufdOgI3dC6Jiq0gFhZ4PN90Am1iYzDtSUQS-s/edit?usp=sharing&tq=' + scatterPlot_queryString);
+          scatterPlot_query.send(handleScatterPlotData);
 
-          query.send(handlePieChartData);
+          var columnChartData_queryString = encodeURIComponent('SELECT N'); // x=toilet type, y=how many of those type.
+          var columnChartData_query = new google.visualization.Query('https://docs.google.com/spreadsheets/d/1XAwhoVufdOgI3dC6Jiq0gFhZ4PN90Am1iYzDtSUQS-s/edit?usp=sharing&tq=' + columnChartData_queryString);
+          columnChartData_query.send(handleColumnChartData);
       }
 
       function handlePieChartData(response) {
@@ -23,7 +29,7 @@
               return;
           }
            var data = response.getDataTable();
-           console.log(data);
+        //    console.log(data);
 
            // get the states from the response and put into an array.
            var states = data.getDistinctValues(1);
@@ -105,6 +111,22 @@
         // Draw the dashboard.
         dashboard.draw(pieChartData);
       }
+      function handleScatterPlotData(response){
+          if(response.isError()) {
+              alert('Error in query' + response.getMessage() + ' ' + response.getDetailedMessage());
+              return;
+          }
+          var data = response.getDataTable();
+          console.log(data);
+          // get distinct postcode
+          // get 
+      }
+      function handleColumnChartData(response){
+          // getDistinctValues of toliettype
+          // get the occurences of each
+      }
+
+
 
     </script>
   </head>
