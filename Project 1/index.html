@@ -1,51 +1,130 @@
-<!-- Wasfi Momen
-06/18/17
-
-This is a visualization of the National Public Toilet Map of Australia (https://data.gov.au/dataset/national-public-toilet-map). It uses Google Charts with a control for data manipulation. -->
-
 <html>
   <head>
-    <!--Load the AJAX API-->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
 
-      // Load the Visualization API and the corechart package.
-      google.charts.load('current', {'packages':['corechart']});
+      // Load the Visualization API and the controls package.
+      google.charts.load('current', {'packages':['corechart', 'controls']});
 
       // Set a callback to run when the Google Visualization API is loaded.
-      google.charts.setOnLoadCallback(drawChart);
+      google.charts.setOnLoadCallback(drawSheetName);
 
-      // Callback that creates and populates a data table,
-      // instantiates the pie chart, passes in the data and
-      // draws it.
-      function drawChart() {
+    //   // Callback that creates and populates a data table,
+    //   // instantiates a dashboard, a range slider and a pie chart,
+    //   // passes in the data and draws it.
+    //   function drawDashboard() {
+      //
+    //     // Create our data table.
+    //     var data = google.visualization.arrayToDataTable([
+    //       ['Name', 'Donuts eaten'],
+    //       ['Michael' , 5],
+    //       ['Elisa', 7],
+    //       ['Robert', 3],
+    //       ['John', 2],
+    //       ['Jessica', 6],
+    //       ['Aaron', 1],
+    //       ['Margareth', 8]
+    //     ]);
+      //
 
-        // Create the data table.
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Topping');
-        data.addColumn('number', 'Slices');
-        data.addRows([
-          ['Mushrooms', 3],
-          ['Onions', 1],
-          ['Olives', 1],
-          ['Zucchini', 1],
-          ['Pepperoni', 2]
-        ]);
 
-        // Set chart options
-        var options = {'title':'How Much Pizza I Ate Last Night',
-                       'width':400,
-                       'height':300};
 
-        // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
+        // // Create a pie chart, passing some options
+        // var pieChart = new google.visualization.ChartWrapper({
+        //   'chartType': 'PieChart',
+        //   'containerId': 'chart_div',
+        //   'options': {
+        //     'width': 300,
+        //     'height': 300,
+        //     'pieSliceText': 'value',
+        //     'legend': 'right'
+        //   }
+        // });
+      //
+    //     // Establish dependencies, declaring that 'filter' drives 'pieChart',
+    //     // so that the pie chart will only display entries that are let through
+    //     // given the chosen slider range.
+    //     dashboard.bind(donutRangeSlider, pieChart);
+      //
+    //     // Draw the dashboard.
+    //     dashboard.draw(data);
+    //   }
+      //
+      function drawSheetName() {
+          var queryString = encodeURIComponent('SELECT A, F');
+
+          var query = new google.visualization.Query('https://docs.google.com/spreadsheets/d/1XAwhoVufdOgI3dC6Jiq0gFhZ4PN90Am1iYzDtSUQS-s/edit?usp=sharing&tq=' + queryString);
+
+        //   var query = new google.visualization.Query('https://docs.google.com/spreadsheets/d/1XWJLkAwch5GXAt_7zOFDcg8Wm8Xv29_8PWuuW15qmAE/gviz/tq?sheet=Sheet1&headers=1&tq=' + queryString);
+
+          query.send(handleSampleDataQueryResponse);
       }
+
+      function handleSampleDataQueryResponse(response) {
+          if(response.isError()) {
+              alert('Error in query' + response.getMessage() + ' ' + response.getDetailedMessage());
+              return;
+          }
+           var data = response.getDataTable();
+           console.log(data);
+           console.log(data.getValue(1,1));
+
+           // get the states from the response and put into an array.
+           var states = data.getDistinctValues(1);
+        //    console.log(states);
+
+           // get the occurences of states from the response and put into an array.
+           var occurencesOfState = [];
+           var totalRows = data.getNumberOfRows();
+           var numberOfOccurrences = 0;
+           var state;
+
+           for (var i=0; i < states.length; i++) {
+                state = states[i];
+               for(var j=0; j < totalRows; j++) {
+                   if(data.getValue(j,1) === state) {
+                       numberOfOccurrences++;
+                       console.log(state);
+                   }
+                   occurencesOfState[i] = numberOfOccurrences;
+               }
+           }
+           console.log(occurencesOfState);
+           // create the datatable for the piechart
+        //    var pieChartTable = new google.visualization.DataTable();
+        //    data.addColumn('string', 'State');
+        //    data.addColumn('number', 'Number of Toilets');
+           // https://stackoverflow.com/questions/28165195/how-to-dynamically-add-row-to-google-chart-with-for-loop
+
+        //    // Create a range slider, passing some options
+        //    var donutRangeSlider = new google.visualization.ControlWrapper({
+        //      'controlType': 'NumberRangeFilter',
+        //      'containerId': 'filter_div',
+        //      'options': {
+        //        'filterColumnLabel': 'Donuts eaten'
+        //      }
+        //    });
+
+        //    // Create a dashboard.
+        //    var dashboard = new google.visualization.Dashboard(
+        //        document.getElementById('dashboard_div'));
+
+        //    var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+        //    chart.draw(data, { height: 400 });
+        //
+            //  dashboard.bind(donutRangeSlider, pieChart);
+            //  dashboard.draw(data);
+      }
+
     </script>
   </head>
 
   <body>
-
-        <div id="pie_chart_div"></div>
+    <!--Div that will hold the dashboard-->
+    <div id="dashboard_div">
+      <!--Divs that will hold each control and chart-->
+      <div id="filter_div"></div>
+      <div id="chart_div"></div>
+    </div>
   </body>
 </html>
