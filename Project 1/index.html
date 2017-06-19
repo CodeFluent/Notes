@@ -119,11 +119,62 @@
           var data = response.getDataTable();
           console.log(data);
           // get distinct postcode
-          // get 
+          // get
       }
       function handleColumnChartData(response){
-          // getDistinctValues of toliettype
-          // get the occurences of each
+          if(response.isError()) {
+              alert('Error in query' + response.getMessage() + ' ' + response.getDetailedMessage());
+              return;
+          }
+           var data = response.getDataTable();
+           console.log(data);
+
+           // getDistinctValues of toliettype
+           var toiletTypes = data.getDistinctValues(0); // nulls are empty spaces aka unknown
+
+           // get the occurences of each
+           var occurencesOfToiletTypes = [];
+           var totalRows = data.getNumberOfRows();
+           var numberOfToiletType = 0;
+           var toiletType;
+
+           for (var i=0; i< toiletTypes.length; i++){
+               toiletType = toiletTypes[i];
+               for (var j=0; j<totalRows;j++){
+                   if(data.getValue(j,0) === toiletType){
+                       numberOfToiletType++;
+                   }
+               }
+               occurencesOfToiletTypes[i] = numberOfToiletType;
+           }
+
+           // Log for confirmation.
+        //    console.log(toiletTypes);
+        //    console.log(occurencesOfToiletTypes);
+
+        var columnChartData = new google.visualization.DataTable();
+        columnChartData.addColumn('string', 'Toilet Type');
+        columnChartData.addColumn('number', 'Number of toilet type');
+
+        for(var x=0; x<toiletTypes.length;x++){
+            if (toiletTypes[x] === null) {
+                columnChartData.addRow(['unknown', occurencesOfToiletTypes[x]]);
+            } else {
+                columnChartData.addRow([toiletTypes[x], occurencesOfToiletTypes[x]]);
+            }
+        }
+
+        // Log for confirmation.
+        // console.log(columnChartData);
+
+        var options =  {
+            title : 'Toilet Types in Austrailia'
+        };
+
+        var columnChart = new google.visualization.ColumnChart(document.getElementById('column_chart_div'));
+        columnChart.draw(columnChartData, options);
+
+
       }
 
 
@@ -137,6 +188,8 @@
         <div id="filter_div"></div>
         <div id="pie_chart_div"></div>
     </div>
+    <div id="column_chart_div"></div>
+
 
   </body>
 </html>
