@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>How to use MarkerCluster with Google FusionTablesLayer</title>
+
+    <style type="text/css">
+        #map_div {
+            width: 1000px;
+            height: 600px;
+        }
+    </style>
+
+    <!-- Include Google Chart Tools API -->
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+
+    <!-- Include Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCGsb3YabK4wGR7Ryx9t7dwbtu9YeC0Pw"></script>
+
+    <!-- Include Markerclusterer library -->
+    <script type="text/javascript" src="http://grid.cs.gsu.edu/yzhu/csc4730-6730/markerclusterer_compiled.js"></script>
+
+    <script type="text/javascript" id="script">
+        google.load('visualization', '1.0');
+
+        google.setOnLoadCallback(initialize);
+
+        var infoWindow;
+        var markerCluster;
+        var myMap;
+
+        function initialize() {
+
+            myMap = new google.maps.Map(document.getElementById('map_div'), {
+                center: new google.maps.LatLng(33.754711, -84.388068),
+                zoom: 4,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+
+            // Create a new MarkerCluster object. 
+            // To understand the algorithms behind the MarkerCluster library, 
+            // visit this web site https://developers.google.com/maps/articles/toomanymarkers?hl=en
+            markerCluster = new MarkerClusterer(myMap);
+
+            infoWindow = new google.maps.InfoWindow();
+
+            // Use Google Chart Tools API to retrieve two columns from this fusion table
+            // https://www.google.com/fusiontables/DataSource?docid=1NICsBtZWfpi3kF_3OHsDe7Z9CU2biwyx_A4HRg
+            var query = new google.visualization.Query("https://www.google.com/fusiontables/gvizdata?tq=");
+            query.setQuery("SELECT wikipedia_article, location FROM 1NICsBtZWfpi3kF_3OHsDe7Z9CU2biwyx_A4HRg");
+            query.send(handleQueryResponse);
+        }
+
+        function handleQueryResponse(response) {
+            // Note that Google has a quota on how many rows can be retrieved from a Fusion Table. 
+
+            // Get a data table from the response. 
+            var dataTable = response.getDataTable();
+            var markers = [];
+
+            for (var i = 0; i < dataTable.getNumberOfRows() ; i++) {
+
+                // Retrieve every row of the data table and create a marker. 
+                var articleURL = dataTable.getValue(i, 0).toString();
+
+                // In this fusion table, each pair of latitude and longitude are stored in a string
+                // separated by a white space. So we need to separate them. 
+                var location = dataTable.getValue(i, 1).toString().split(" ");
+                var latlng = new google.maps.LatLng(location[0], location[1]);
+
+                // Create a marker
+                var marker = new google.maps.Marker({
+                    position: latlng,
+                    map: myMap,
+                    title: articleURL
+                });
+
+                google.maps.event.addListener(marker, 'click', function () {
+                    // Create a hyperlink
+                    var hyperlink = '<a href="' + this.getTitle() + '">' + this.getTitle() + '</a>';
+
+                    // Open an information window when a user clicks a marker. 
+                    infoWindow.setContent(hyperlink);
+                    infoWindow.open(this.getMap(), this);
+                });
+
+                // Save all the markers in an array for the MarkerCluster. 
+                markers.push(marker);
+            }
+
+            // Add markers to the MarkerCluster
+            markerCluster.addMarkers(markers);
+        }
+    </script>
+</head>
+<body>
+    <div id="map_div">
+    </div>
+</body>
+</html>
