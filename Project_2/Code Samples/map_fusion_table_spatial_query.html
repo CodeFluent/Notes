@@ -42,14 +42,14 @@
 
             // Get data from this Fusion Table (Northampton Housing Price)
             // https://www.google.com/fusiontables/DataSource?docid=1NICsBtZWfpi3kF_3OHsDe7Z9CU2biwyx_A4HRg#rows:id=1
-            // Make sure your Fusion Table is either "Public" or "Anyone with the link can view". 
+            // Make sure your Fusion Table is either "Public" or "Anyone with the link can view".
             var layer = new google.maps.FusionTablesLayer({
                 query: {
-                    // This shows how to use a two-column locations in Fusion Table. 
+                    // This shows how to use a two-column locations in Fusion Table.
                     // A two-column locations means the locations are specified as latitudes and longitudes.
                     // In Fusion Table, you need to set one column (usually latitude) to be the type "location",
-                    // and the other column (usually longitude) to be the type "number". 
-                    // See this web page for details: https://support.google.com/fusiontables/answer/175922?hl=en. 
+                    // and the other column (usually longitude) to be the type "number".
+                    // See this web page for details: https://support.google.com/fusiontables/answer/175922?hl=en.
                     select: locationColumn,
                     from: fusionTableID
                 }

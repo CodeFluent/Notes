@@ -37,28 +37,31 @@
         <button id="directions">Get Directions</button>
         <button id="search_radius">Get Search Radius</button>
         <select id="radius_select">
+            <option value="1">1 mile</option>
             <option value="5">5 miles</option>
+            <option value="8">8 miles</option>
             <option value="10">10 miles</option>
             <option value="20">20 miles</option>
-            <option value="30">30 miles</option>
-            <option value="50">50 miles</option>
-            <option value="100">100 miles</option>
         </select>
     </div>
     <div id="map"></div>
     <script>
+
+      var map;
+      var layer;
+
       function initMap() {
 
         // set up directionsService, directionsDisplay, and map
         var directionsService = new google.maps.DirectionsService;
         var directionsDisplay = new google.maps.DirectionsRenderer;
-        var map = new google.maps.Map(document.getElementById('map'), {
+        map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 33.7490, lng: -84.3880},
           zoom: 11
         });
 
         // get our fusion table layer
-        var layer = new google.maps.FusionTablesLayer({
+        layer = new google.maps.FusionTablesLayer({
           query: {
             select: '\'Address\'',
             from: '1FjVvT2lxm_meECyU7Mn1TaZOvvwu3rJnpZztPqvr'
@@ -99,7 +102,7 @@
 
             // remove event listener to avoid alert popping up.
             if (clickedMarkerLoc !== null) {
-                document.getElementById('directions').removeEventListener('click', sendAlert);
+                document.getElementById('directions').removeEventListener('click', sendDirectionsAlert);
             }
 
             // handle directions
@@ -116,6 +119,37 @@
 
       }
 
+      function doRadiusSearch(loc) {
+          var lat = loc[0];
+          var lng = loc[1];
+
+          var circle = new google.maps.Circle({
+            center: new google.maps.LatLng(lat, lng),
+            radius: 5000,
+            map: map,
+            fillOpacity: 0.2,
+            strokeOpacity: 0.5,
+            strokeWeight: 1
+          });
+
+          google.maps.event.addDomListener(document.getElementById('search_radius'),
+          'click', function () {
+              // Convert miles to meters
+              var meters = parseInt(document.getElementById('radius_select').value, 10) * 1609.34;
+              console.log(meters);
+              layer.setOptions({
+                  query: {
+                      select: '\'Address\'',
+                      from: '1FjVvT2lxm_meECyU7Mn1TaZOvvwu3rJnpZztPqvr',
+                      where: 'ST_INTERSECTS(Address, ' +
+                          'CIRCLE(LATLNG(33.7490, -84.3880), ' + meters + '))'
+                  }
+              });
+              circle.setRadius(meters);
+          });
+
+      }
+
       function sendDirectionsAlert() {
           alert("Please click a marker.");
       }
@@ -125,7 +159,33 @@
           if (!address || address.length === 0){
               alert("Please enter an address.");
           } else {
-              console.log("hello");
+
+              var geocoder = new google.maps.Geocoder();
+              var loc = [];
+
+              geocoder.geocode({ 'address': address }, function (results, status) {
+                  if (status === google.maps.GeocoderStatus.OK) {
+
+                      // Center the map on the returned geolocation.
+                      map.setCenter(results[0].geometry.location);
+
+                      // Place a marker on the returned geolocation.
+                      var marker = new google.maps.Marker({
+                          map: map,
+                          position: results[0].geometry.location
+                      });
+
+                      loc[0] = results[0].geometry.location.lat();
+                      loc[1] = results[0].geometry.location.lng();
+
+                  } else {
+                      alert('Geocode was not successful for the following reason: ' + status);
+                  }
+              });
+
+              if(loc) {
+                  doRadiusSearch(loc);
+              }
           }
       }
 
