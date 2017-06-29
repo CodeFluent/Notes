@@ -138,7 +138,7 @@
               var meters = parseInt(document.getElementById('radius_select').value, 10) * 1609.34;
               layer.setOptions({
                   query: {
-                      select: 'Address',
+                      select: 'Lat, Long',
                       from: '1FjVvT2lxm_meECyU7Mn1TaZOvvwu3rJnpZztPqvr',
                       where: 'ST_INTERSECTS(Address, ' +
                           'CIRCLE(LATLNG(' + lat + ', ' + lng + '), ' + meters + '))'
@@ -210,7 +210,7 @@
       }
     </script>
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGAKDIgT36hS5KvEDf3x86wuedBQKP1as&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCPVcHY7DoztJrMzg51HfwIdroNX3v3qpg&callback=initMap">
     </script>
   </body>
 </html>
