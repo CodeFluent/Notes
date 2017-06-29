@@ -35,6 +35,15 @@
     <div id="float-controls">
         <input id="start" type="text" placeholder="Enter Street Address..." />
         <button id="directions">Get Directions</button>
+        <button id="search_radius">Get Search Radius</button>
+        <select id="radius_select">
+            <option value="5">5 miles</option>
+            <option value="10">10 miles</option>
+            <option value="20">20 miles</option>
+            <option value="30">30 miles</option>
+            <option value="50">50 miles</option>
+            <option value="100">100 miles</option>
+        </select>
     </div>
     <div id="map"></div>
     <script>
@@ -61,15 +70,19 @@
         directionsDisplay.setMap(map);
 
 
-
         var clickedMarkerLat = null;
         var clickedMarkerLng = null;
         var clickedMarkerLoc = null;
 
+
+
         // send an alert if user clicks getDirections without a marker.
         if (clickedMarkerLoc === null) {
-            document.getElementById('directions').addEventListener('click', sendAlert);
+            document.getElementById('directions').addEventListener('click', sendDirectionsAlert);
         }
+
+        document.getElementById('search_radius').addEventListener('click', sendRadiusAlert);
+
 
 
         google.maps.event.addListener(layer, "click", function(evt) {
@@ -95,18 +108,32 @@
             };
 
             document.getElementById('directions').addEventListener('click', onChangeHandler);
+
+
         });
 
 
 
       }
 
-      function sendAlert() {
+      function sendDirectionsAlert() {
           alert("Please click a marker.");
       }
 
+      function sendRadiusAlert() {
+          var address = document.getElementById('start').value;
+          if (!address || address.length === 0){
+              alert("Please enter an address.");
+          } else {
+              console.log("hello");
+          }
+      }
+
+
+
+
       // calculate directions with the value of the text box and the passed marker.
-     
+
       function calculateAndDisplayRoute(clickedMarkerLoc, directionsService, directionsDisplay) {
         directionsService.route({
           origin: document.getElementById("start").value,
