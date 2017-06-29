@@ -120,8 +120,8 @@
       }
 
       function doRadiusSearch(loc) {
-          var lat = loc[0];
-          var lng = loc[1];
+          var lat = loc.lat;
+          var lng = loc.lng;
 
           var circle = new google.maps.Circle({
             center: new google.maps.LatLng(lat, lng),
@@ -136,13 +136,12 @@
           'click', function () {
               // Convert miles to meters
               var meters = parseInt(document.getElementById('radius_select').value, 10) * 1609.34;
-              console.log(meters);
               layer.setOptions({
                   query: {
-                      select: '\'Address\'',
+                      select: 'Address',
                       from: '1FjVvT2lxm_meECyU7Mn1TaZOvvwu3rJnpZztPqvr',
                       where: 'ST_INTERSECTS(Address, ' +
-                          'CIRCLE(LATLNG(33.7490, -84.3880), ' + meters + '))'
+                          'CIRCLE(LATLNG(' + lat + ', ' + lng + '), ' + meters + '))'
                   }
               });
               circle.setRadius(meters);
@@ -156,12 +155,13 @@
 
       function sendRadiusAlert() {
           var address = document.getElementById('start').value;
+          var loc = {};
+
           if (!address || address.length === 0){
               alert("Please enter an address.");
           } else {
 
               var geocoder = new google.maps.Geocoder();
-              var loc = [];
 
               geocoder.geocode({ 'address': address }, function (results, status) {
                   if (status === google.maps.GeocoderStatus.OK) {
@@ -175,17 +175,18 @@
                           position: results[0].geometry.location
                       });
 
-                      loc[0] = results[0].geometry.location.lat();
-                      loc[1] = results[0].geometry.location.lng();
+                      loc.lat = results[0].geometry.location.lat();
+                      loc.lng = results[0].geometry.location.lng();
+
+                      if(loc) {
+                          doRadiusSearch(loc);
+                      }
 
                   } else {
                       alert('Geocode was not successful for the following reason: ' + status);
                   }
               });
 
-              if(loc) {
-                  doRadiusSearch(loc);
-              }
           }
       }
 
