@@ -77,12 +77,14 @@
         var clickedMarkerLng = null;
         var clickedMarkerLoc = null;
 
-        var address = document.getElementById('start').value;
+        var address = document.getElementById('start');
 
         // send an alert if user clicks getDirections without a marker.
         if (clickedMarkerLoc === null) {
             document.getElementById('directions').addEventListener('click', sendDirectionsAlert);
         }
+
+
 
 
         // fire findRadius() to get search radius when button is clicked or change in radius selection.
@@ -103,9 +105,13 @@
             clickedMarkerLoc = '"' + clickedMarkerLat + ',' + clickedMarkerLng + '"';
             // console.log(clickedMarkerLoc);
 
-            
-            document.getElementById('directions').removeEventListener('click', sendDirectionsAlert);
 
+            document.getElementById('directions').removeEventListener('click', sendDirectionsAlert);
+            console.log(address.value);
+
+            if (address.value === "") {
+                alert("Please enter an address.");
+            }
 
 
             // handle directions
