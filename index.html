@@ -1,271 +1,102 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
+<head>
+    <title>Data Viz Project 2 Requirement 5</title>
 
-      // Load the Visualization API and the controls package.
-      google.charts.load('current', {'packages':['corechart', 'controls', 'treemap']});
+    <style type="text/css">
+        #map_div {
+            width: 1000px;
+            height: 600px;
+        }
+    </style>
 
-      // Set a callback to run when the Google Visualization API is loaded.
-      google.charts.setOnLoadCallback(drawSheetName);
+    <!-- Include Google Chart Tools API -->
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
 
-      function drawSheetName() {
-          var pieChart_queryString = encodeURIComponent('SELECT F'); // per state how many number of toilets
-          var pieChart_query = new google.visualization.Query('https://docs.google.com/spreadsheets/d/1XAwhoVufdOgI3dC6Jiq0gFhZ4PN90Am1iYzDtSUQS-s/edit?usp=sharing&tq=' + pieChart_queryString);
-          pieChart_query.send(handlePieChartData);
+    <!-- Include Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCPVcHY7DoztJrMzg51HfwIdroNX3v3qpg"></script>
 
-          var treeMap_queryString = encodeURIComponent('SELECT E, F'); // x=postcode , y=facilityType
-          var treeMap_query = new google.visualization.Query('https://docs.google.com/spreadsheets/d/1XAwhoVufdOgI3dC6Jiq0gFhZ4PN90Am1iYzDtSUQS-s/edit?usp=sharing&tq=' + treeMap_queryString);
-          treeMap_query.send(handletreeMapData);
+    <!-- Include Markerclusterer library -->
+    <script type="text/javascript" src="http://grid.cs.gsu.edu/yzhu/csc4730-6730/markerclusterer_compiled.js"></script>
 
-          var columnChartData_queryString = encodeURIComponent('SELECT N'); // x=toilet type, y=how many of those type.
-          var columnChartData_query = new google.visualization.Query('https://docs.google.com/spreadsheets/d/1XAwhoVufdOgI3dC6Jiq0gFhZ4PN90Am1iYzDtSUQS-s/edit?usp=sharing&tq=' + columnChartData_queryString);
-          columnChartData_query.send(handleColumnChartData);
-      }
+    <script type="text/javascript" id="script">
+        google.load('visualization', '1.0');
 
-      function handlePieChartData(response) {
-          if(response.isError()) {
-              alert('Error in query' + response.getMessage() + ' ' + response.getDetailedMessage());
-              return;
-          }
-           var data = response.getDataTable();
-        //    console.log(data);
+        google.setOnLoadCallback(initialize);
 
-           // get the states from the response and put into an array.
-           var states = data.getDistinctValues(0);
-        //    console.log(states); // see the states array
+        var infoWindow;
+        var markerCluster;
+        var myMap;
 
-           // get the occurences of states from the response and put into an array.
-           var occurencesOfState = [];
-           var totalRows = data.getNumberOfRows();
-           var numberOfOccurrences = 0;
-           var state;
+        function initialize() {
 
-           // for each of the states in the states array,
-           for (var i=0; i < states.length; i++) {
-                state = states[i];
-               for(var j=0; j < totalRows; j++) {
-                   // get the value of the row within the column,
-                   // see if that value is equal to the value in the states array,
-                   // and increment the numberOfOccurrences.
-                   if(data.getValue(j,0) === state) {
-                       numberOfOccurrences++;
-                   }
-                   // numberOfOccurrences is now set to another array
-                   // in the same index of the state in the states array
-                   occurencesOfState[i] = numberOfOccurrences;
-               }
-           }
-            // Log for confirmation.
-            // console.log(states);
-            // console.log(occurencesOfState);
-
-            var string_states = [];
-            for(var y=0; y < states.length;y++){
-                string_states[y] = states[y].toString();
-            }
-
-           // create the datatable for the piechart
-           var pieChartData = new google.visualization.DataTable();
-           pieChartData.addColumn('string', 'State');
-           pieChartData.addColumn('number', 'Number of Toilets');
-
-           for(var x=0;x < states.length; x++) {
-               pieChartData.addRow([string_states[x], occurencesOfState[x]]);
-           }
-
-            //   Log for confirmation.
-        //    console.log(pieChartData);
-
-            // Create a pie chart, passing some options
-            var pieChart = new google.visualization.ChartWrapper({
-              'chartType': 'PieChart',
-              'containerId': 'pie_chart_div',
-              'options': {
-                'title' : 'Number of Toilets per State',
-                'width': 600,
-                'height': 800,
-                'pieSliceText': 'value',
-                'legend': 'right'
-              }
+            myMap = new google.maps.Map(document.getElementById('map_div'), {
+                center: new google.maps.LatLng(33.7490, -84.3880),
+                zoom: 4,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
             });
 
-        // Create a dashboard.
-        var dashboard = new google.visualization.Dashboard(
-            document.getElementById('dashboard_div'));
+            // Create a new MarkerCluster object.
+            // To understand the algorithms behind the MarkerCluster library,
+            // visit this web site https://developers.google.com/maps/articles/toomanymarkers?hl=en
+            markerCluster = new MarkerClusterer(myMap);
 
-        // Create a range slider, passing some options
-        var donutRangeSlider = new google.visualization.ControlWrapper({
-          'controlType': 'NumberRangeFilter',
-          'containerId': 'filter_div',
-          'options': {
-            'filterColumnLabel': 'Number of Toilets'
-          }
-        });
+            infoWindow = new google.maps.InfoWindow();
 
-        // Establish dependencies, declaring that 'filter' drives 'pieChart',
-        // so that the pie chart will only display entries that are let through
-        // given the chosen slider range.
-        dashboard.bind(donutRangeSlider, pieChart);
-
-        // Draw the dashboard.
-        dashboard.draw(pieChartData);
-      }
-      function handletreeMapData(response){
-          if(response.isError()) {
-              alert('Error in query' + response.getMessage() + ' ' + response.getDetailedMessage());
-              return;
-          }
-          var data = response.getDataTable();
-          console.log(data);
-
-
-          // reusing same code from piechart
-          var states = data.getDistinctValues(1);
-
-          var occurencesOfState = [];
-          var totalRows = data.getNumberOfRows();
-          var numberOfOccurrences = 0;
-          var state;
-
-          for (var i=0; i < states.length; i++) {
-               state = states[i];
-              for(var j=0; j < totalRows; j++) {
-                  // get the value of the row within the column,
-                  // see if that value is equal to the value in the states array,
-                  // and increment the numberOfOccurrences.
-                  if(data.getValue(j,1) === state) {
-                      numberOfOccurrences++;
-                  }
-                  // numberOfOccurrences is now set to another array
-                  // in the same index of the state in the states array
-                  occurencesOfState[i] = numberOfOccurrences;
-              }
-          }
-
-          var towns = data.getDistinctValues(0);
-          var town;
-          var stateMap;
-          var objArray = [];
-
-          for(var j=0; j < towns.length;j++){
-             var townOccurence = 0;
-             town = towns[j];
-             stateMap = data.getValue(j,1);
-             for(var l=0; l < totalRows; l++) {
-                 if(data.getValue(l,0) === town){
-                     townOccurence++;
-                 }
-             }
-             var obj = {townName: town, state: stateMap, numberOfToilets : townOccurence };
-            //  console.log(obj);
-             objArray.push(obj);
-          }
-            //  console.log(towns);
-        //   console.log(states);
-        //   console.log(occurencesOfState);
-
-          var treeMapData = new google.visualization.DataTable();
-          treeMapData.addColumn('string', 'Location');
-          treeMapData.addColumn('string', 'Parent');
-          treeMapData.addColumn('number', 'Toilets');
-          treeMapData.addRow(['Austrailia', null, 0]);
-          for(var o=0;o < states.length; o++) {
-              treeMapData.addRow([states[o], 'Austrailia', 0]);
-          }
-
-          for(var k=0;k<towns.length;k++){
-                treeMapData.addRow([objArray[k].townName, objArray[k].state, objArray[k].numberOfToilets]);
-          }
-
-          var treeMap = new google.visualization.TreeMap(document.getElementById('treemap_div'));
-
-          treeMap.draw(treeMapData, {
-          minColor: '#f00',
-          midColor: '#ddd',
-          maxColor: '#0d0',
-          headerHeight: 15,
-          fontColor: 'black',
-          showScale: true,
-          width: 1000,
-          height: 600
-        });
-
-
-
-
-
-      }
-      function handleColumnChartData(response){
-          if(response.isError()) {
-              alert('Error in query' + response.getMessage() + ' ' + response.getDetailedMessage());
-              return;
-          }
-           var data = response.getDataTable();
-           console.log(data);
-
-           // getDistinctValues of toliettype
-           var toiletTypes = data.getDistinctValues(0); // nulls are empty spaces aka unknown
-
-           // get the occurences of each
-           var occurencesOfToiletTypes = [];
-           var totalRows = data.getNumberOfRows();
-           var numberOfToiletType = 0;
-           var toiletType;
-
-           for (var i=0; i< toiletTypes.length; i++){
-               toiletType = toiletTypes[i];
-               for (var j=0; j<totalRows;j++){
-                   if(data.getValue(j,0) === toiletType){
-                       numberOfToiletType++;
-                   }
-               }
-               occurencesOfToiletTypes[i] = numberOfToiletType;
-           }
-
-           // Log for confirmation.
-        //    console.log(toiletTypes);
-        //    console.log(occurencesOfToiletTypes);
-
-        var columnChartData = new google.visualization.DataTable();
-        columnChartData.addColumn('string', 'Toilet Type');
-        columnChartData.addColumn('number', 'Number of toilet type');
-
-        for(var x=0; x<toiletTypes.length;x++){
-            if (toiletTypes[x] === null) {
-                columnChartData.addRow(['unknown', occurencesOfToiletTypes[x]]);
-            } else {
-                columnChartData.addRow([toiletTypes[x], occurencesOfToiletTypes[x]]);
-            }
+            // Use Google Chart Tools API to retrieve two columns from this fusion table
+            // https://www.google.com/fusiontables/DataSource?docid=1NICsBtZWfpi3kF_3OHsDe7Z9CU2biwyx_A4HRg
+            var query = new google.visualization.Query("https://www.google.com/fusiontables/gvizdata?tq=");
+            query.setQuery("SELECT Name, Lat, Lng FROM 1FjVvT2lxm_meECyU7Mn1TaZOvvwu3rJnpZztPqvr");
+            query.send(handleQueryResponse);
         }
 
-        // Log for confirmation.
-        // console.log(columnChartData);
+        function handleQueryResponse(response) {
+            // Note that Google has a quota on how many rows can be retrieved from a Fusion Table.
 
-        var options =  {
-            title : 'Toilet Types in Austrailia'
-        };
+            // Get a data table from the response.
+            var dataTable = response.getDataTable();
+            var markers = [];
 
-        var columnChart = new google.visualization.ColumnChart(document.getElementById('column_chart_div'));
-        columnChart.draw(columnChartData, options);
+            for (var i = 0; i < dataTable.getNumberOfRows() ; i++) {
 
+                // Retrieve every row of the data table and create a marker.
+                var nameOfCenter = dataTable.getValue(i, 0).toString();
 
-      }
+                // In this fusion table, each pair of latitude and longitude are stored in a string
+                // separated by a white space. So we need to separate them.
+                // var location = dataTable.getValue(i, 1).toString().split(" ");
+                // var latlng = new google.maps.LatLng(location[0], location[1]);
+                var lat = dataTable.getValue(i, 1);
+                var lng = dataTable.getValue(i, 2);
+                var latlng = new google.maps.LatLng(lat, lng);
 
+                // Create a marker
+                var marker = new google.maps.Marker({
+                    position: latlng,
+                    map: myMap,
+                    title: nameOfCenter
+                });
 
+                google.maps.event.addListener(marker, 'click', function () {
+                    // Create a hyperlink
+                    // var hyperlink = '<a href="' + this.getTitle() + '">' + this.getTitle() + '</a>';
+                    var title = '<p>' + this.getTitle() + '</p>';
+                    // Open an information window when a user clicks a marker.
+                    infoWindow.setContent(title);
+                    infoWindow.open(this.getMap(), this);
+                });
 
+                // Save all the markers in an array for the MarkerCluster.
+                markers.push(marker);
+            }
+
+            // Add markers to the MarkerCluster
+            markerCluster.addMarkers(markers);
+        }
     </script>
-  </head>
-
-  <body>
-    <!--Div that will hold the dashboard-->
-    <div id="dashboard_div">
-        <div id="filter_div"></div>
-        <div id="pie_chart_div"></div>
+</head>
+<body>
+    <div id="map_div">
     </div>
-    <div id="column_chart_div"></div>
-    <div id="treemap_div"></div>
-
-
-  </body>
+</body>
 </html>
