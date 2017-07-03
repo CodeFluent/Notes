@@ -77,14 +77,17 @@
         var clickedMarkerLng = null;
         var clickedMarkerLoc = null;
 
-
+        var address = document.getElementById('start').value;
 
         // send an alert if user clicks getDirections without a marker.
         if (clickedMarkerLoc === null) {
             document.getElementById('directions').addEventListener('click', sendDirectionsAlert);
         }
 
-        document.getElementById('search_radius').addEventListener('click', sendRadiusAlert);
+
+        // fire findRadius() to get search radius when button is clicked or change in radius selection.
+        document.getElementById('search_radius').addEventListener('click', findRadius);
+        document.getElementById('radius_select').addEventListener('change', findRadius);
 
 
 
@@ -100,10 +103,8 @@
             clickedMarkerLoc = '"' + clickedMarkerLat + ',' + clickedMarkerLng + '"';
             // console.log(clickedMarkerLoc);
 
-            // remove event listener to avoid alert popping up.
-            if (clickedMarkerLoc !== null) {
-                document.getElementById('directions').removeEventListener('click', sendDirectionsAlert);
-            }
+            
+            document.getElementById('directions').removeEventListener('click', sendDirectionsAlert);
 
 
 
@@ -127,7 +128,7 @@
 
 
 
-      function sendRadiusAlert() {
+      function findRadius() {
           var address = document.getElementById('start').value;
           var radius = document.getElementById('radius_select').value;
           var loc = {};
@@ -175,11 +176,7 @@
           }
       }
 
-
-
-
       // calculate directions with the value of the text box and the passed marker.
-
       function calculateAndDisplayRoute(clickedMarkerLoc, directionsService, directionsDisplay) {
         directionsService.route({
           origin: document.getElementById("start").value,
@@ -193,6 +190,8 @@
           }
         });
       }
+
+
     </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCPVcHY7DoztJrMzg51HfwIdroNX3v3qpg&callback=initMap">
