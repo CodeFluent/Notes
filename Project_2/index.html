@@ -105,6 +105,8 @@
                 document.getElementById('directions').removeEventListener('click', sendDirectionsAlert);
             }
 
+
+
             // handle directions
             var onChangeHandler = function() {
               calculateAndDisplayRoute(clickedMarkerLoc, directionsService, directionsDisplay);
@@ -119,42 +121,15 @@
 
       }
 
-      function doRadiusSearch(loc) {
-          var lat = loc.lat;
-          var lng = loc.lng;
-
-          var circle = new google.maps.Circle({
-            center: new google.maps.LatLng(lat, lng),
-            radius: 5000,
-            map: map,
-            fillOpacity: 0.2,
-            strokeOpacity: 0.5,
-            strokeWeight: 1
-          });
-
-          google.maps.event.addDomListener(document.getElementById('search_radius'),
-          'click', function () {
-              // Convert miles to meters
-              var meters = parseInt(document.getElementById('radius_select').value, 10) * 1609.34;
-              layer.setOptions({
-                  query: {
-                      select: 'Lat, Long',
-                      from: '1FjVvT2lxm_meECyU7Mn1TaZOvvwu3rJnpZztPqvr',
-                      where: 'ST_INTERSECTS(Address, ' +
-                          'CIRCLE(LATLNG(' + lat + ', ' + lng + '), ' + meters + '))'
-                  }
-              });
-              circle.setRadius(meters);
-          });
-
-      }
-
       function sendDirectionsAlert() {
           alert("Please click a marker.");
       }
 
+
+
       function sendRadiusAlert() {
           var address = document.getElementById('start').value;
+          var radius = document.getElementById('radius_select').value;
           var loc = {};
 
           if (!address || address.length === 0){
@@ -179,7 +154,17 @@
                       loc.lng = results[0].geometry.location.lng();
 
                       if(loc) {
-                          doRadiusSearch(loc);
+
+                          var meters = parseInt(radius, 10) * 1609.34;
+
+                          layer.setOptions({
+                              query: {
+                                  select: 'Lat',
+                                  from: '1FjVvT2lxm_meECyU7Mn1TaZOvvwu3rJnpZztPqvr',
+                                  where: 'ST_INTERSECTS(Lat, ' +
+                                    'CIRCLE(LATLNG(' + loc.lat + ', ' + loc.lng + '), ' + meters + '))'
+                              }
+                          });
                       }
 
                   } else {
