@@ -10,3 +10,6 @@ An example webserver in python is
 and browse to localhost:8000.
 
 Or you can view it here: http://codefluent.github.io/Notes
+
+Note that the file upload doesn't work properly. Clicking on the file and selecting the exact "lesmis.json" from the project samples changes the data, but it doesn't actually upload anything, it just selects the data that is 
+stored locally on the server aka localhost/lesmis.json.
