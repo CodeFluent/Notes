@@ -2,14 +2,15 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class BasicApplication extends Application {
+public class RunnerWindow extends Application {
     @Override
     public void start(Stage primaryStage) {
-        BasicWidget bw = new BasicWidget();
+        GridPane root = new GridPane();
 
-        primaryStage.setTitle("8-29 Work");
-
-        primaryStage.setScene(new Scene(bw, 400, 400));
+        
+        primaryStage.setTitle("Starting Out");
+        
+        primaryStage.setScene(new Scene(root, 400, 400));
         primaryStage.show();
     }
 }
