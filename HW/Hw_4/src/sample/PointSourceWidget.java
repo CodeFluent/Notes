@@ -1,10 +1,12 @@
 package sample;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 
 import java.util.Vector;
 
@@ -32,12 +34,16 @@ public class PointSourceWidget extends GridPane {
     }
 
     private void makeLayout() {
-        submit.setAlignment(Pos.CENTER);
-        add(xValue, 1, 0);
-        add(yValue, 2, 0);
-        add(zValue, 3, 0);
 
-        add(submit, 4, 0);
+        HBox hold = new HBox();
+
+        hold.getChildren().addAll(xValue, yValue, zValue, submit);
+
+        add(hold, 0, 0);
+
+        this.setPadding(new Insets(10, 20, 10, 20));
+
+
     }
 
     public void addPointSourceHandler(PointSourceWidgetHandle ph) {

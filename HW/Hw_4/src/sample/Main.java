@@ -13,8 +13,10 @@ public class Main extends Application {
         VBox root = new VBox();
 
         SubmissionLogWidget subLog = new SubmissionLogWidget();
+
         TextSourceWidget txtSrc = new TextSourceWidget();
         PointSourceWidget ptSrc = new PointSourceWidget();
+        SelectionSourceWidget ssw = new SelectionSourceWidget();
 
         ptSrc.addPointSourceHandler(
                 (double x, double y, double z) -> {
@@ -29,15 +31,18 @@ public class Main extends Application {
 
         txtSrc.addTextSubmissionHandler(
                 (String input) -> {
-                    System.out.println(input);
+                    subLog.logSubmission(input);
+                }
+        );
+
+        ssw.addSelectionSourceHandler(
+                (String input) -> {
                     subLog.logSubmission(input);
                 }
         );
 
 
-
-
-        root.getChildren().addAll(txtSrc, ptSrc, subLog);
+        root.getChildren().addAll(txtSrc, ptSrc, ssw, subLog);
 
         Scene scene = new Scene(root, 600, 600);
 
