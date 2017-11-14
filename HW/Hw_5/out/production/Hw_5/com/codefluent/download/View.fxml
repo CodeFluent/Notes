@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.HBox?>
+<VBox spacing="10" alignment="CENTER" prefWidth="900" prefHeight="600" fx:controller="com.codefluent.download.Controller" xmlns:fx="http://javafx.com/fxml">
+
+    <HBox alignment="CENTER" spacing="10">
+        <TextField fx:id="downloadFile" />
+        <Button text="Download" prefWidth="100" onAction="#downloadClicked" />
+    </HBox>
+
+    <HBox alignment="CENTER" spacing="10">
+        <TextField fx:id="saveFile" />
+        <Button text="Save File" prefWidth="100" />
+    </HBox>
+
+
+
+
+</VBox>
