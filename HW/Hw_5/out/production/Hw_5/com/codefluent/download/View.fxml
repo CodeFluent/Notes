@@ -15,11 +15,9 @@
     </HBox>
 
     <HBox alignment="CENTER" spacing="10">
+
         <TextField fx:id="saveFile" />
-        <Button text="Save File" prefWidth="100" />
+        <Button text="Save File" prefWidth="100" onAction="#saveClicked" />
     </HBox>
-
-
-
 
 </VBox>
