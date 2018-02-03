@@ -30,7 +30,8 @@ public class Rectangle {
    return height;
  }
 
- // The method returns the area of the rectangle.
+ // Write an instance method called area that will be placed inside the Rectangle
+ // class. The method returns the area of the rectangle.
  public int area() {
      return width * height;
  }

@@ -9,7 +9,6 @@ public class Bubble {
     public static void bubbleSort (int [] a) {
 
         int temp;
-
         for (int j = 0; j < a.length; j++) {
             for (int i = 1; i < a.length; i++) {
                 if (a[i] > a[i-1]) {
