@@ -1,6 +1,7 @@
-<<<<<<< HEAD
+
+
 /.imdone
-=======
+
 *.py[cod]
 
 # C extensions
@@ -41,4 +42,3 @@ nosetests.xml
 
 
 *.bphys
->>>>>>> dataviz
