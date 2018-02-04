@@ -24,7 +24,6 @@ public class Bubble {
 
     }
 
-
     public static void main (String [] args) {
 
         int [] num = new int []{5,28,7,46,4,12,9,1,3,8,65};
