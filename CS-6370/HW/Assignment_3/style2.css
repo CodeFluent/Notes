@@ -1,0 +1,44 @@
+.container {
+    width: 800px;
+    margin: 0 auto;
+}
+
+.color {
+    width: 100%;
+    background-color: purple;
+    border-style: solid;
+    border-color: black;
+    border-width: 5px;
+    text-align: center;
+    animation-name: transition;
+    animation-duration: 4s;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+}
+
+ul {
+    text-align: left;
+    margin: auto;
+    margin-top: 20px;
+    width: 25%;
+}
+
+h1 {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.pic {
+    height: 200px;
+    width: auto;
+    display: inline-block;
+    margin: 0 5px;
+}
+
+@keyframes transition {
+    from {
+        background-color: purple;
+    }
+    to {
+        background-color: green;
+    }
+}
