@@ -13,14 +13,18 @@ window.onload = function () {
         var row;
         var cell;
 
+        var array = [];
+
         for (var i = 0; i < num_rows; i++) {
             row = table.insertRow(0);
             for (var j = 0; j < num_col; j++) {
                 cell = row.insertCell(j);
                 cell.innerHTML = "row " + i + ", col " + j;
             }
+            array.push(row);
         }
 
+        console.log(array);
 
         // var row1 = table.insertRow(0);
         // var cell1 = row1.insertCell(0);
