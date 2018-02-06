@@ -21,19 +21,12 @@ window.onload = function () {
                 cell = row.insertCell(j);
                 cell.innerHTML = "row " + i + ", col " + j;
             }
-            array.push(row);
+            // array.push(row); // ignore, just pushes html elements to an array.
         }
 
-        console.log(array);
-
-        // var row1 = table.insertRow(0);
-        // var cell1 = row1.insertCell(0);
-        // var cell2 = row1.insertCell(1);
-        // var cell3 = row1.insertCell(2);
-
-        // cell1.innerHTML = "NEW CELL1";
-        // cell2.innerHTML = "NEW CELL2";
-        // cell3.innerHTML = "NEW CELL2";
+        // sucessfully caught all html table rows
+        // need to output in reverse order
+        // console.log(array);
 
 
     }
