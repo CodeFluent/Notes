@@ -5,20 +5,20 @@
 
 <head>
     <title>CSC 6370 &#8212; Wasfi Momen</title>
+    <script src="form2.js"></script>
 </head>
 
 <body>
     <h1>Assignment 2</h1>
     <p>Wasfi Momen</p>
-    <a href="https://validator.w3.org/" target="_blank">Validation Link</a>
 
     <form action="http://codd.cs.gsu.edu/~cfrederick1/submitassn2.php" method="get">
         <br/> Checkbox 1:
         <br/>
-        <input type="checkbox" name="check1" value="Check1" />
+        <input type="checkbox" name="check" value="Check1" />
         <br/> Checkbox 2:
         <br/>
-        <input type="checkbox" name="check2" value="Check2" />
+        <input type="checkbox" name="check" value="Check2" />
 
 
         <br/>
@@ -36,6 +36,7 @@
         <br/> Select Menu:
         <br/>
         <select name="select1">
+            <option> Please select</option>
             <option> Mildly sick</option>
             <option> Not so mildly sick</option>
             <option> Help. </option>
@@ -46,6 +47,10 @@
         <input type="submit" value="Submit" />
 
     </form>
+
+    <button id="validate" onmousedown="buttonClicked()">Validate</button>
+    <span id="text"></span>
+
 </body>
 
 </html>
