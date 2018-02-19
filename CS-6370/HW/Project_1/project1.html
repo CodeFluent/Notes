@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>CSC 6370 &#8212; Wasfi Momen</title>
+    <script src="script.js"></script>
+
+    <style>
+        td {
+            border: 3px solid black;
+            background-color: white;
+            border-radius: 10px 10px 10px 10px;
+            height: 100px;
+            width: 100px;
+        }
+
+        table {
+            margin-top: 5%;
+            border-collapse: collapse;
+
+
+        }
+
+        .container {
+            width: 100%;
+            margin: auto;
+        }
+
+        .table-container {
+            width: 100%;
+            margin: auto;
+        }
+
+        .controls {
+            width: 50%;
+            float: right;
+
+        }
+
+        .matrix-controls {
+            width: 50%;
+            float: left;
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="matrix-controls">
+            <label for="matrix">Matrix:</label>
+            <input id="matrix" type="number" name="board" value="0" min="0" />
+
+            <button id="matrix-button">Expand Table</button>
+        </div>
+
+        <div class="controls">
+            <button id="start">Start</button>
+            <button id="stop">Stop</button>
+            <button id="reset">Reset</button>
+        </div>
+    </div>
+
+    <table id="table"></table>
+    </div>
+
+
+
+</body>
+
+</html>

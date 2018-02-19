@@ -42,3 +42,18 @@ nosetests.xml
 
 *.bphys
 
+# Microsoft Office Temp Files
+
+*.tmp
+
+# Word temporary
+~$*.doc*
+
+# Excel temporary
+~$*.xls*
+
+# Excel Backup File
+*.xlk
+
+# PowerPoint temporary
+~$*.ppt*
