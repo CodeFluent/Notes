@@ -1,5 +1,4 @@
 // TODO:
-//     - Start, Stop, Reset buttons
 //     - Score TextArea
 //     - Time elapsed   (opt)
 //     - Moves till tie (opt)
@@ -22,8 +21,6 @@ window.onload = function () {
     var board_size;
     var tie_size;
     var moves_done = 0;
-
-
 
     var turn = PLAYER_X; // intialize to player x. it's biased but whatever. Random might help.
     var score = {
