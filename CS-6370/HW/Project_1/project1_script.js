@@ -1,5 +1,4 @@
 // TODO:
-//     - Expand Table confirm to remake table and start new game.
 //     - Start, Stop, Reset buttons
 //     - Score TextArea
 //     - Time elapsed   (opt)
@@ -12,6 +11,12 @@ window.onload = function () {
 
     var button = document.getElementById("matrix-button");
     button.addEventListener("click", createTable);
+    var start = document.getElementById("start");
+    start.addEventListener("click", startGame);
+    var stop = document.getElementById("stop");
+    stop.addEventListener("click", endGame);
+    var reset = document.getElementById("reset");
+    reset.addEventListener("click", resetGame);
     var table;
     var board;
     var board_size;
@@ -32,14 +37,14 @@ window.onload = function () {
     // Board size is set here to track the tie state.
     function createTable() {
 
-
         board = document.getElementById("matrix").value;
         table = document.getElementById("table");
+
 
         if (table.hasChildNodes()) {
             var return_value = confirm("Are you sure? Current game will be deleted.");
             if (return_value === true) {
-                while (table.firstChild) {
+                if (table.firstChild) {
                     table.removeChild(table.firstChild); // delete the current table
                     tableCreationHelper(); // create a new table
                 }
@@ -74,8 +79,53 @@ window.onload = function () {
 
     }
 
+    function startGame() {
+
+        // change the onclick to run update() on the cells
+        for (var i = 0, row; row = table.rows[i]; i++) {
+            for (var j = 0, cell; cell = row.cells[j]; j++) {
+                cell.onclick = function () {
+                    update(this);
+                };
+            }
+        }
+
+        // start time
+
+        // alert the user
+        alert("Game has started.");
+    }
+
+    function endGame() {
+
+        // change the onclick back to an alert on the cells
+        for (var i = 0, row; row = table.rows[i]; i++) {
+            for (var j = 0, cell; cell = row.cells[j]; j++) {
+                cell.onclick = function () {
+                    alertUser();
+                };
+            }
+        }
+
+        // end time
+
+        // alert the user that the game has ended
+        alert("Game has ended.");
+
+    }
+
+    function resetGame() {
+        var return_value = confirm("Are you sure? Current game will be deleted.");
+        if (return_value === true) {
+            table.removeChild(table.firstChild);
+            tableCreationHelper();
+        }
+
+        // start time
+    }
+
     function alertUser() {
-        alert("")
+        alert("Please click Start.");
     }
 
     function update(cell) {
@@ -99,7 +149,6 @@ window.onload = function () {
 
         // switch players for next loop.
         switchPlayers(turn);
-
 
     }
 
