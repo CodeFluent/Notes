@@ -10,7 +10,6 @@
 
     <style>
         td {
-            width: 100%;
             border: 3px solid black;
             background-color: white;
             border-radius: 10px 10px 10px 10px;
@@ -19,22 +18,58 @@
         }
 
         table {
-            margin-top: 2%;
+            margin-top: 5%;
             border-collapse: collapse;
+
+
+        }
+
+        .container {
+            width: 100%;
+            margin: auto;
+        }
+
+        .table-container {
+            width: 100%;
+            margin: auto;
+        }
+
+        .controls {
+            width: 50%;
+            float: right;
+
+        }
+
+        .matrix-controls {
+            width: 50%;
+            float: left;
+
         }
     </style>
 </head>
 
 <body>
-    <label for="matrix">Matrix:</label>
-    <input id="matrix" type="number" name="board" value="0" min="0" />
 
-    <button id="button">Start Game</button>
+    <div class="container">
 
-    <br/>
+        <div class="matrix-controls">
+            <label for="matrix">Matrix:</label>
+            <input id="matrix" type="number" name="board" value="0" min="0" />
 
+            <button id="button">Create Game</button>
+        </div>
 
-    <table id="table"></table>
+        <div class="controls">
+            <button id="start">Start</button>
+            <button id="stop">Stop</button>
+            <button id="reset">Reset</button>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table id="table"></table>
+    </div>
+
 
 
 </body>
