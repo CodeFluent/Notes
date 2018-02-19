@@ -21,7 +21,10 @@ window.onload = function () {
 
 
     var turn = PLAYER_X; // intialize to player x. it's biased but whatever. Random might help.
-    var score = { "Player X": 0, "Player O": 0 };
+    var score = {
+        "Player X": 0,
+        "Player O": 0
+    };
 
 
     // this is the setup method. Takes input from the user to make the table.
@@ -33,11 +36,20 @@ window.onload = function () {
         board = document.getElementById("matrix").value;
         table = document.getElementById("table");
 
-
-        if (table !== null) {
-            var r = confirm("Are you sure? Current game will be deleted.");
+        if (table.hasChildNodes()) {
+            var return_value = confirm("Are you sure? Current game will be deleted.");
+            if (return_value === true) {
+                while (table.firstChild) {
+                    table.removeChild(table.firstChild); // delete the current table
+                    tableCreationHelper(); // create a new table
+                }
+            }
+        } else {
+            tableCreationHelper();
         }
+    }
 
+    function tableCreationHelper() {
         var row;
         var cell;
 
@@ -46,7 +58,7 @@ window.onload = function () {
             for (var j = 0; j < board; j++) {
                 cell = row.insertCell(0);
                 cell.onclick = function () {
-                    update(this);
+                    alertUser();
                 };
                 cell.onmouseover = function () {
                     showPlayerTurn(this);
@@ -57,9 +69,13 @@ window.onload = function () {
             }
         }
 
-
         board_size = board;
         tie_size = board * board; // track the number of total cells on the board for the tie state.
+
+    }
+
+    function alertUser() {
+        alert("")
     }
 
     function update(cell) {
