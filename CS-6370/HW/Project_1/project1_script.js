@@ -1,6 +1,4 @@
 // TODO:
-//     - Expand Table confirm to remake table and start new game.
-//     - Start, Stop, Reset buttons
 //     - Score TextArea
 //     - Time elapsed   (opt)
 //     - Moves till tie (opt)
@@ -12,16 +10,23 @@ window.onload = function () {
 
     var button = document.getElementById("matrix-button");
     button.addEventListener("click", createTable);
+    var start = document.getElementById("start");
+    start.addEventListener("click", startGame);
+    var stop = document.getElementById("stop");
+    stop.addEventListener("click", endGame);
+    var reset = document.getElementById("reset");
+    reset.addEventListener("click", resetGame);
     var table;
     var board;
     var board_size;
     var tie_size;
     var moves_done = 0;
 
-
-
     var turn = PLAYER_X; // intialize to player x. it's biased but whatever. Random might help.
-    var score = { "Player X": 0, "Player O": 0 };
+    var score = {
+        "Player X": 0,
+        "Player O": 0
+    };
 
 
     // this is the setup method. Takes input from the user to make the table.
@@ -29,15 +34,24 @@ window.onload = function () {
     // Board size is set here to track the tie state.
     function createTable() {
 
-
         board = document.getElementById("matrix").value;
         table = document.getElementById("table");
 
 
-        if (table !== null) {
-            var r = confirm("Are you sure? Current game will be deleted.");
+        if (table.hasChildNodes()) {
+            var return_value = confirm("Are you sure? Current game will be deleted.");
+            if (return_value === true) {
+                if (table.firstChild) {
+                    table.removeChild(table.firstChild); // delete the current table
+                    tableCreationHelper(); // create a new table
+                }
+            }
+        } else {
+            tableCreationHelper();
         }
+    }
 
+    function tableCreationHelper() {
         var row;
         var cell;
 
@@ -46,7 +60,7 @@ window.onload = function () {
             for (var j = 0; j < board; j++) {
                 cell = row.insertCell(0);
                 cell.onclick = function () {
-                    update(this);
+                    alertUser();
                 };
                 cell.onmouseover = function () {
                     showPlayerTurn(this);
@@ -57,9 +71,58 @@ window.onload = function () {
             }
         }
 
-
         board_size = board;
         tie_size = board * board; // track the number of total cells on the board for the tie state.
+
+    }
+
+    function startGame() {
+
+        // change the onclick to run update() on the cells
+        for (var i = 0, row; row = table.rows[i]; i++) {
+            for (var j = 0, cell; cell = row.cells[j]; j++) {
+                cell.onclick = function () {
+                    update(this);
+                };
+            }
+        }
+
+        // start time
+
+        // alert the user
+        alert("Game has started.");
+    }
+
+    function endGame() {
+
+        // change the onclick back to an alert on the cells
+        for (var i = 0, row; row = table.rows[i]; i++) {
+            for (var j = 0, cell; cell = row.cells[j]; j++) {
+                cell.onclick = function () {
+                    alertUser();
+                };
+            }
+        }
+
+        // end time
+
+        // alert the user that the game has ended
+        alert("Game has ended.");
+
+    }
+
+    function resetGame() {
+        var return_value = confirm("Are you sure? Current game will be deleted.");
+        if (return_value === true) {
+            table.removeChild(table.firstChild);
+            tableCreationHelper();
+        }
+
+        // start time
+    }
+
+    function alertUser() {
+        alert("Please click Start.");
     }
 
     function update(cell) {
@@ -83,7 +146,6 @@ window.onload = function () {
 
         // switch players for next loop.
         switchPlayers(turn);
-
 
     }
 
