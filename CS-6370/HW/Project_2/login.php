@@ -49,9 +49,8 @@
                 <?php
                     ***REMOVED***
                     ***REMOVED***
+                    $password = "wmomen1";
                     ***REMOVED***
-                    ***REMOVED***
-
                     
                     $msg = "";
 
@@ -63,21 +62,21 @@
                         die("Connection failed: " . $conn->connect_error);
                     } 
 
-                    if ($_POST['submit']) {
+                    if (isset($_POST['inputUsername']) && isset($_POST['inputPassword'])) {
 
                             $username = mysqli_real_escape_string($conn, $_POST['inputUsername']);
                             $password = mysqli_real_escape_string($conn, $_POST['inputPassword']);
     
-                            $query = "SELECT username,password,isSuper FROM Users WHERE username='$username' and password='$password'";
+                            $query = "SELECT username,password FROM Users WHERE username='$username' and password='$password'";
                             $result = mysqli_query($conn, $query);
                             
-                            $row = mysql_fetch_row($result);
-                            $isSuper = $row[4];
+                            // $row = mysql_fetch_row($result);
+                            // $isSuper = $row[4];
 
                             if (mysqli_num_rows($result) > 0) {
                                 $_SESSION['logged_in'] = true;
                                 $_SESSION['username'] = $username;
-                                $_SESSION['isSuper'] = $isSuper;
+                                // $_SESSION['isSuper'] = $isSuper;
                                 
                                 header("location: index.php");
                             } else {
@@ -88,7 +87,7 @@
                     }     
                 ?>
             
-                <form class="form-signin" action="login.php" method="POST">
+                <form class="form-signin" action="login.php" method="post">
                     <h1 class="h3">Please sign in</h1>
 
                     <label for="inputUsername" class="sr-only">Username</label>

@@ -123,7 +123,7 @@
                     function createPost() {
                           ***REMOVED***
                           ***REMOVED***
-                          ***REMOVED***
+                          $password = "wmomen1";
                           ***REMOVED***
 
                             // Create connection
