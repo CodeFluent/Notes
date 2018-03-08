@@ -49,7 +49,7 @@
                 <?php
                     ***REMOVED***
                     ***REMOVED***
-                    $password = "wmomen1";
+                    ***REMOVED***
                     ***REMOVED***
                     
                     $msg = "";

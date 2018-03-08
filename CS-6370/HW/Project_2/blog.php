@@ -60,10 +60,17 @@
    
                     <?php
                         function getPosts() {
+<<<<<<< HEAD
                             ***REMOVED***
                             ***REMOVED***
                             ***REMOVED***
                             ***REMOVED***
+=======
+                            ***REMOVED***
+                            ***REMOVED***
+                            ***REMOVED***
+                            ***REMOVED***
+>>>>>>> 64ca95a2d56b45effb0ca79f0c336ff8db5dfab9
     
                             // Create connection
                             $conn = new mysqli($servername, $username, $password, $db);
@@ -123,7 +130,7 @@
                     function createPost() {
                           ***REMOVED***
                           ***REMOVED***
-                          $password = "wmomen1";
+                          ***REMOVED***
                           ***REMOVED***
 
                             // Create connection

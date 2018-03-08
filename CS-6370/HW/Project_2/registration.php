@@ -49,7 +49,7 @@
                 <?php
                     ***REMOVED***
                     ***REMOVED***
-                    $password = "wmomen1";
+                    ***REMOVED***
                     ***REMOVED***
 
                     if (isset($_SESSION['logged_in']) && $_SESSION['logged_in' == true]) {
