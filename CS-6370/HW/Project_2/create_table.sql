@@ -3,16 +3,26 @@
 
 /* create the users table */
 create table Users  (
-      UserId INT NOT NULL UNIQUE PRIMARY KEY,
-      Username VARCHAR(255),
-      Password VARCHAR(255),
-      Email VARCHAR(255),
-      IsSuper BOOLEAN
+      userId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+      username VARCHAR(255),
+      password VARCHAR(255),
+      email VARCHAR(255),
+      isSuper BOOLEAN
 );
 
 /* create the posts table */
 create table Posts  (
-      PostId INT NOT NULL UNIQUE PRIMARY KEY,
-      PostTitle VARCHAR(255),
-      PostContent MEDIUMTEXT
+      postId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+      postTitle VARCHAR(255),
+      postContent MEDIUMTEXT
 );
+/* create root user */
+INSERT INTO Users (username, password, isSuper)
+VALUES ("root", "password", true);
+
+/* Some fake posts */
+INSERT INTO Posts (postTitle, postContent) 
+VALUES ("WTF", "WTAFASFASFF");
+
+INSERT INTO Posts (postTitle, postContent) 
+VALUES ("WHAT DID I DOOOO", "Holy crap it works it works it works it works it works it works");
