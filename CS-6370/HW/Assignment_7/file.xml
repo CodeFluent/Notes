@@ -1,0 +1,42 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<?xml-stylesheet type = "text/css" href = "stylexml.css"?>
+<billboard>
+    <header>
+        <h>Rank</h>
+    </header>
+    <song>
+        <rank>1</rank>
+        <title>God's Plan</title>
+        <artist>Drake</artist>
+        <album>Scary Hours</album>
+        <last-week>1</last-week>
+    </song>
+    <song>
+        <rank>2</rank>
+        <title>Perfect</title>
+        <artist>Ed Sheeran</artist>
+        <album>Divide</album>
+        <last-week>2</last-week>
+    </song>
+    <song>
+        <rank>3</rank>
+        <title>Finesse</title>
+        <artist>Bruno Marts</artist>
+        <album>24K Magic</album>
+        <last-week>3</last-week>
+    </song>
+    <song>
+        <rank>4</rank>
+        <title>Havana</title>
+        <artist>Camila Cabello</artist>
+        <album>Camila</album>
+        <last-week>4</last-week>
+    </song>
+    <song>
+        <rank>5</rank>
+        <title>Rockstar</title>
+        <artist>Post Malone</artist>
+        <album>Stoney</album>
+        <last-week>5</last-week>
+    </song>
+</billboard>
