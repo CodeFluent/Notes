@@ -17,3 +17,6 @@
 [https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6980976](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6980976)
 [https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6246111](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6246111)
 [https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=7906943](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=7906943)
+
+
+Main Quote: [https://www.stratus.com/assets/CS-Gas-Transmission.pdf](https://www.stratus.com/assets/CS-Gas-Transmission.pdf)
