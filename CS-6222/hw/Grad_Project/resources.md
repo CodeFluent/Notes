@@ -11,3 +11,9 @@
 ](https://ac.els-cdn.com/S0167404806000514/1-s2.0-S0167404806000514-main.pdf?_tid=b3c5da7c-c318-42a9-b099-530986f0851c&acdnat=1523841042_9d614954094a5e50671440336173e2fd)
 
 [https://www.researchgate.net/post/How_to_write_survey_or_review_papers_and_What_sections_should_be_mentioned_in_such_papers](https://www.researchgate.net/post/How_to_write_survey_or_review_papers_and_What_sections_should_be_mentioned_in_such_papers)
+
+[https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=1612765](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=1612765)
+[https://ics.sans.org/media/IT-OT-Convergence-NexDefense-Whitepaper.pdf](https://ics.sans.org/media/IT-OT-Convergence-NexDefense-Whitepaper.pdf)
+[https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6980976](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6980976)
+[https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6246111](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6246111)
+[https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=7906943](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=7906943)
