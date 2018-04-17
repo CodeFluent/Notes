@@ -23,16 +23,32 @@ Main Quote: [https://www.stratus.com/assets/CS-Gas-Transmission.pdf](https://www
 
 !------------------------------------- The above is garbage (but interesting)-------------------------------------!
 
-### Main
+### Intro
 - [Wiki article on SCADA](https://en.wikipedia.org/wiki/SCADA)
 - [First Gen HMI SCADA](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&ved=0ahUKEwj4ipLW8cDaAhVrc98KHfHeCLwQFggpMAA&url=https%3A%2F%2Fproceedings.asmedigitalcollection.asme.org%2Fdata%2FConferences%2FASMEP%2F83891%2FV005T13A005-83-GT-98.pdf&usg=AOvVaw2hX7ek08soGej20HRxR7Po)
 - [CANDU examples, good figures, ASME paper](http://www.iaea.org/inis/collection/NCLCollectionStore/_Public/41/057/41057292.pdf)
 - [More CANDU, stuff on control centers, IAEA](https://aris.iaea.org/PDF/ACR-1000.pdf)
 -[The only gov info I can find on any web programming attacks, CERT](https://ics-cert.us-cert.gov/sites/default/files/recommended_practices/RP_CaseStudy_XSS_20071024_S508C.pdf)
 
+### Main
+- [Siemens slides](https://indico.cern.ch/event/640705/contributions/2599040/attachments/1464254/2262937/ETMUserDays2017Summary-PG.pdf)
+- [Siemens catalog](https://cache.industry.siemens.com/dl/files/146/109744146/att_927907/v1/simatic-st80-stpc-complete-english-2017.pdf)
+- [TIA Portal, example attack](https://mall.industry.siemens.com/spice/TSTWeb/#/Start/)
+
+### Program / Code
+- [Conpot](https://github.com/mushorg/conpot) READ FIRST
+- [Conpot in Detail paper](https://msmis.eller.arizona.edu/sites/msmis/files/documents/sfs_papers/arthur_jicha_masters_paper.pdf) READ FIRST
+- [More Conpot Details from SANS](https://www.sans.org/reading-room/whitepapers/detection/designing-implementing-honeypot-scada-network-35252) READ FIRST
+- [Other Honeypots](https://lib.dr.iastate.edu/cgi/viewcontent.cgi?article=3130&context=etd)
+
+### Related CVEs for HMIs
+- [GE CVE HMI](https://www.cvedetails.com/cve/CVE-2014-0751/?q=CVE-2014-0751)
+- [Simatic PCS7 and WinCC 7.0](https://www.cvedetails.com/cve/CVE-2014-8551/)
+
 ### Other
 - [Slightly irrelevant, but good paper on virtualization in SCADA](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6820114)
 - [NIST on SCADA and ICS, very quotable](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-82r2.pdf)
+- [PCAPs on Siemens, maybe useful?](https://sourceforge.net/projects/s7commwireshark/files/Sample-captures/)
 
 
 
