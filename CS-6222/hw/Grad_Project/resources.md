@@ -20,3 +20,19 @@
 
 
 Main Quote: [https://www.stratus.com/assets/CS-Gas-Transmission.pdf](https://www.stratus.com/assets/CS-Gas-Transmission.pdf)
+
+!------------------------------------- The above is garbage (but interesting)-------------------------------------!
+
+### Main
+- [Wiki article on SCADA](https://en.wikipedia.org/wiki/SCADA)
+- [First Gen HMI SCADA](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&ved=0ahUKEwj4ipLW8cDaAhVrc98KHfHeCLwQFggpMAA&url=https%3A%2F%2Fproceedings.asmedigitalcollection.asme.org%2Fdata%2FConferences%2FASMEP%2F83891%2FV005T13A005-83-GT-98.pdf&usg=AOvVaw2hX7ek08soGej20HRxR7Po)
+- [CANDU examples, good figures, ASME paper](http://www.iaea.org/inis/collection/NCLCollectionStore/_Public/41/057/41057292.pdf)
+- [More CANDU, stuff on control centers, IAEA](https://aris.iaea.org/PDF/ACR-1000.pdf)
+-[The only gov info I can find on any web programming attacks, CERT](https://ics-cert.us-cert.gov/sites/default/files/recommended_practices/RP_CaseStudy_XSS_20071024_S508C.pdf)
+
+### Other
+- [Slightly irrelevant, but good paper on virtualization in SCADA](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6820114)
+- [NIST on SCADA and ICS, very quotable](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-82r2.pdf)
+
+
+
