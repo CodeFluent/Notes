@@ -20,3 +20,9 @@
 
 
 Main Quote: [https://www.stratus.com/assets/CS-Gas-Transmission.pdf](https://www.stratus.com/assets/CS-Gas-Transmission.pdf)
+
+
+TOPIC: HMI and SCADA Vulnerabilities and History
+- go over history and their reasons in HMIs
+- at the  same time go through their vulnerabilities
+- bacnet and GSU server lol
