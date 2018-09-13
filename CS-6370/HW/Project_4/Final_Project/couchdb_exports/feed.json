@@ -1,0 +1,54 @@
+{
+    "docs": [{
+        {
+            "total_rows": 3,
+            "offset": 0,
+            "rows": [{
+                    "id": "46cc489dd19564f49308ca6d6b0024eb",
+                    "key": "46cc489dd19564f49308ca6d6b0024eb",
+                    "value": {
+                        "rev": "2-ab0582e3d1b9baad9daa1a52f39c40d1"
+                    },
+                    "doc": {
+                        "_id": "46cc489dd19564f49308ca6d6b0024eb",
+                        "_rev": "2-ab0582e3d1b9baad9daa1a52f39c40d1",
+                        "geopoint": [33.752843, -84.385642],
+                        "title": "Chicken 4 Freeeee!!!!111!1",
+                        "datasets": [],
+                        "description": "Hi guys, this is a little, small-time resturant called CHICK-FIL-A! loL. They're giving out free sandwiches right now! #freegrub. 😂😂😂"
+                    }
+                },
+                {
+                    "id": "46cc489dd19564f49308ca6d6b010e94",
+                    "key": "46cc489dd19564f49308ca6d6b010e94",
+                    "value": {
+                        "rev": "2-152b225c80b4d05b4a39dd1798a4c156"
+                    },
+                    "doc": {
+                        "_id": "46cc489dd19564f49308ca6d6b010e94",
+                        "_rev": "2-152b225c80b4d05b4a39dd1798a4c156",
+                        "geopoint": [46.770913, -92.122824],
+                        "title": "Piedmont is okay.....",
+                        "datasets": ["Freegrub"],
+                        "description": "Food is food I guess."
+                    }
+                },
+                {
+                    "id": "_design/feed",
+                    "key": "_design/feed",
+                    "value": {
+                        "rev": "3-7c1828bbb8949273411fd6b3d906c345"
+                    },
+                    "doc": {
+                        "_id": "_design/feed",
+                        "_rev": "3-7c1828bbb8949273411fd6b3d906c345",
+                        "views": {
+                            "All Feed Items": {
+                                "map": "function(doc){ emit(doc.geopoint, doc)}"
+                            }
+                        }
+                    }
+                }
+            ]
+        }]
+    }

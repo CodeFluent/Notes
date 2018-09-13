@@ -1,0 +1,8 @@
+{
+  "name": "CampusMap",
+  "app_id": "96169297",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}

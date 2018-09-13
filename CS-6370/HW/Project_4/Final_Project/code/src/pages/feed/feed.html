@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Feed</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content class="">
+  <ion-list [virtualScroll]="feeditems">
+
+    <ion-card *virtualItem="let feeditem">
+      <ion-card-header>
+        {{feeditem.value.title}}
+      </ion-card-header>
+      <ion-card-content>
+        {{feeditem.value.description}}
+      </ion-card-content>
+      <button ion-button icon-left clear item-end (click)="goToMarker(feeditem.key, feeditem.value.title)">
+        <ion-icon name="navigate"></ion-icon>
+        Map
+      </button>
+    </ion-card>
+
+  </ion-list>
+</ion-content>

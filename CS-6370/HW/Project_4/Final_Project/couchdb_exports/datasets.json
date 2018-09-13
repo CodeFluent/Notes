@@ -1,0 +1,20 @@
+{
+    "docs": [{
+        "total_rows": 1,
+        "offset": 0,
+        "rows": [{
+            "id": "46cc489dd19564f49308ca6d6b004532",
+            "key": "46cc489dd19564f49308ca6d6b004532",
+            "value": {
+                "rev": "1-3fdf810e1f580d3ea2812d5b90d274bc"
+            },
+            "doc": {
+                "_id": "46cc489dd19564f49308ca6d6b004532",
+                "_rev": "1-3fdf810e1f580d3ea2812d5b90d274bc",
+                "feed_items": [],
+                "name": "Freegrub",
+                "description": "Free food all around GSU."
+            }
+        }]
+    }]
+}
