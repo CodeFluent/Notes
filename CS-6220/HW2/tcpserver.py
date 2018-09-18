@@ -9,8 +9,20 @@ Made by Wasfi Momen.
 """
 
 """
-TEMP
+REQUIRMENTS
+    - ~~Capitalizes strings~~
+    - New thread handles dialog of client-server
+    - ~~Max 10 strings~~
+    - Client ask for termination
+    - Limit reached, send message to client
+
+"""
+
+"""
+ISSUES
     - Multithreading*
+    - Sending out of order*
+    - Prompt for next string AFTER capitalized string is sent*
     - Don't bind port to specific number
     - KeyboardInterrupt won't work for some reason until after client connects and server receives and processes input.
 """
@@ -95,21 +107,28 @@ port = 65434
 def main():
     try:
         server_sock = TCPServer(host, port)
+        server_sock.socket.setblocking(0)
+        server_sock.socket.settimeout(10)
         server_sock.listen()
         while True:
             conn, addr = server_sock.accept()
             with conn:  # from python 3.7 docs examples
                 print("Connected by: ", addr)
-                while (server_sock.get_num_of_strings() < 10):
+                while True:
                     sentence = conn.recv(1024).decode()
-                    if not sentence:
+                    if (server_sock.get_num_of_strings() >= 10):
+                        print(
+                            "STRINGS LIMIT REACHED, SHUTTING DOWN AND CLOSING SOCKET")
+                        conn.sendall(
+                            "STRINGS LIMIT REACHED, CLOSING CONNECTION".encode())
+                        conn.shutdown(2)
+                        conn.close()
                         break
                     print("\nSentence is: ", sentence)
                     conn.sendall(
                         server_sock.capitalize_string(sentence).encode())
                     print("Number of strings ",
                           server_sock.get_num_of_strings())
-                    conn.sendall("Awaiting next sentence...".encode())
     except KeyboardInterrupt:
         print("\nExited by Ctrl+C.")
         server_sock.close()

@@ -54,7 +54,7 @@ def main():
             sentence = input("\n\tInput a lowercase sentence...\n")
             client_sock.socket.sendall(sentence.encode())
             data = client_sock.socket.recv(1024)
-            print("From Server: ", data.decode())
+            print("\nFrom Server: ", data.decode())
     except KeyboardInterrupt:
         print("Interrupted")
         client_sock.close()
