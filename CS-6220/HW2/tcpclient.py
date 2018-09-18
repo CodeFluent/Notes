@@ -58,7 +58,6 @@ def main():
             sock.socket.send(sentence.encode())
             data = sock.socket.recv(1024)
             print("From Server: ", data.decode())
-            sock.close()
     except KeyboardInterrupt:
         print("Interrupted")
         sock.close()

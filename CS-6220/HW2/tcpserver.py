@@ -8,9 +8,15 @@ Made by Wasfi Momen.
 
 """
 
+"""
+TEMP
+    - Multithreading*
+    - Don't bind port to specific number
+    - KeyboardInterrupt won't work for some reason until after client connects and server receives and processes input.
+"""
+
 import socket
 import sys
-import time
 
 
 class TCPServer:
@@ -56,7 +62,6 @@ class TCPServer:
 
         """See Unix man socket(7) SO_REUSEPORT"""
         # self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-
         try:
             # a tuple of the address and port is used for the bind function
             self.socket.bind((self.server_address, self.server_port))
@@ -77,6 +82,9 @@ class TCPServer:
     def received_string(self):
         self.num_strings += 1
 
+    def get_num_of_strings(self):
+        return self.num_strings
+
     def __enter__(self):
         return self
 
@@ -87,7 +95,7 @@ class TCPServer:
             raise Exception('Socket was already closed.')
 
 
-host = '127.0.0.1'
+host = "127.0.0.1"
 # port = 0  # the OS should choose an open port for us
 port = 65434
 
@@ -95,19 +103,17 @@ port = 65434
 def main():
     try:
         sock = TCPServer(host, port)
-        conn, addr = sock.accept()
-        with conn:
-            print(addr)
-            while True:
-                sentence = conn.recv(1024).decode()
-                print("Sentence", sentence)
-                processed_sentence = sock.capitalize_string(sentence)
-                conn.send(processed_sentence.encode())
-                conn.send("Awaiting next sentence...".encode())
+        while True:
+            conn, addr = sock.accept()
+            sentence = conn.recv(1024).decode()
+            print("Sentence is: ", sentence)
+            processed_sentence = sock.capitalize_string(sentence)
+            conn.send(processed_sentence.encode())
+            print("Number of strings ", sock.get_num_of_strings())
+            conn.send("Awaiting next sentence...".encode())
     except KeyboardInterrupt:
         print("\nExited by Ctrl+C.")
         sock.close()
-        sys.exit()
 
 
 main()
