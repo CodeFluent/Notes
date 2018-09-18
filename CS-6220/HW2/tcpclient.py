@@ -29,20 +29,16 @@ class TCPClient:
         self.socket = socket.socket(self.address_family, self.socket_type)
 
     def connect(self):
-        self.socket.connect((self.server_address, self.server_port))
-        print("Connected!")
+        """Attempts to connect to the server socket, throws exception and closes socket if fails."""
+        try:
+            self.socket.connect((self.server_address, self.server_port))
+        except:
+            self.socket.close()
+            raise Exception('Failed to connect to server socket.')
 
     def close(self):
+        """Closes socket."""
         self.socket.close()
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, *args):
-        try:
-            self.socket.close()
-        except:
-            raise Exception('Socket was already closed.')
 
 
 host = '127.0.0.1'
@@ -52,16 +48,17 @@ port = 65434
 
 def main():
     try:
-        with TCPClient(host, port) as sock:
-            sock.connect()
-            sentence = input("Input a lowercase sentence...\n")
-            sock.socket.send(sentence.encode())
-            data = sock.socket.recv(1024)
+        client_sock = TCPClient(host, port)
+        client_sock.connect()
+        while True:  # from python 3.7 docs examples
+            sentence = input("\n\tInput a lowercase sentence...\n")
+            client_sock.socket.sendall(sentence.encode())
+            data = client_sock.socket.recv(1024)
             print("From Server: ", data.decode())
     except KeyboardInterrupt:
         print("Interrupted")
-        sock.close()
-        sys.exit()
+        client_sock.close()
+        sys.exit(1)
 
 
 main()

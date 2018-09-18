@@ -38,8 +38,7 @@ class TCPServer:
         self.socket = socket.socket(self.address_family, self.socket_type)
 
         try:
-            self.server_bind()
-            self.server_start()
+            self.bind()
         except:
             self.socket.close()
             raise Exception('Error in setting up connection to host port.')
@@ -57,7 +56,7 @@ class TCPServer:
         """Closes the socket."""
         self.socket.close()
 
-    def server_bind(self):
+    def bind(self):
         """Binds the socket to any available port"""
 
         """See Unix man socket(7) SO_REUSEPORT"""
@@ -70,7 +69,7 @@ class TCPServer:
             raise Exception(
                 'Error in binding socket to address and port specified.')
 
-    def server_start(self):
+    def listen(self):
         """Start listening for any clients"""
         self.socket.listen(1)
         self.print_details()  # print the details of the connection
@@ -80,19 +79,12 @@ class TCPServer:
         print('SERVER READY @ ', self.socket.getsockname())
 
     def received_string(self):
+        """Increments the number of string received by the server."""
         self.num_strings += 1
 
     def get_num_of_strings(self):
+        """Returns the number of strings the server has received."""
         return self.num_strings
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, *args):
-        try:
-            self.socket.close()
-        except:
-            raise Exception('Socket was already closed.')
 
 
 host = "127.0.0.1"
@@ -102,18 +94,26 @@ port = 65434
 
 def main():
     try:
-        sock = TCPServer(host, port)
+        server_sock = TCPServer(host, port)
+        server_sock.listen()
         while True:
-            conn, addr = sock.accept()
-            sentence = conn.recv(1024).decode()
-            print("Sentence is: ", sentence)
-            processed_sentence = sock.capitalize_string(sentence)
-            conn.send(processed_sentence.encode())
-            print("Number of strings ", sock.get_num_of_strings())
-            conn.send("Awaiting next sentence...".encode())
+            conn, addr = server_sock.accept()
+            with conn:  # from python 3.7 docs examples
+                print("Connected by: ", addr)
+                while (server_sock.get_num_of_strings() < 10):
+                    sentence = conn.recv(1024).decode()
+                    if not sentence:
+                        break
+                    print("\nSentence is: ", sentence)
+                    conn.sendall(
+                        server_sock.capitalize_string(sentence).encode())
+                    print("Number of strings ",
+                          server_sock.get_num_of_strings())
+                    conn.sendall("Awaiting next sentence...".encode())
     except KeyboardInterrupt:
         print("\nExited by Ctrl+C.")
-        sock.close()
+        server_sock.close()
+        sys.exit(1)
 
 
 main()
