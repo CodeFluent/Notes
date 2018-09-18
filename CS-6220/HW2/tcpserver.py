@@ -4,11 +4,12 @@ tcpserver.py
 
 A tcp server made in python.
 Some variable and function names from socketserver.py in python 3.7 release.
-Made by Wasfi Momen. 
-   
+Made by Wasfi Momen.
+
 """
 
 import socket
+import sys
 
 
 class TCPServer:
@@ -21,7 +22,7 @@ class TCPServer:
     address_family = socket.AF_INET  # only IPv4 connections
     socket_type = socket.SOCK_STREAM  # constant to use TCP socket type
     # request_queue_size = 1  # we only take one connection
-    strings = []  # empty array to gather strings from client
+    num_strings = 0  # number of strings received
 
     # constructor from the socket.py module
     def __init__(self, server_address, server_port):
@@ -39,6 +40,15 @@ class TCPServer:
     def accept(self):
         """Start accepting incoming connections and data"""
         return self.socket.accept()
+
+    def capitalize_string(self, client_string):
+        """Capitalizes string that is received from the client."""
+        self.received_string()
+        return client_string.upper()
+
+    def close(self):
+        """Closes the socket."""
+        self.socket.close()
 
     def server_bind(self):
         """Binds the socket to any available port"""
@@ -63,6 +73,9 @@ class TCPServer:
         """Print out the server details"""
         print('SERVER READY @ ', self.socket.getsockname())
 
+    def received_string(self):
+        self.num_strings += 1
+
     def __enter__(self):
         return self
 
@@ -74,6 +87,25 @@ class TCPServer:
 
 
 host = '127.0.0.1'
-port = 0  # the OS should choose an open port for us
-with TCPServer(host, port) as sock:
-    conn, addr = sock.accept()
+# port = 0  # the OS should choose an open port for us
+port = 65434
+
+
+def main():
+    try:
+        sock = TCPServer(host, port)
+        conn, addr = sock.accept()
+        with conn:
+            print(addr)
+            while True:
+                sentence = conn.recv(1024).decode()
+                processed_sentence = sock.capitalize_string(sentence)
+                conn.send(processed_sentence.encode())
+                conn.send("Awaiting next sentence...".encode())
+    except KeyboardInterrupt:
+        print("Interrupted")
+        sock.close()
+        sys.exit()
+
+
+main()
