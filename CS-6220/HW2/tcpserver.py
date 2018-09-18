@@ -12,7 +12,7 @@ Made by Wasfi Momen.
 REQUIRMENTS
     - ~~Capitalizes strings~~
     - ~~Max 10 strings~~
-    - Client ask for termination
+    - ~~Client ask for termination~~ **"Appropiate message" to terminate is Ctrl+C**
     - ~~Limit reached, send message to client~~
     - Multithreaded
 
@@ -109,6 +109,7 @@ def main():
             print("Connected by: ", addr)
             while True:
                 sentence = conn.recv(1024).decode()
+                """Turn if loops into a function"""
                 # break out of while loop if shutdown request is given
                 if (sentence == "CLIENT REQUESTS SHUTDOWN"):
                     print("\nCLIENT HAS REQUESTED SHUTDOWN")
