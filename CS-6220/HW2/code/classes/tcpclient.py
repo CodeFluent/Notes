@@ -45,24 +45,22 @@ class TCPClient:
             raise Exception('Socket was already closed.')
 
 
-host = '127.0.0.1'
-# port = 0  # the OS should choose an open port for us
-port = 65434
+# host = '127.0.0.1'
+# # port = 0  # the OS should choose an open port for us
+# port = 65434
 
 
-def main():
-    try:
-        with TCPClient(host, port) as sock:
-            sock.connect()
-            sentence = input("Input a lowercase sentence...\n")
-            sock.socket.send(sentence.encode())
-            data = sock.socket.recv(1024)
-            print("From Server: ", data.decode())
-            sock.close()
-    except KeyboardInterrupt:
-        print("Interrupted")
-        sock.close()
-        sys.exit()
+# def main():
+#     try:
+#         with TCPClient(host, port) as sock:
+#             sock.connect()
+#             sentence = input("Input a lowercase sentence...\n")
+#             sock.socket.send(sentence.encode())
+#             data = sock.socket.recv(1024)
+#             print("From Server: ", data.decode())
+#     except KeyboardInterrupt:
+#         print("\nExited by Ctrl+C.")
+#         sock.close()
 
 
-main()
+# main()
