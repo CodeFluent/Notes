@@ -14,7 +14,7 @@ REQUIRMENTS
     - New thread handles dialog of client-server
     - ~~Max 10 strings~~
     - Client ask for termination
-    - Limit reached, send message to client
+    - ~~Limit reached, send message to client~~
 
 """
 
@@ -116,17 +116,19 @@ def main():
                 print("Connected by: ", addr)
                 while True:
                     sentence = conn.recv(1024).decode()
+                    # break out of while loop, close socket, and send messages to client
                     if (server_sock.get_num_of_strings() >= 10):
                         print(
                             "STRINGS LIMIT REACHED, SHUTTING DOWN AND CLOSING SOCKET")
                         conn.sendall(
                             "STRINGS LIMIT REACHED, CLOSING CONNECTION".encode())
+                        # 2 means SHUT_RDWR or disable read and write, Windows only takes numbers
                         conn.shutdown(2)
                         conn.close()
                         break
                     print("\nSentence is: ", sentence)
                     conn.sendall(
-                        server_sock.capitalize_string(sentence).encode())
+                        server_sock.capitalize_string(sentence).encode() + "\nAwaiting next string...".encode())
                     print("Number of strings ",
                           server_sock.get_num_of_strings())
     except KeyboardInterrupt:

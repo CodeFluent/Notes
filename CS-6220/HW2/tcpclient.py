@@ -36,6 +36,10 @@ class TCPClient:
             self.socket.close()
             raise Exception('Failed to connect to server socket.')
 
+    def shutdown(self):
+        """Schedules resources for GC."""
+        self.socket.shutdown(2)
+
     def close(self):
         """Closes socket."""
         self.socket.close()
@@ -55,6 +59,12 @@ def main():
             client_sock.socket.sendall(sentence.encode())
             data = client_sock.socket.recv(1024)
             print("\nFrom Server: ", data.decode())
+            # server has terminated connection, clean up and close socket
+            if (data == "STRINGS LIMIT REACHED, CLOSING CONNECTION".encode()):
+                print("\n\tCLIENT CONNECTION CLOSED.")
+                client_sock.shutdown()
+                break
+        client_sock.close()
     except KeyboardInterrupt:
         print("Interrupted")
         client_sock.close()
