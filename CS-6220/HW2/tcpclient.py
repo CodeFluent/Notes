@@ -14,8 +14,12 @@ import sys
 
 class TCPClient:
 
-    """TCPClient class for the TCP socket client to send messages
-    to the server.
+    """TCPClient class that only binds the 
+    socket using the specified ports in the
+    constructor.
+
+    All other socket operations should 
+    be used by the .socket member access.
 
     """
 
@@ -36,14 +40,6 @@ class TCPClient:
             self.socket.close()
             raise Exception('Failed to connect to server socket.')
 
-    def shutdown(self):
-        """Schedules resources for GC."""
-        self.socket.shutdown(2)
-
-    def close(self):
-        """Closes socket."""
-        self.socket.close()
-
 
 host = '127.0.0.1'
 # port = 0  # the OS should choose an open port for us
@@ -62,12 +58,14 @@ def main():
             # server has terminated connection, clean up and close socket
             if (data == "STRINGS LIMIT REACHED, CLOSING CONNECTION".encode()):
                 print("\n\tCLIENT CONNECTION CLOSED.")
-                client_sock.shutdown()
+                client_sock.socket.shutdown(2)
                 break
-        client_sock.close()
+        client_sock.socket.close()
     except KeyboardInterrupt:
         print("Interrupted")
-        client_sock.close()
+        client_sock.socket.sendall("CLIENT REQUESTS SHUTDOWN".encode())
+        client_sock.socket.shutdown(2)
+        client_sock.socket.close()
         sys.exit(1)
 
 

@@ -11,10 +11,10 @@ Made by Wasfi Momen.
 """
 REQUIRMENTS
     - ~~Capitalizes strings~~
-    - New thread handles dialog of client-server
     - ~~Max 10 strings~~
     - Client ask for termination
     - ~~Limit reached, send message to client~~
+    - Multithreaded
 
 """
 
@@ -24,7 +24,8 @@ ISSUES
     - Sending out of order*
     - Prompt for next string AFTER capitalized string is sent*
     - Don't bind port to specific number
-    - KeyboardInterrupt won't work for some reason until after client connects and server receives and processes input.
+    - KeyboardInterrupt won't work until enter is pressed.
+    - ~~Figure out what the classes actually do instead of just implementing socket functions.~~
 """
 
 import socket
@@ -33,8 +34,13 @@ import sys
 
 class TCPServer:
 
-    """TCPServer class for the TCP socket server to listen
-    to the client.
+    """TCPServer class contains the necessary functions
+    for the application by keeping track of the strings
+    and only binding the socket to the specified ports in 
+    the constructor. 
+
+    All other socket operations should
+    be used by the .socket member access.
 
     """
 
@@ -55,18 +61,10 @@ class TCPServer:
             self.socket.close()
             raise Exception('Error in setting up connection to host port.')
 
-    def accept(self):
-        """Start accepting incoming connections and data"""
-        return self.socket.accept()
-
     def capitalize_string(self, client_string):
         """Capitalizes string that is received from the client."""
         self.received_string()
         return client_string.upper()
-
-    def close(self):
-        """Closes the socket."""
-        self.socket.close()
 
     def bind(self):
         """Binds the socket to any available port"""
@@ -80,11 +78,6 @@ class TCPServer:
             self.socket.close()
             raise Exception(
                 'Error in binding socket to address and port specified.')
-
-    def listen(self):
-        """Start listening for any clients"""
-        self.socket.listen(1)
-        self.print_details()  # print the details of the connection
 
     def print_details(self):
         """Print out the server details"""
@@ -107,33 +100,41 @@ port = 65434
 def main():
     try:
         server_sock = TCPServer(host, port)
-        server_sock.socket.setblocking(0)
+        server_sock.socket.setblocking(1)
         server_sock.socket.settimeout(10)
-        server_sock.listen()
+        server_sock.socket.listen()
+        server_sock.print_details()
         while True:
-            conn, addr = server_sock.accept()
-            with conn:  # from python 3.7 docs examples
-                print("Connected by: ", addr)
-                while True:
-                    sentence = conn.recv(1024).decode()
-                    # break out of while loop, close socket, and send messages to client
-                    if (server_sock.get_num_of_strings() >= 10):
-                        print(
-                            "STRINGS LIMIT REACHED, SHUTTING DOWN AND CLOSING SOCKET")
-                        conn.sendall(
-                            "STRINGS LIMIT REACHED, CLOSING CONNECTION".encode())
-                        # 2 means SHUT_RDWR or disable read and write, Windows only takes numbers
-                        conn.shutdown(2)
-                        conn.close()
-                        break
-                    print("\nSentence is: ", sentence)
+            conn, addr = server_sock.socket.accept()
+            print("Connected by: ", addr)
+            while True:
+                sentence = conn.recv(1024).decode()
+                # break out of while loop if shutdown request is given
+                if (sentence == "CLIENT REQUESTS SHUTDOWN"):
+                    print("\nCLIENT HAS REQUESTED SHUTDOWN")
+                    # 2 means SHUT_RDWR or disable read and write, Windows only takes numbers
+                    conn.shutdown(2)
+                    conn.close()
+                    break
+                # break out of while loop if number of strings exceeds 10
+                if (server_sock.get_num_of_strings() >= 10):
+                    print(
+                        "STRINGS LIMIT REACHED, SHUTTING DOWN AND CLOSING SOCKET")
                     conn.sendall(
-                        server_sock.capitalize_string(sentence).encode() + "\nAwaiting next string...".encode())
-                    print("Number of strings ",
-                          server_sock.get_num_of_strings())
+                        "STRINGS LIMIT REACHED, CLOSING CONNECTION".encode())
+                    conn.shutdown(2)
+                    conn.close()
+                    break
+                print("\nSentence is: ", sentence)
+                conn.sendall(
+                    server_sock.capitalize_string(sentence).encode() + "\nAwaiting next string...".encode())
+                print("Number of strings ",
+                      server_sock.get_num_of_strings())
+            break
+        server_sock.socket.close()
     except KeyboardInterrupt:
         print("\nExited by Ctrl+C.")
-        server_sock.close()
+        server_sock.socket.close()
         sys.exit(1)
 
 
