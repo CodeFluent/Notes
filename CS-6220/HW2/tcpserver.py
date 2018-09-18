@@ -10,6 +10,7 @@ Made by Wasfi Momen.
 
 import socket
 import sys
+import time
 
 
 class TCPServer:
@@ -99,11 +100,12 @@ def main():
             print(addr)
             while True:
                 sentence = conn.recv(1024).decode()
+                print("Sentence", sentence)
                 processed_sentence = sock.capitalize_string(sentence)
                 conn.send(processed_sentence.encode())
                 conn.send("Awaiting next sentence...".encode())
     except KeyboardInterrupt:
-        print("Interrupted")
+        print("\nExited by Ctrl+C.")
         sock.close()
         sys.exit()
 

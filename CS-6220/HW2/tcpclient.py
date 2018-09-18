@@ -28,15 +28,12 @@ class TCPClient:
         self.server_port = server_port
         self.socket = socket.socket(self.address_family, self.socket_type)
 
-        try:
-            self.connect()
-        except:
-            raise Exception('Error in setting up connection to host port.')
-        finally:
-            self.socket.close()
-
     def connect(self):
         self.socket.connect((self.server_address, self.server_port))
+        print("Connected!")
+
+    def close(self):
+        self.socket.close()
 
     def __enter__(self):
         return self
@@ -56,11 +53,15 @@ port = 65434
 def main():
     try:
         with TCPClient(host, port) as sock:
-            sock.socket.sendall(b'Hello World')
+            sock.connect()
+            sentence = input("Input a lowercase sentence...\n")
+            sock.socket.send(sentence.encode())
             data = sock.socket.recv(1024)
-            print(repr(data))
+            print("From Server: ", data.decode())
+            sock.close()
     except KeyboardInterrupt:
         print("Interrupted")
+        sock.close()
         sys.exit()
 
 
