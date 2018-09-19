@@ -27,6 +27,8 @@ class UDPServer:
     address_family = socket.AF_INET  # only IPv4 connections
     socket_type = socket.SOCK_DGRAM  # constant to use UDP socket type
     # request_queue_size = 1  # we only take one connection
+    file = open("user.txt", "w")
+    balance = 0
 
     # constructor from the socket.py module
     def __init__(self, server_address, server_port):
@@ -53,6 +55,8 @@ class UDPServer:
             raise Exception(
                 'Error in binding socket to address and port specified.')
 
+    def operation(self, command):
+
     def print_details(self):
         """Print out the server details"""
         print('SERVER READY @ ', self.socket.getsockname())
@@ -73,6 +77,7 @@ def main():
             print("Connected by: ", addr)
             while True:
                 message = conn.decode()
+                operation(message)
                 server_sock.socket.sendto(message.encode(), addr)
         server_sock.socket.close()
     except KeyboardInterrupt:

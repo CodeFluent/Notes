@@ -43,6 +43,9 @@ def main():
         client_sock.connect()
         while True:  # from python 3.7 docs examples
             command = input("\n\tInput command...\n")
+            print("\t(1) Check Balance\n")
+            print("\t(2) Withdraw\n")
+            print("\t(3) Deposit\n")
             client_sock.socket.sendto(
                 command.encode(), (host, port))
             conn, addr = client_sock.socket.recvfrom(2048)

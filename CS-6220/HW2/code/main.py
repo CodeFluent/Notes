@@ -5,7 +5,7 @@ host = "127.0.0.1"
 port = 65434
 
 
-if __name___ == '__main__':
+def main():
     try:
         sock = TCPServer(host, port)
         while True:
@@ -19,3 +19,7 @@ if __name___ == '__main__':
     except KeyboardInterrupt:
         print("\nExited by Ctrl+C.")
         sock.close()
+
+
+if __name__ == '__main__':
+    main()

@@ -21,15 +21,16 @@ REQUIRMENTS
 """
 ISSUES
     - Multithreading*
-    - Sending out of order*
-    - Prompt for next string AFTER capitalized string is sent*
     - Don't bind port to specific number
     - KeyboardInterrupt won't work until enter is pressed.
-    - ~~Figure out what the classes actually do instead of just implementing socket functions.~~
 """
 
 import socket
 import sys
+from _thread import *
+import threading
+
+write_lock = threading.Lock()
 
 
 class TCPServer:
@@ -97,6 +98,35 @@ host = "127.0.0.1"
 port = 65434
 
 
+def thread_server(socket, connection):
+    while True:
+        sentence = connection.recv(1024).decode()
+        """Turn if loops into a function"""
+        # break out of while loop if shutdown request is given
+        if (sentence == "CLIENT REQUESTS SHUTDOWN"):
+            print("\nCLIENT HAS REQUESTED SHUTDOWN")
+            # 2 means SHUT_RDWR or disable read and write, Windows only takes numbers
+            connection.shutdown(2)
+            connection.close()
+            write_lock.release()
+            break
+        # break out of while loop if number of strings exceeds 10
+        if (socket.get_num_of_strings() >= 10):
+            print(
+                "STRINGS LIMIT REACHED, SHUTTING DOWN AND CLOSING SOCKET")
+            connection.sendall(
+                "STRINGS LIMIT REACHED, CLOSING CONNECTION".encode())
+            connection.shutdown(2)
+            connection.close()
+            write_lock.release()
+            break
+        print("\nSentence is: ", sentence)
+        connection.sendall(
+            socket.capitalize_string(sentence).encode() + "\nAwaiting next string...".encode())
+        print("Number of strings ",
+              socket.get_num_of_strings())
+
+
 def main():
     try:
         server_sock = TCPServer(host, port)
@@ -107,31 +137,8 @@ def main():
         while True:
             conn, addr = server_sock.socket.accept()
             print("Connected by: ", addr)
-            while True:
-                sentence = conn.recv(1024).decode()
-                """Turn if loops into a function"""
-                # break out of while loop if shutdown request is given
-                if (sentence == "CLIENT REQUESTS SHUTDOWN"):
-                    print("\nCLIENT HAS REQUESTED SHUTDOWN")
-                    # 2 means SHUT_RDWR or disable read and write, Windows only takes numbers
-                    conn.shutdown(2)
-                    conn.close()
-                    break
-                # break out of while loop if number of strings exceeds 10
-                if (server_sock.get_num_of_strings() >= 10):
-                    print(
-                        "STRINGS LIMIT REACHED, SHUTTING DOWN AND CLOSING SOCKET")
-                    conn.sendall(
-                        "STRINGS LIMIT REACHED, CLOSING CONNECTION".encode())
-                    conn.shutdown(2)
-                    conn.close()
-                    break
-                print("\nSentence is: ", sentence)
-                conn.sendall(
-                    server_sock.capitalize_string(sentence).encode() + "\nAwaiting next string...".encode())
-                print("Number of strings ",
-                      server_sock.get_num_of_strings())
-            break
+            write_lock.acquire()  # acquire the lock so no other thread can harm data
+            start_new_thread(thread_server, (server_sock, conn))
         server_sock.socket.close()
     except KeyboardInterrupt:
         print("\nExited by Ctrl+C.")
