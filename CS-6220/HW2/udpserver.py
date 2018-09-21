@@ -56,7 +56,7 @@ class UDPServer:
                 'Error in binding socket to address and port specified.')
 
     def check_balance(self):
-        return self.balance
+        return str(self.balance) + " dollar(s) are in your balance."
 
     def deposit(self, amount):
         amount = amount[0:]
@@ -72,10 +72,10 @@ class UDPServer:
                 return self.check_balance()
             elif (message[0] == "w"):
                 self.withdraw(message[1:])
-                return "Withdrew " + message[1:] + " dollars. Balance is now " + str(self.balance) + " dollars."
+                return "Withdrew " + message[1:] + " dollar(s). Balance is now " + str(self.balance) + " dollar(s)."
             elif (message[0] == "d"):
                 self.deposit(message[1:])
-                return "Deposited " + message[1:] + " dollars. Balance is now " + str(self.balance) + " dollars."
+                return "Deposited " + message[1:] + " dollar(s). Balance is now " + str(self.balance) + " dollar(s)."
         else:
             return "Improper format, please send command again."
 
@@ -97,10 +97,9 @@ def main():
         while True:
             conn, addr = server_sock.socket.recvfrom(2048)
             print("Connected by: ", addr)
-            while True:
-                message = conn.decode()
-                message = server_sock.process_command(message)
-                server_sock.socket.sendto(message.encode(), addr)
+            message = conn.decode()
+            message = server_sock.process_command(message)
+            server_sock.socket.sendto(message.encode(), addr)
 
         server_sock.socket.close()
     except KeyboardInterrupt:
