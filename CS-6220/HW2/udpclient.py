@@ -31,6 +31,11 @@ class UDPClient:
             self.socket.close()
             raise Exception('Failed to connect to server socket.')
 
+    def auth_challege(self):
+        username = input("\n\tPlease give the username.\n")
+        pin = input("\n\tPlease give the pin number.\n")
+        return username + pin
+
     def process_command(self, number):
         amount = 0
 
@@ -38,7 +43,8 @@ class UDPClient:
             return "b"
         elif (number == "2"):
             amount = input("\n\tHow much do you want to withdraw?\n")
-            return ("w" + amount)
+            credentials = self.auth_challege()
+            return ("w" + amount + "c" + credentials)
         elif (number == "3"):
             amount = input("\n\tHow much do you want to deposit?\n")
             return ("d" + amount)

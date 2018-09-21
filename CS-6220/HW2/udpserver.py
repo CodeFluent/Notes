@@ -28,9 +28,14 @@ class UDPServer:
     socket_type = socket.SOCK_DGRAM  # constant to use UDP socket type
     # request_queue_size = 1  # we only take one connection
     file = open("user.txt", "w")
+
+    # to be put into a file
     balance = 0
+    username = "charles"
+    pin = "02323"
 
     # constructor from the socket.py module
+
     def __init__(self, server_address, server_port):
         self.server_address = server_address
         self.server_port = server_port
@@ -54,6 +59,14 @@ class UDPServer:
             self.socket.close()
             raise Exception(
                 'Error in binding socket to address and port specified.')
+
+    def check_auth(self, username, pin):
+        auth = False
+        if (username == self.username and pin == self.pin):
+            auth = True
+        else:
+            auth = False
+        return auth
 
     def check_balance(self):
         return str(self.balance) + " dollar(s) are in your balance."
