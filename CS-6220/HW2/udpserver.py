@@ -55,15 +55,19 @@ class UDPServer:
             raise Exception(
                 'Error in binding socket to address and port specified.')
 
-    def operation(self, command):
-        if (command == "1"):
-            return "Balance is %s" % self.balance
-        elif (command == "2"):
-            return "Please enter amount:\n"
-        elif (command == "3"):
-            return "Please enter amount:\n"
-        else:
-            return "Illegal Command"
+    def check_balance(self):
+        return self.balance
+
+    def withdraw(self, amount):
+        self.balance = self.balance - int(amount[1:])
+
+    def process_command(self, message):
+        if (len(message) >= 1):
+            if (message[0] == "b"):
+                return self.check_balance()
+            elif (message[0] == "w"):
+                self.withdraw(message[1:])
+                return "Withdrew" + message[1:]
 
     def print_details(self):
         """Print out the server details"""
@@ -85,9 +89,9 @@ def main():
             print("Connected by: ", addr)
             while True:
                 message = conn.decode()
-                server_sock.operation(message)
-
+                server_sock.process_command(message)
                 server_sock.socket.sendto(message.encode(), addr)
+
         server_sock.socket.close()
     except KeyboardInterrupt:
         print("\nExited by Ctrl+C.")

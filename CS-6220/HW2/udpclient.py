@@ -31,25 +31,24 @@ class UDPClient:
             self.socket.close()
             raise Exception('Failed to connect to server socket.')
 
+    def process_command(self, number):
+        amount = 0
+
+        if (number == "1"):
+            return "b"
+        elif (number == "2"):
+            amount = input("\n\tHow much do you want to withdraw?\n")
+            return ("w" + amount)
+        elif (number == "3"):
+            amount = input("\n\tHow much do you want to deposit?\n")
+            return ("d" + amount)
+        else:
+            return "\nIllegal Command."
+
 
 host = '127.0.0.1'
 # port = 0  # the OS should choose an open port for us
 port = 65434
-
-
-def process_command(number):
-    amount = 0
-
-    if (number == "1"):
-        return "b"
-    elif (number == "2"):
-        amount = input("\n\tHow much do you want to withdraw?\n")
-        return ("w" + amount)
-    elif (number == "3"):
-        amount = input("\n\tHow much do you want to deposit?\n")
-        return ("d" + amount)
-    else:
-        return "\nIllegal Command."
 
 
 def main():
@@ -62,7 +61,7 @@ def main():
             print("\t(2) Withdraw\n")
             print("\t(3) Deposit\n")
             command = input("\n\tInput command by sending a number...\n")
-            message = process_command(command)
+            message = client_sock.process_command(command)
             if (message != "\nIllegal Command."):
                 client_sock.socket.sendto(
                     message.encode(), (host, port))
