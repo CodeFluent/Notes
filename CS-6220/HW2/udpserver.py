@@ -58,8 +58,13 @@ class UDPServer:
     def check_balance(self):
         return self.balance
 
+    def deposit(self, amount):
+        amount = amount[0:]
+        self.balance = self.balance + int(amount)
+
     def withdraw(self, amount):
-        self.balance = self.balance - int(amount[1:])
+        amount = amount[0:]
+        self.balance = self.balance - int(amount)
 
     def process_command(self, message):
         if (len(message) >= 1):
@@ -67,7 +72,12 @@ class UDPServer:
                 return self.check_balance()
             elif (message[0] == "w"):
                 self.withdraw(message[1:])
-                return "Withdrew" + message[1:]
+                return "Withdrew " + message[1:] + " dollars. Balance is now " + str(self.balance) + " dollars."
+            elif (message[0] == "d"):
+                self.deposit(message[1:])
+                return "Deposited " + message[1:] + " dollars. Balance is now " + str(self.balance) + " dollars."
+        else:
+            return "Improper format, please send command again."
 
     def print_details(self):
         """Print out the server details"""
@@ -89,7 +99,7 @@ def main():
             print("Connected by: ", addr)
             while True:
                 message = conn.decode()
-                server_sock.process_command(message)
+                message = server_sock.process_command(message)
                 server_sock.socket.sendto(message.encode(), addr)
 
         server_sock.socket.close()
