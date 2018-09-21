@@ -27,7 +27,6 @@ ISSUES
 
 import socket
 import sys
-from _thread import *
 import threading
 
 write_lock = threading.Lock()
@@ -35,14 +34,14 @@ write_lock = threading.Lock()
 
 class TCPServer:
 
-    """TCPServer class contains the necessary functions
+    """
+    TCPServer class contains the necessary functions
     for the application by keeping track of the strings
     and only binding the socket to the specified ports in 
     the constructor. 
 
     All other socket operations should
     be used by the .socket member access.
-
     """
 
     address_family = socket.AF_INET  # only IPv4 connections

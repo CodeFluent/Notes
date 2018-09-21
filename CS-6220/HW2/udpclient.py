@@ -37,19 +37,40 @@ host = '127.0.0.1'
 port = 65434
 
 
+def process_command(number):
+    amount = 0
+
+    if (number == "1"):
+        return "b"
+    elif (number == "2"):
+        amount = input("\n\tHow much do you want to withdraw?\n")
+        return ("w" + amount)
+    elif (number == "3"):
+        amount = input("\n\tHow much do you want to deposit?\n")
+        return ("d" + amount)
+    else:
+        return "\nIllegal Command."
+
+
 def main():
     try:
         client_sock = UDPClient(host, port)
         client_sock.connect()
         while True:  # from python 3.7 docs examples
-            command = input("\n\tInput command...\n")
+            print("\n")
             print("\t(1) Check Balance\n")
             print("\t(2) Withdraw\n")
             print("\t(3) Deposit\n")
-            client_sock.socket.sendto(
-                command.encode(), (host, port))
-            conn, addr = client_sock.socket.recvfrom(2048)
-            print("\nFrom Server: ", conn.decode())
+            command = input("\n\tInput command by sending a number...\n")
+            message = process_command(command)
+            if (message != "\nIllegal Command."):
+                client_sock.socket.sendto(
+                    message.encode(), (host, port))
+                conn, addr = client_sock.socket.recvfrom(2048)
+                print("\nFrom Server: ", conn.decode())
+            else:
+                print(message)
+
         client_sock.socket.close()
     except KeyboardInterrupt:
         print("Interrupted")
