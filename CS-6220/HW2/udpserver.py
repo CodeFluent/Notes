@@ -34,6 +34,7 @@ class UDPServer:
     username = "charles"
     pin = "02323"
 
+    client_details = []  # list to hold client tuples
     # constructor from the socket.py module
 
     def __init__(self, server_address, server_port):
@@ -68,6 +69,31 @@ class UDPServer:
             auth = False
         return auth
 
+    def auth_challege(self):
+        message = "\n\tPlease give the username and pin number.\n"
+
+        # send a message back to the client asking for auth info
+        self.socket.sendto(message.encode(), (self.client_details[0]))
+
+        conn, addr = self.socket.recvfrom(2048)
+        credentials = conn.decode()
+        credentials = credentials.split()
+        credentials = [
+            word for line in credentials for word in line.split()]
+
+        if (self.check_auth(credentials[0], credentials[1]) == True):
+            return True
+        else:
+            return False
+
+    def add_client_details(self, addr):
+        """
+        Add the tuples of our connected clients to a list.
+        This is used namely to connect back to clients for an auth check.
+        See auth_challenge() for more info.
+        """
+        self.client_details.append(addr)
+
     def check_balance(self):
         return str(self.balance) + " dollar(s) are in your balance."
 
@@ -84,8 +110,11 @@ class UDPServer:
             if (message[0] == "b"):
                 return self.check_balance()
             elif (message[0] == "w"):
-                self.withdraw(message[1:])
-                return "Withdrew " + message[1:] + " dollar(s). Balance is now " + str(self.balance) + " dollar(s)."
+                if (self.auth_challege() != False):
+                    self.withdraw(message[1:])
+                    return "Withdrew " + message[1:] + " dollar(s). Balance is now " + str(self.balance) + " dollar(s)."
+                else:
+                    return "Invalid credentials. Please try the withdraw command again."
             elif (message[0] == "d"):
                 self.deposit(message[1:])
                 return "Deposited " + message[1:] + " dollar(s). Balance is now " + str(self.balance) + " dollar(s)."
@@ -110,6 +139,7 @@ def main():
         while True:
             conn, addr = server_sock.socket.recvfrom(2048)
             print("Connected by: ", addr)
+            server_sock.add_client_details(addr)
             message = conn.decode()
             message = server_sock.process_command(message)
             server_sock.socket.sendto(message.encode(), addr)

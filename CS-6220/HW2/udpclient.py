@@ -31,20 +31,15 @@ class UDPClient:
             self.socket.close()
             raise Exception('Failed to connect to server socket.')
 
-    def auth_challege(self):
-        username = input("\n\tPlease give the username.\n")
-        pin = input("\n\tPlease give the pin number.\n")
-        return username + pin
-
     def process_command(self, number):
+        """Formats a message to be received and interpreted server-side."""
         amount = 0
 
         if (number == "1"):
             return "b"
         elif (number == "2"):
             amount = input("\n\tHow much do you want to withdraw?\n")
-            credentials = self.auth_challege()
-            return ("w" + amount + "c" + credentials)
+            return ("w" + amount)
         elif (number == "3"):
             amount = input("\n\tHow much do you want to deposit?\n")
             return ("d" + amount)
@@ -67,14 +62,26 @@ def main():
             print("\t(2) Withdraw\n")
             print("\t(3) Deposit\n")
             command = input("\n\tInput command by sending a number...\n")
+
+            # get a message to send to the server
             message = client_sock.process_command(command)
+
             if (message != "\nIllegal Command."):
+                # send message to server.
                 client_sock.socket.sendto(
                     message.encode(), (host, port))
-                conn, addr = client_sock.socket.recvfrom(2048)
-                print("\nFrom Server: ", conn.decode())
+
+            conn, addr = client_sock.socket.recvfrom(2048)
+            message_from_server = conn.decode()
+            print("\nFrom Server: ", message_from_server)
+
+            if (message_from_server == "\n\tPlease give the username and pin number.\n"):
+                username = input("\n\tPlease give the username.\n")
+                pin = input("\n\tPlease give the pin number.\n")
+                formatted = "u" + username + " " + "p" + pin
+                client_sock.socket.sendto(formatted.encode(), (host, port))
             else:
-                print(message)
+                print("\nFrom Server: ", message_from_server)
 
         client_sock.socket.close()
     except KeyboardInterrupt:
