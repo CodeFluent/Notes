@@ -20,7 +20,6 @@ REQUIRMENTS
 
 """
 ISSUES
-    - Multithreading*
     - Don't bind port to specific number
     - KeyboardInterrupt won't work until enter is pressed.
 """
@@ -139,8 +138,6 @@ def thread_server(socket, connection):
 def main():
     try:
         server_sock = TCPServer(host, port)
-        server_sock.socket.setblocking(1)
-        server_sock.socket.settimeout(10)
         server_sock.socket.listen()
         server_sock.print_details()
         while True:
