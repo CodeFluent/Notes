@@ -10,12 +10,11 @@ Made by Wasfi Momen.
 
 """
 REQUIRMENTS
-    - Maintains file with: name, pin, and balance
-    - Prompts client for auth using name and pin
-    - Allows client to deposit and withdraw AFTER auth
-    - Messages client confirmation of record update
-    - Allows client to ask for and receive current balance
-
+    - ~~Maintains file with: name, pin, and balance~~
+    - ~~Prompts client for auth using name and pin~~
+    - ~~Allows client to deposit and withdraw AFTER auth~~
+    - ~~Messages client confirmation of record update~~
+    - ~~Allows client to ask for and receive current balance~~
 """
 
 import socket
@@ -26,7 +25,6 @@ class UDPServer:
 
     address_family = socket.AF_INET  # only IPv4 connections
     socket_type = socket.SOCK_DGRAM  # constant to use UDP socket type
-    # request_queue_size = 1  # we only take one connection
 
     # to be put into a file
     balance = 0
@@ -42,7 +40,7 @@ class UDPServer:
         self.socket = socket.socket(self.address_family, self.socket_type)
 
         try:
-            self.write_to_file()
+            self.write_to_file()  # initialize and write to file
             self.bind()
         except:
             self.socket.close()
@@ -80,11 +78,20 @@ class UDPServer:
             return False
 
     def auth_challege(self):
+        """
+        Challenges the client to provide credentials.
+        Credentials are returned as a tuple that we can pass to
+        check_auth individually.
+
+        Returns true if credentials are correct and false otherwise.
+        """
+
         message = "\n\tPlease give the username and pin number.\n"
 
         # send a message back to the client asking for auth info
         self.socket.sendto(message.encode(), (self.client_details[0]))
 
+        # initate a new frame to get UDP data. (Probably can just do self.socket.recvfrom(2048))
         conn, addr = self.socket.recvfrom(2048)
         credentials = conn.decode()
         credentials = credentials.split()
@@ -110,6 +117,18 @@ class UDPServer:
         self.write_to_file()
 
     def process_command(self, message):
+        """
+        Takes in a message of 3 formats -- either b, w{int number}, or d{int number}
+        The first character in the message string represent the check_balance(), deposit(), 
+        and withdraw() functions, respectively.
+
+        For withdraw and deposit, the auth_challenge() validates the user permission to 
+        execute the functions.
+
+        Returns strings to send to clients, either a confirmation or invalid message, to
+        be then sent back to the client.
+
+        """
         if (len(message) >= 1):
             if (message[0] == "b"):
                 return self.check_balance()
@@ -133,6 +152,11 @@ class UDPServer:
         print('SERVER READY @ ', self.socket.getsockname())
 
     def write_to_file(self):
+        """
+        Writes to the user.txt file. This function is called
+        once every time a UDPServer is instantiated.
+
+        """
         string = str(self.balance) + "\n" + \
             self.username + "\n" + self.pin + "\n"
         file = open("user.txt", "w")
@@ -142,6 +166,7 @@ class UDPServer:
             file.close()
         except Exception as e:
             file.close()  # just in case
+            sys.exit(1)  # to force stop execution
             print(e)
 
 
