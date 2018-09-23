@@ -29,8 +29,6 @@ import socket
 import sys
 import threading
 
-write_lock = threading.Lock()
-
 
 class TCPServer:
 
@@ -46,8 +44,11 @@ class TCPServer:
 
     address_family = socket.AF_INET  # only IPv4 connections
     socket_type = socket.SOCK_STREAM  # constant to use TCP socket type
+
     # request_queue_size = 1  # we only take one connection
+
     num_strings = 0  # number of strings received
+    client_details = []  # list of clients connected
 
     # constructor from the socket.py module
     def __init__(self, server_address, server_port):
@@ -60,6 +61,17 @@ class TCPServer:
         except:
             self.socket.close()
             raise Exception('Error in setting up connection to host port.')
+
+    def add_client_details(self, addr):
+        """
+        Add the tuples of our connected clients to a list.
+        This is used namely to connect back to clients for an auth check.
+        See auth_challenge() for more info.
+        """
+        if addr in self.client_details:
+            return
+        self.client_details.append(addr)
+        print("Connected by: ", addr)
 
     def capitalize_string(self, client_string):
         """Capitalizes string that is received from the client."""
@@ -107,7 +119,6 @@ def thread_server(socket, connection):
             # 2 means SHUT_RDWR or disable read and write, Windows only takes numbers
             connection.shutdown(2)
             connection.close()
-            write_lock.release()
             break
         # break out of while loop if number of strings exceeds 10
         if (socket.get_num_of_strings() >= 10):
@@ -117,7 +128,6 @@ def thread_server(socket, connection):
                 "STRINGS LIMIT REACHED, CLOSING CONNECTION".encode())
             connection.shutdown(2)
             connection.close()
-            write_lock.release()
             break
         print("\nSentence is: ", sentence)
         connection.sendall(
@@ -135,9 +145,9 @@ def main():
         server_sock.print_details()
         while True:
             conn, addr = server_sock.socket.accept()
-            print("Connected by: ", addr)
-            write_lock.acquire()  # acquire the lock so no other thread can harm data
-            start_new_thread(thread_server, (server_sock, conn))
+            server_sock.add_client_details(addr)
+            thread_server(server_sock, conn)
+            break
         server_sock.socket.close()
     except KeyboardInterrupt:
         print("\nExited by Ctrl+C.")
