@@ -27,7 +27,6 @@ class UDPServer:
     address_family = socket.AF_INET  # only IPv4 connections
     socket_type = socket.SOCK_DGRAM  # constant to use UDP socket type
     # request_queue_size = 1  # we only take one connection
-    file = open("user.txt", "w")
 
     # to be put into a file
     balance = 0
@@ -35,14 +34,15 @@ class UDPServer:
     pin = "02323"
 
     client_details = []  # list to hold client tuples
-    # constructor from the socket.py module
 
+    # constructor from the socket.py module
     def __init__(self, server_address, server_port):
         self.server_address = server_address
         self.server_port = server_port
         self.socket = socket.socket(self.address_family, self.socket_type)
 
         try:
+            self.write_to_file()
             self.bind()
         except:
             self.socket.close()
@@ -55,7 +55,7 @@ class UDPServer:
         See auth_challenge() for more info.
         """
         if addr in self.client_details:
-            pass
+            return
         self.client_details.append(addr)
         print("Connected by: ", addr)
 
@@ -102,10 +102,12 @@ class UDPServer:
     def deposit(self, amount):
         amount = amount[0:]
         self.balance = self.balance + int(amount)
+        self.write_to_file()
 
     def withdraw(self, amount):
         amount = amount[0:]
         self.balance = self.balance - int(amount)
+        self.write_to_file()
 
     def process_command(self, message):
         if (len(message) >= 1):
@@ -129,6 +131,18 @@ class UDPServer:
     def print_details(self):
         """Print out the server details"""
         print('SERVER READY @ ', self.socket.getsockname())
+
+    def write_to_file(self):
+        string = str(self.balance) + "\n" + \
+            self.username + "\n" + self.pin + "\n"
+        file = open("user.txt", "w")
+
+        try:
+            file.write(string)
+            file.close()
+        except Exception as e:
+            file.close()  # just in case
+            print(e)
 
 
 host = "127.0.0.1"
