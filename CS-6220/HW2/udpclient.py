@@ -80,7 +80,10 @@ def main():
                 pin = input("\n\tPlease give the pin number.\n")
                 formatted = "u" + username + " " + "p" + pin
                 client_sock.socket.sendto(formatted.encode(), (host, port))
-            else:
+                # we make another conn, addr here to get another frame of the UDP packet.
+                # dunno how to fix except keeping track of packet data sent and received.
+                conn, addr = client_sock.socket.recvfrom(2048)
+                message_from_server = conn.decode()
                 print("\nFrom Server: ", message_from_server)
 
         client_sock.socket.close()

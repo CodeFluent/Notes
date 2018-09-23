@@ -48,11 +48,19 @@ class UDPServer:
             self.socket.close()
             raise Exception('Error in setting up connection to host port.')
 
+    def add_client_details(self, addr):
+        """
+        Add the tuples of our connected clients to a list.
+        This is used namely to connect back to clients for an auth check.
+        See auth_challenge() for more info.
+        """
+        if addr in self.client_details:
+            pass
+        self.client_details.append(addr)
+        print("Connected by: ", addr)
+
     def bind(self):
         """Binds the socket to any available port"""
-
-        """See Unix man socket(7) SO_REUSEPORT"""
-        # self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         try:
             # a tuple of the address and port is used for the bind function
             self.socket.bind((self.server_address, self.server_port))
@@ -87,14 +95,6 @@ class UDPServer:
             return True
         else:
             return False
-
-    def add_client_details(self, addr):
-        """
-        Add the tuples of our connected clients to a list.
-        This is used namely to connect back to clients for an auth check.
-        See auth_challenge() for more info.
-        """
-        self.client_details.append(addr)
 
     def check_balance(self):
         return str(self.balance) + " dollar(s) are in your balance."
@@ -143,7 +143,6 @@ def main():
         server_sock.print_details()
         while True:
             conn, addr = server_sock.socket.recvfrom(2048)
-            print("Connected by: ", addr)
             server_sock.add_client_details(addr)
             message = conn.decode()
             message = server_sock.process_command(message)
