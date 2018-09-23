@@ -15,11 +15,15 @@ REQUIRMENTS
     - ~~Client ask for termination~~ **"Appropiate message" to terminate is Ctrl+C**
     - ~~Limit reached, send message to client~~
     - ~~Multithreaded~~
+    ALL COMPLETE
 
 """
 
 """
 ISSUES
+    - Non-graceful shutdown of more than two clients. Exception will be raised 
+    but server will continue to function till the last client disconnects.
+    - KeyboardInterrupt not working correctly.
 """
 
 import socket

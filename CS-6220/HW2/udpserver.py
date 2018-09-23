@@ -15,6 +15,7 @@ REQUIRMENTS
     - ~~Allows client to deposit and withdraw AFTER auth~~
     - ~~Messages client confirmation of record update~~
     - ~~Allows client to ask for and receive current balance~~
+    ALL COMPLETE
 """
 
 import socket
