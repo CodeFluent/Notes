@@ -62,12 +62,14 @@ class UDPServer:
                 'Error in binding socket to address and port specified.')
 
     def check_auth(self, username, pin):
-        auth = False
+        # forgot list comprehension, so we separate the first chars here
+        username = username[1:]
+        pin = pin[1:]
+
         if (username == self.username and pin == self.pin):
-            auth = True
+            return True
         else:
-            auth = False
-        return auth
+            return False
 
     def auth_challege(self):
         message = "\n\tPlease give the username and pin number.\n"
@@ -79,7 +81,7 @@ class UDPServer:
         credentials = conn.decode()
         credentials = credentials.split()
         credentials = [
-            word for line in credentials for word in line.split()]
+            word for line in credentials for word in line.split()]  # separate the username and password strings
 
         if (self.check_auth(credentials[0], credentials[1]) == True):
             return True
@@ -116,8 +118,11 @@ class UDPServer:
                 else:
                     return "Invalid credentials. Please try the withdraw command again."
             elif (message[0] == "d"):
-                self.deposit(message[1:])
-                return "Deposited " + message[1:] + " dollar(s). Balance is now " + str(self.balance) + " dollar(s)."
+                if (self.auth_challege() != False):
+                    self.deposit(message[1:])
+                    return "Deposited " + message[1:] + " dollar(s). Balance is now " + str(self.balance) + " dollar(s)."
+                else:
+                    return "Invalid credentails. Please try the deposit command again."
         else:
             return "Improper format, please send command again."
 
