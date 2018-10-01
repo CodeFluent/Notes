@@ -48,6 +48,11 @@ class ToyCrypto:
         print("\nThe message is: ", self.message)
         return self.message
 
+    def str_xor(self, s1, s2):
+        done = "".join([chr(ord(c1) ^ ord(c2)) for (c1, c2) in zip(s1, s2)])
+        print("Formatted: {:02x}".format(done))
+        return done
+
     def encrypt(self, key, message):
         if (key != None and message != None):
 
@@ -56,9 +61,10 @@ class ToyCrypto:
                 str(key) * n_times)  # K || K n/2 times
 
             # can uncomment to see the keys concatenated
-            # print("The string of K keys: ", string_to_concat)
+            print("The string of K keys: ", string_to_concat)
 
-            print(string_to_concat)
+            # self.str_xor(str(key), message)
+            self.str_xor("100", "100")
 
             # self.encrypted_message = (
             #     int(message, 2) ^ int(string_to_concat, 2)) * 100
