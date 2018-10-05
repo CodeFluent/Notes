@@ -32,10 +32,10 @@ class ToyCrypto:
     contains a brute force algorithm to try and decrypt the message.
     """
 
-    def __init__(self, n_chars):
+    def __init__(self):
         self.message = self.decrypted_message = self.encrypted_message = None
         self.key = None
-        self.n_chars = n_chars
+        self.n_bytes = 0
 
     def generateKey(self):
         self.key = random.getrandbits(16)
@@ -43,9 +43,17 @@ class ToyCrypto:
         return self.key
 
     def generateMessage(self):
+
+        # generates a string using upper and lower cases of even character lengths
+        #  from 2 to up to 100 total characters.
         self.message = ''.join(random.choices(
-            string.ascii_letters, k=self.n_chars))
+            string.ascii_letters, k=random.randrange(2, 100, 2)))
+
+        # save the message length (in bytes)
+        self.n_bytes = self.utf8len(self.message)
+
         print("\nThe message is: ", self.message)
+        print("The message length is: ", self.utf8len(self.message))
         return self.message
 
     def str_xor(self, s1, s2):
@@ -56,19 +64,19 @@ class ToyCrypto:
     def encrypt(self, key, message):
         if (key != None and message != None):
 
-            n_times = int(self.n_chars/2)
+            n_times = int(self.n_bytes/2)
             string_to_concat = ''.join(
                 str(key) * n_times)  # K || K n/2 times
 
             # can uncomment to see the keys concatenated
-            print("The string of K keys: ", string_to_concat)
+            print("\nThe string of K keys: ", string_to_concat)
 
             # self.str_xor(str(key), message)
-            self.str_xor("100", "100")
+            # self.str_xor("100", "100")
 
             # self.encrypted_message = (
             #     int(message, 2) ^ int(string_to_concat, 2)) * 100
-            print("The encrypted message is: ", self.encrypted_message)
+            print("\nThe encrypted message is: ", self.encrypted_message)
 
             return self.encrypted_message
 
@@ -89,9 +97,13 @@ class ToyCrypto:
     def bruteForce(self):
         pass
 
+    def utf8len(self, string):
+        """Returns the actual length of a string in bytes."""
+        return len(string.encode('utf-8'))
+
 
 def main():
-    toy = ToyCrypto(2)
+    toy = ToyCrypto()
     key = toy.generateKey()
     message = toy.generateMessage()
     encrypted = toy.encrypt(key, message)
