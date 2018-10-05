@@ -9,7 +9,7 @@ Made by Wasfi Momen.
 """
 
 """
-REQUIRMENTS
+REQUIREMENTS
     - ~~Maintains file with: name, pin, and balance~~
     - ~~Prompts client for auth using name and pin~~
     - ~~Allows client to deposit and withdraw AFTER auth~~
