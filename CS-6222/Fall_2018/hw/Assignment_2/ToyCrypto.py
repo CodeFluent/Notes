@@ -57,26 +57,30 @@ class ToyCrypto:
         return self.message
 
     def str_xor(self, s1, s2):
-        done = "".join([chr(ord(c1) ^ ord(c2)) for (c1, c2) in zip(s1, s2)])
-        print("Formatted: {:02x}".format(done))
+        """Returns the complete encrypted string."""
+        # convert each character to unicode, XOR them, then use chr to convert the character
+        #  back to ascii. Do this for all characters in string s1 and s2.
+        done = ''.join(chr(ord(a) ^ ord(b)) for a, b in zip(s1, s2))
         return done
 
     def encrypt(self, key, message):
         if (key != None and message != None):
 
+            # calculate how many times we need to concat the key (message length in bytes / 2)
             n_times = int(self.n_bytes/2)
-            string_to_concat = ''.join(
-                str(key) * n_times)  # K || K n/2 times
 
-            # can uncomment to see the keys concatenated
+            # concat the key by n_times
+            string_to_concat = ''.join(
+                str(key) * n_times)
+
+            # print the resulting concatenation
             print("\nThe string of K keys: ",
                   string_to_concat + " (Repeated " + str(n_times) + " times)")
 
-            # self.str_xor(str(key), message)
-            # self.str_xor("100", "100")
+            # use str_xor to do the actual encryption process
+            self.encrypted_message = self.str_xor(str(key), message)
 
-            # self.encrypted_message = (
-            #     int(message, 2) ^ int(string_to_concat, 2)) * 100
+            # print the encrypted message
             print("\nThe encrypted message is: ", self.encrypted_message)
 
             return self.encrypted_message
@@ -93,6 +97,7 @@ class ToyCrypto:
 
     def decrypt(self, key, message):
         #  decryption same as encryption
+        print("\n" + "-"*10 + "DECRYPTION" + "-"*10)
         return self.encrypt(key, message)
 
     def bruteForce(self):
@@ -108,7 +113,7 @@ def main():
     key = toy.generateKey()
     message = toy.generateMessage()
     encrypted = toy.encrypt(key, message)
-    decrypted = toy.decrypt(key, encrypted)
+    # decrypted = toy.decrypt(key, encrypted)
 
 
 if __name__ == '__main__':
