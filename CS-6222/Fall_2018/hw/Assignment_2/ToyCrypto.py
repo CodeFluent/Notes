@@ -69,7 +69,8 @@ class ToyCrypto:
                 str(key) * n_times)  # K || K n/2 times
 
             # can uncomment to see the keys concatenated
-            print("\nThe string of K keys: ", string_to_concat)
+            print("\nThe string of K keys: ",
+                  string_to_concat + " (Repeated " + str(n_times) + " times)")
 
             # self.str_xor(str(key), message)
             # self.str_xor("100", "100")
