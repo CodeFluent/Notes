@@ -6,22 +6,25 @@ Made by Wasfi Momen.
 
 """
 REQUIRMENTS
-    - Keys are randomly generated 16 bit values
-    - Messages are randomly generated strings with
-    an even number of characters
-    - Valid characters are upper case and lower case
-    characters
-    - Encryption is n bytes with K being n/2 times
-     (E(M) = M XOR K || K || K) with || as string concat
-    - Decryption is the same as encryption
-     (D(C) = C XOR K || K || K)
+    - ~~Keys are randomly generated 16 bit values~~
+    - ~~Messages are randomly generated strings with
+    an even number of characters~~
+    - ~~Valid characters are upper case and lower case
+    characters~~
+    - ~~Encryption is n bytes with K being n/2 times
+     (E(M) = M XOR K || K || K) with || as string concat~~
+    - ~~Decryption is the same as encryption
+     (D(C) = C XOR K || K || K)~~
      - Bruteforce attack
 
+ISSUES
+    - Bruteforce not completed
 """
 
 
 import random
 import string
+import re
 
 
 class ToyCrypto:
@@ -64,6 +67,7 @@ class ToyCrypto:
         return done
 
     def encrypt(self, key, message):
+        """Returns an encrypted message string and prints status messages."""
         if (key != None and message != None):
 
             # calculate how many times we need to concat the key (message length in bytes / 2)
@@ -98,12 +102,36 @@ class ToyCrypto:
             return
 
     def decrypt(self, key, message):
-        #  decryption same as encryption
-        print("\n" + "-"*10 + "DECRYPTION" + "-"*10)
-        return self.encrypt(key, message)
+        """Decryption same as encryption. Copy/pasted for convienence, but messages
+        should be in other functions instead."""
 
-    def bruteForce(self):
-        pass
+        # calculate how many times we need to concat the key (message length in bytes / 2)
+        n_times = int(self.n_bytes/2)
+
+        # concat the key by n_times
+        string_to_concat = ''.join(
+            str(key) * n_times)
+
+        # use str_xor to concat the message and the key concatenation
+        self.decrypted_message = self.str_xor(string_to_concat, message)
+
+        return self.decrypted_message
+
+    def bruteForce(self, encrypted_message):
+        """
+        Attempts to brute force the key given an encrypted string.
+        Iterates over all possible key values since the attacker knows
+        the key length.
+        """
+        for i in range(2**16):  # 2^16 possible key values
+            key_string = ""
+            length_of_key = len(key_string)
+            for j in range(16-length_of_key):
+                key_string = "0" + key_string
+            decrypted_message = self.decrypt(key_string, encrypted_message)
+            if (re.match("[a-zA-Z ]+", decrypted_message)):
+                print("decrypted message: ", decrypted_message)
+                print("key is: ", key_string)
 
 
 def main():
@@ -111,7 +139,13 @@ def main():
     key = toy.generateKey()
     message = toy.generateMessage()
     encrypted = toy.encrypt(key, message)
+
+    # uncomment to see decryption work
     # decrypted = toy.decrypt(key, encrypted)
+    # print("\nThe decrypted message is: " + decrypted)
+
+    # does not work
+    # toy.bruteForce(encrypted)
 
 
 if __name__ == '__main__':
