@@ -22,39 +22,30 @@ clients = {
 }
 
 
-def get_key(value):
-    """
-    Returns the first key given the value. Cuz dictionaries aren't "intended" to do that.
-    Used to return the ip from a given mac address registered in the clients dictionary.
-    """
-    for ip, mac in clients.items():
-        if (mac == value):
-            return ip
+def identify_attacker():
+    for i in clients.keys():
+        if (clients[i][1] >= 100):
+            print("FUCK", clients[i])
 
 
-# def record_client(packet):
-#     """Records all clients in the pcap file into the clients dictionary."""
-#     if ((packet.psrc and packet.hwsrc) not in clients):
-#         clients[packet.psrc] = packet.hwsrc
-
-
-def record_ports_hit(packet, packet_number):
-    # given packet and packet number...
-    # get the destination port number for the TCP SYN packet
-    dest_port = packet.dport
-    # see if destination port is unique in the pcap
-    unique_port(dest_port)
-    # find the packet's source ip in the dictionary
-    # increment the number of ports hit
+def increment_ports_hit(source_ip_address):
     # future feature: before incrementing, follow convo of packet to see if it is actually a legit connection. If legit, don't increment.
-    pass
+    for ip in clients.keys():
+        if (ip == source_ip_address):
+            # delete the ports_hit value and stores it in ports_hit
+            ports_hit = clients[source_ip_address].pop(1)
+            # append an incremented ports_hit value
+            clients[source_ip_address].append(ports_hit + 1)
 
 
-def unique_port(port_num):
-    # (check all past packets for port vs check all mentions of port in pcap)
-    # check all past packets to see if port_num was previously used. Return false if already used.
-
-    pass
+def unique_port(port_num, packet_number):
+    """Returns a boolean to indicate if the port has been used before."""
+    # checks all past packets to see if port_num was previously used. Return false if already used.
+    # could cut down range by just getting the first TCP SYN packet and all subsequent ones.
+    for packet in range(0, packet_number):
+        if ((packet.haslayer(TCP) and packet['TCP'].flags == 'S') and (packet.dport == port_num)):
+            return False
+    return True
 
 
 def output_warning(source_ip_address, destination_ip_address, packet_number):
@@ -68,49 +59,23 @@ def output_warning(source_ip_address, destination_ip_address, packet_number):
     print(str)
 
 
-# def experiments():
-#     """Not used in the program. Only used to experiment with the scapy library."""
-
-#     # EXPERIMENTS with scapy...
-
-#     """
-#     What follows are the scapy packet attributes (by layer) and their Wireshark equivalents in parentheses.
-#         - p.src (Eth) is also p.psrc, p.hwsrc (ARP) as SourceMACField, SourceIPField, or ARPSourceMacField, respectively. (SenderIPAddress)
-#         - p.dst (Eth) is also p.pdst, p.hwdst (ARP) as DestMacField, IPField, or MACField, respectively. (TargetMACAddress)
-#         - p.pdst is just an IPField, normally the destination (TargetIPAddress)
-#     """
-
-#     # # for more info on packets
-#     # for idx, p in enumerate(a):
-#     #     p.show()
-
-#     # # for more info on fields
-#     # for idx, p in enumerate(a):
-#     #     ls(p)
-
-#     # # for more info on ARP layer packets
-#     # for idx, p in enumerate(a):
-#     #     if (p.haslayer(ARP)):
-#     #         if (idx == 9):
-#     #             p.show()
-
-
 def main():
 
     # a.show()  # to show all packets using nsummary format
 
-    # experiments()  # for experimental/learning purposes
-
     for idx, p in enumerate(a):
         if (p.haslayer(TCP) and p['TCP'].flags == 'S'):
-            # record_ports_hit(packet, idx + 1)
-            p.show()
-            # attacker = identify_attacker(p)
+            # see if destination port is unique in the pcap
+            if (unique_port(p, idx + 1)):
+                # find the packet's source ip in the dictionary and increment the number of ports hit
+                increment_ports_hit(p.src)
+
             # Output a warning
             # output_warning(src_ip, dest_ip, idx+1)
         elif (p.haslayer(UDP)):
             pass
 
+    identify_attacker()
     # print(clients)  # print out the list of clients
 
 
