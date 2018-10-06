@@ -77,11 +77,13 @@ class ToyCrypto:
             print("\nThe string of K keys: ",
                   string_to_concat + " (Repeated " + str(n_times) + " times)")
 
-            # use str_xor to do the actual encryption process
-            self.encrypted_message = self.str_xor(str(key), message)
+            # use str_xor to concat the message and the key concatenation
+            self.encrypted_message = self.str_xor(string_to_concat, message)
 
             # print the encrypted message
             print("\nThe encrypted message is: ", self.encrypted_message)
+            print("The encrypted message length is: ",
+                  len(self.encrypted_message))
 
             return self.encrypted_message
 
