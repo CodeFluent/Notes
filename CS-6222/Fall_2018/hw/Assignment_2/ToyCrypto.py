@@ -50,10 +50,10 @@ class ToyCrypto:
             string.ascii_letters, k=random.randrange(2, 100, 2)))
 
         # save the message length (in bytes)
-        self.n_bytes = self.utf8len(self.message)
+        self.n_bytes = len(self.message)
 
         print("\nThe message is: ", self.message)
-        print("The message length is: ", self.utf8len(self.message))
+        print("The message length is: ", len(self.message))
         return self.message
 
     def str_xor(self, s1, s2):
@@ -102,10 +102,6 @@ class ToyCrypto:
 
     def bruteForce(self):
         pass
-
-    def utf8len(self, string):
-        """Returns the actual length of a string in bytes."""
-        return len(string.encode('utf-8'))
 
 
 def main():
