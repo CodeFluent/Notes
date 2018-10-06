@@ -14,6 +14,7 @@ from scapy.layers.all import *
 # load file from same directory
 a = rdpcap('portscan.pcap')
 
+# dictionary of clients with their MAC addresses and number of ports hit
 clients = {
     "192.168.0.100": ["7c:d1:c3:94:9e:b8", 0],
     # typo in assignment .103 should be .101 and MAC is 60:fe not d8:96
@@ -21,11 +22,14 @@ clients = {
     "192.168.0.1": ["f8:1a:67:cd:57:6e", 0]
 }
 
+# list of ports
+tracked_ports = []
 
-def identify_attacker():
+
+def identify_attacker(packet, packet_number):
     for i in clients.keys():
         if (clients[i][1] >= 100):
-            print("FUCK", clients[i])
+            output_warning(packet['IP'].src, packet['IP'].dst, packet_number)
 
 
 def increment_ports_hit(source_ip_address):
@@ -38,14 +42,13 @@ def increment_ports_hit(source_ip_address):
             clients[source_ip_address].append(ports_hit + 1)
 
 
-def unique_port(port_num, packet_number):
+def unique_port(packet):
     """Returns a boolean to indicate if the port has been used before."""
-    # checks all past packets to see if port_num was previously used. Return false if already used.
-    # could cut down range by just getting the first TCP SYN packet and all subsequent ones.
-    for packet in range(0, packet_number):
-        if ((packet.haslayer(TCP) and packet['TCP'].flags == 'S') and (packet.dport == port_num)):
-            return False
-    return True
+    if (packet.dport not in tracked_ports):
+        tracked_ports.append(packet.dport)
+        return True
+    else:
+        return False
 
 
 def output_warning(source_ip_address, destination_ip_address, packet_number):
@@ -66,16 +69,16 @@ def main():
     for idx, p in enumerate(a):
         if (p.haslayer(TCP) and p['TCP'].flags == 'S'):
             # see if destination port is unique in the pcap
-            if (unique_port(p, idx + 1)):
+            if (unique_port(p)):
                 # find the packet's source ip in the dictionary and increment the number of ports hit
-                increment_ports_hit(p.src)
+                increment_ports_hit(p['IP'].src)
+                identify_attacker(p, idx + 1)
 
             # Output a warning
             # output_warning(src_ip, dest_ip, idx+1)
         elif (p.haslayer(UDP)):
             pass
 
-    identify_attacker()
     # print(clients)  # print out the list of clients
 
 
