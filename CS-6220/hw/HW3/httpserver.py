@@ -21,7 +21,7 @@ import threading
 import socketserver
 import sys
 
-from http.server import BaseHTTPRequestHandler
+from http.server import HTTPServer, BaseHTTPRequestHandler
 
 
 DEFAULT_PAGE = """\
@@ -44,10 +44,17 @@ DEFAULT_PAGE = """\
 
 class Page_Handler(BaseHTTPRequestHandler):
 
+    def do_HEAD(self):
+        self.send_response(200)
+        self.send_header("Content-Type", "text/html")
+        self.end_headers()
+
     def do_GET(self):
         if (self.path == "/"):
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html")
+            self.end_headers()         
             self.wfile.write(DEFAULT_PAGE.encode("utf-8"))
-        return 
 
  
 
@@ -57,9 +64,13 @@ def main():
     
     
     server = socketserver.TCPServer((host, port), Page_Handler)
-    server.serve_forever()
-    
 
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
+
+    server.shutdown()
 
 if __name__ == '__main__':
     main()
