@@ -56,6 +56,21 @@ ERROR_404_PAGE = """\
 </html>
 """
 
+ERROR_504_PAGE = """\
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+        <title>504</title>
+    </head>
+    <body>
+        <h1>Server is stopped.</h1>
+        <p>This is the 504 page.</p>
+    </body>
+</html>
+"""
+
 
 
 class Page_Handler(BaseHTTPRequestHandler):
@@ -74,6 +89,14 @@ class Page_Handler(BaseHTTPRequestHandler):
             self.send_header("Content-Type", "text/html")
             self.end_headers()
             self.wfile.write(ERROR_404_PAGE.encode("utf-8"))
+    
+    def do_TIMEOUT(self):
+        self.send_response(504)
+        self.send_header("Content-Type", "text/html")
+        self.end_headers()
+        self.wfile.write(ERROR_504_PAGE.encode("utf-8"))
+
+        
 
 
  
@@ -90,6 +113,7 @@ def main():
     except KeyboardInterrupt:
         print("\nShutting down server...")
         server.shutdown()
+    
 
 if __name__ == '__main__':
     main()
