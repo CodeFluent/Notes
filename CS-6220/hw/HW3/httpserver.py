@@ -20,6 +20,7 @@ import socket
 import threading
 import socketserver # TCPServer will be used as our server.
 import sys
+import time
 
 # for proper processing of HTTP verbs
 from http.server import HTTPServer, BaseHTTPRequestHandler
@@ -36,7 +37,7 @@ DEFAULT_PAGE = """\
     <body>
         <h1>Welcome to the HTTP Server!</h1>
         <p>Try to go to an unknown page like <a href="wtf.html">here.</a></p>
-        <p>Or try to intiate a timeout here.</p>
+        <p>Or try to intiate a timeout <a href="/long_page">here.</a></p>
     </body>
 </html>
 """
@@ -75,31 +76,30 @@ ERROR_504_PAGE = """\
 
 class Page_Handler(BaseHTTPRequestHandler):
 
-    def do_HEAD(self):
-        self.send_response(200)
+    def do_HEAD(self, status):
+        self.send_response(status)
         self.send_header("Content-Type", "text/html")
         self.end_headers()
 
     def do_GET(self):
         if (self.path == "/"):
-            self.do_HEAD()
+            self.do_HEAD(200)
             self.wfile.write(DEFAULT_PAGE.encode("utf-8"))
+        elif (self.path == "/long_page"):
+            self.do_TIMEOUT()
         else:
-            self.send_response(404)
-            self.send_header("Content-Type", "text/html")
-            self.end_headers()
+            self.do_HEAD(404)
             self.wfile.write(ERROR_404_PAGE.encode("utf-8"))
     
     def do_TIMEOUT(self):
-        self.send_response(504)
-        self.send_header("Content-Type", "text/html")
-        self.end_headers()
-        self.wfile.write(ERROR_504_PAGE.encode("utf-8"))
+        """Sleep for 10 seconds. Then do a 504 error."""
+        i = 10 
+        while (i != 0):
+            i -= 1
+            time.sleep(1)
+        self.do_HEAD(504)
+        self.wfile.write(ERROR_504_PAGE.encode("utf-8")) 
 
-        
-
-
- 
 
 def main():
     host = "127.0.0.1"
