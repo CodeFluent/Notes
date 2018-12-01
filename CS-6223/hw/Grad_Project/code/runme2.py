@@ -19,7 +19,7 @@ REQUIREMENTS:
 import numpy as np
 import pandas as pd
 
-random.seed(6223) # so we can make random values consistent
+np.random.seed(6223) # so we can make random values consistent
 
 """
 The Laplace Mechanism Function
@@ -36,6 +36,12 @@ def laplace(data, f, e):
 def count_query(data, f, e):
     return laplace(data, f, e)
 
+def laplace_noise(row, col,e):
+    noise = np.random.laplace(0, e, [row, col])
+    # print(noise + "\n" + len(noise))
+    return noise
+
+
 
 def clean_up():
     # read csv file
@@ -48,12 +54,19 @@ def clean_up():
         "Capital-Gain", "Capital-Loss", "Hoursperweek", "Native-Country", "Class"
     ]
 
+    # drop data columns with continous variables
+    dataframe.drop(["Age", "Fnlwgt", "Education-Number", "Capital-Gain", "Capital-Loss", "Hoursperweek"], axis=1, inplace=True,)
+
     return dataframe
 
     # print(dataframe)
 
 
 dataframe = clean_up()
-altered_dataframe = count_query(dataframe, np.sum, np.log(3))
 
-# print(df)
+num_rows = dataframe.shape[0]
+num_cols = dataframe.shape[1]
+
+noise = laplace_noise(num_rows, num_cols, 0.1)
+
+# print(dataframe)
