@@ -22,27 +22,37 @@ import pandas as pd
 np.random.seed(6223) # so we can make random values consistent
 
 """
-The Laplace Mechanism Function
+laplace(): The Laplace Mechanism Function
 
 Perturbs a data value by the Laplace Distribution given an epsilon e and function f. Lap(f/e)
-
 """
 def laplace(data, f, e):
     data += f(data) # get the data value after it goes through the function f 
     data += np.random.laplace(0, 1.0/e) # then add a Laplace Random variable controlled by epsilon
     return data
 
+"""
 
+"""
 def count_query(data, f, e):
     return laplace(data, f, e)
 
-def laplace_noise(row, col,e):
+
+"""
+laplace_noise() creates a matrix of Laplacian noise given the number of rows and columns of the 
+dataset to be perturbed. Can edit epsilon value to adjust.
+"""
+def laplace_noise(row, col, e):
     noise = np.random.laplace(0, e, [row, col])
     # print(noise)
     # print(len(noise))
     return noise
 
 
+"""
+clean_up() handles the dataprocessing to extract the dataset D. For use with Laplacian noise,
+we must drop con
+"""
 
 def clean_up():
     # read csv file
@@ -56,14 +66,18 @@ def clean_up():
     ]
 
     # drop data columns with continous variables
-    dataframe.drop(["Age", "Fnlwgt", "Education-Number", "Capital-Gain", "Capital-Loss", "Hoursperweek"], axis=1, inplace=True)
+    # dataframe.drop(["Age", "Fnlwgt", "Education-Number", "Capital-Gain", "Capital-Loss", "Hoursperweek"], axis=1, inplace=True)
 
     # map our protected value to either -1 or 1
     dataframe.Class = dataframe.Class.map(({ "<=50K": -1, ">50K": 1 }))
 
     # turn all categorical values to dummies. Some distance based on categorical or other way might've been better.
-    dataframe = pd.get_dummies(dataframe, columns=["Workclass", "Education", 
-        "Marital-status", "Occupation", "Relationship", "Race", "Gender", "Native-Country"])
+    # dataframe = pd.get_dummies(dataframe, columns=["Workclass", "Education", 
+    #     "Marital-status", "Occupation", "Relationship", "Race", "Gender", "Native-Country"])
+        
+    dataframe = pd.get_dummies(dataframe, columns=["Age", "Workclass", "Fnlwgt", "Education", "Education-Number",
+        "Marital-status", "Occupation", "Relationship", "Race", "Gender",
+        "Capital-Gain", "Capital-Loss", "Hoursperweek", "Native-Country", "Class"])
     
     return dataframe
 
@@ -74,8 +88,17 @@ dataframe = clean_up()
 num_rows = dataframe.shape[0]
 num_cols = dataframe.shape[1]
 
+# create a laplace_noise matrix with the same size as the dataframe
 noise = laplace_noise(num_rows, num_cols, 0.1)
 
+# add the dataframe and noise together. This is the resulting output dataset
 dataframe = dataframe + noise
 
-print(dataframe)
+dataframe.to_csv("output.csv", index=False)
+
+# print(dataframe)
+
+
+altered_dataframe = count_query(dataframe.Class, np.sum, 1.0)
+
+print(altered_dataframe)
