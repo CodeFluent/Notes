@@ -66,7 +66,7 @@ def clean_up():
 dataframe = clean_up()
 
 print("Dataset D:\n")
-print(dataframe[["Class", "Workclass"]])
+print(dataframe)
 
 
 num_rows = dataframe.shape[0]
@@ -84,4 +84,4 @@ dataframe = dataframe + noise
 dataframe.to_csv("LP_output.csv", index=False)
 
 print("Perturbed Dataset D':\n")
-print(dataframe[["Class", "Workclass"]])
+print(dataframe)
