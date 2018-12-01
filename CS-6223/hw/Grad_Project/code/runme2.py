@@ -46,7 +46,7 @@ def laplace_noise(row, col,e):
 
 def clean_up():
     # read csv file
-    dataframe = pd.read_csv("data/adult.data")
+    dataframe = pd.read_csv("data/adult.data", delimiter=',', skipinitialspace=True,)
 
     # assign columns for the DataFrame
     dataframe.columns = [
@@ -56,11 +56,17 @@ def clean_up():
     ]
 
     # drop data columns with continous variables
-    dataframe.drop(["Age", "Fnlwgt", "Education-Number", "Capital-Gain", "Capital-Loss", "Hoursperweek"], axis=1, inplace=True,)
+    dataframe.drop(["Age", "Fnlwgt", "Education-Number", "Capital-Gain", "Capital-Loss", "Hoursperweek"], axis=1, inplace=True)
+
+    dataframe.Class = dataframe.Class.map(({ "<=50K": -1, ">50K": 1 }))
+    y_all = dataframe.Class
+
+
+    # dataframe = pd.get_dummies(dataframe, columns=["Workclass", "Education", "Marital-status",
+    # "Occupation", "Relationship", "Race", "Gender", "Native-Country"])
 
     return dataframe
 
-    # print(dataframe)
 
 
 dataframe = clean_up()

@@ -49,7 +49,7 @@ def count_query(p, q, data):
 
 def clean_up():
     # read csv file
-    dataframe = pd.read_csv("data/adult.data")
+    dataframe = pd.read_csv("data/adult.data", delimiter=',', skipinitialspace=True,)
 
     # assign columns for the DataFrame
     dataframe.columns = [
