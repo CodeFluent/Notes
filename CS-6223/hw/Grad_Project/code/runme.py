@@ -18,35 +18,24 @@ REQUIREMENTS:
 
 import numpy as np
 import pandas as pd
-from numpy.random import random
 
-random.seed(6223) # so we can make random values consistent
-
-"""
-The Randomized Response Mechanism. Will perturb data values with probability p and q.
-
-Same setup as Assignment 2, we flip a coin and if it's tails (prob_p) we give the data value d. 
-However, if it's heads (prob_q), then we flip another coin and give answer "1" for heads (prob_q) and 
-"0" for tails (prob_p). This means we have values 0 <= d <= 1.
-
-p and q must equal 1
+np.random.seed(6223) # so we can make random values consistent
 
 """
-def RR(p, q, data):
-    if (p + q == 1):
-        if (random() < p):
-            return data
-        elif (random() < q): # got heads, flip another coin
-            return 1
-        else:
-            return 0 # got tails instead for the second flip
-    else:
-        print("Error! Please pick a p and q value that sum to 1.")
+laplace_noise() creates a matrix of Laplacian noise given the number of rows and columns of the 
+dataset to be perturbed. Can edit epsilon value e to adjust.
+"""
+def laplace_noise(row, col, e):
+    noise = np.random.laplace(0, e, [row, col])
+    # print(noise)
+    # print(len(noise))
+    return noise
 
-def count_query(p, q, data):
-    randomized_data = RR(p, q, data)
-    return len(data) * (randomized_data.mean() - (1 - p)*q)/p
 
+"""
+clean_up() handles the dataprocessing to extract the dataset D. For use with Laplacian noise,
+we must drop con
+"""
 def clean_up():
     # read csv file
     dataframe = pd.read_csv("data/adult.data", delimiter=',', skipinitialspace=True,)
@@ -58,11 +47,41 @@ def clean_up():
         "Capital-Gain", "Capital-Loss", "Hoursperweek", "Native-Country", "Class"
     ]
 
+    # drop data columns with continous variables, they have very few unique values unlike the other columns
+    # not dropping them and perturbing them results in the program crashing.
+    dataframe.drop(["Age", "Fnlwgt", "Education-Number", "Capital-Gain", "Capital-Loss", "Hoursperweek"], axis=1, inplace=True)
+
+    # map our protected value to either -1 or 1
+    # this provides the two extreme truth values that Laplacian noise will disturb
+    dataframe.Class = dataframe.Class.map(({ "<=50K": -1, ">50K": 1 }))
+
+    # turn all categorical values to dummies. Some distance based on categorical or other way might've been better.
+    dataframe = pd.get_dummies(dataframe, columns=["Workclass", "Education", 
+        "Marital-status", "Occupation", "Relationship", "Race", "Gender", "Native-Country"])
+    
     return dataframe
 
-    # print(dataframe)
 
 
-df = clean_up()
+dataframe = clean_up()
 
-# print(df)
+print("Dataset D:\n")
+print(dataframe[["Class", "Workclass"]])
+
+
+num_rows = dataframe.shape[0]
+num_cols = dataframe.shape[1]
+
+# !!!!MODIFY EPISILON HERE!!! if you wish by changing .1 to whatever value
+# create a laplace_noise matrix with the same size as the dataframe
+# noise = laplace_noise(num_rows, num_cols, np.log(3))
+noise = laplace_noise(num_rows, num_cols, .1)
+
+
+# add the dataframe and noise together. This is the resulting output dataset
+dataframe = dataframe + noise
+
+dataframe.to_csv("LP_output.csv", index=False)
+
+print("Perturbed Dataset D':\n")
+print(dataframe[["Class", "Workclass"]])
