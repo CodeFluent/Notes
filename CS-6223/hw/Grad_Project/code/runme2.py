@@ -38,7 +38,8 @@ def count_query(data, f, e):
 
 def laplace_noise(row, col,e):
     noise = np.random.laplace(0, e, [row, col])
-    # print(noise + "\n" + len(noise))
+    # print(noise)
+    # print(len(noise))
     return noise
 
 
