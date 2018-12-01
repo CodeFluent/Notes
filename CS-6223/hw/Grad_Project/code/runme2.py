@@ -58,13 +58,13 @@ def clean_up():
     # drop data columns with continous variables
     dataframe.drop(["Age", "Fnlwgt", "Education-Number", "Capital-Gain", "Capital-Loss", "Hoursperweek"], axis=1, inplace=True)
 
+    # map our protected value to either -1 or 1
     dataframe.Class = dataframe.Class.map(({ "<=50K": -1, ">50K": 1 }))
-    y_all = dataframe.Class
 
-
-    # dataframe = pd.get_dummies(dataframe, columns=["Workclass", "Education", "Marital-status",
-    # "Occupation", "Relationship", "Race", "Gender", "Native-Country"])
-
+    # turn all categorical values to dummies. Some distance based on categorical or other way might've been better.
+    dataframe = pd.get_dummies(dataframe, columns=["Workclass", "Education", 
+        "Marital-status", "Occupation", "Relationship", "Race", "Gender", "Native-Country"])
+    
     return dataframe
 
 
@@ -76,4 +76,6 @@ num_cols = dataframe.shape[1]
 
 noise = laplace_noise(num_rows, num_cols, 0.1)
 
-# print(dataframe)
+dataframe = dataframe + noise
+
+print(dataframe)
