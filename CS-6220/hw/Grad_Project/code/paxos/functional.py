@@ -16,6 +16,7 @@ class HeartbeatMessenger (practical.Messenger):
         Sends a heartbeat message to all nodes
         '''
 
+
     def schedule(self, msec_delay, func_obj):
         '''
         While leadership is held, this method is called by pulse() to schedule
@@ -107,7 +108,7 @@ class HeartbeatNode (practical.Node):
         Should be called every liveness_window. This method checks to see if the
         current leader is active and, if not, will begin the leadership acquisition
         process.
-        '''
+        '''            
         if not self.leader_is_alive() and not self.observed_recent_prepare():
             if self._acquiring:
                 self.prepare()
@@ -141,6 +142,7 @@ class HeartbeatNode (practical.Node):
         '''
         Must be called every hb_period while this node is the leader
         '''
+
         if self.leader:
             self.recv_heartbeat(self.node_uid, self.proposal_id)
             self.messenger.send_heartbeat(self.proposal_id)
@@ -205,5 +207,10 @@ class HeartbeatNode (practical.Node):
 def main():
     x = HeartbeatMessenger()
     y = HeartbeatNode(x, 1, 2)
+    x.send_heartbeat(1)
     z = HeartbeatNode(x, 2, 2)
+
+
+if __name__ == '__main__':
+    main()
 

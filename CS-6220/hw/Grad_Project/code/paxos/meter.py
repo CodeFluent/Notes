@@ -1,28 +1,10 @@
 import time
 
-from paxos import practical
+import practical
 
-from paxos.practical import ProposalID
-
-MAJORITY = 2
+from practical import ProposalID
 
 
-class MeterMessenger (practical.Messenger):
-
-    def send_prepare_nack(self, to_uid, proposal_id, promised_id):
-        """
-        NACK message from practical.py. Used to prepare a NACK message.
-        """
-
-    def send_prepare_ack(self, to_uid, proposal_id, promised_id):
-        """
-        ACK message from practical.py. Used to prepare an ACK message.
-        """
-
-    def on_resolution(self, proposal_id, value):
-        """
-        Resolution on privacy parameter.
-        """
 
 class SubStation (practical.Node):
     """
@@ -31,11 +13,102 @@ class SubStation (practical.Node):
     """
     active = True
 
-    def __init__(self, messenger, uid, quorum_size):
+    proposed_value = None
+    proposal_id = None
+    highest_accepted_id  = None
+    promises_received    = None
+    nacks_received       = None
+    current_prepare_msg  = None
+    current_accept_msg = None
 
-        super(SubStation, self).__init__(messenger, uid, quorum_size)
+    def __init__(self, network_uid, quorum_size):
+        self.network_uid         = network_uid
+        self.quorum_size         = quorum_size
+        self.proposal_id         = ProposalID(0, network_uid)
+        self.highest_proposal_id = ProposalID(0, network_uid)
 
-        self.
+    def propose_value(self, value):
+        '''
+        Sets the proposal value for this node iff this node is not already aware of
+        a previous proposal value. If the node additionally believes itself to be
+        the current leader, an Accept message will be returned
+        '''
+        if self.proposed_value is None:
+            self.proposed_value = value
+            
+            if self.leader:
+                self.current_accept_msg = Accept(self.network_uid, self.proposal_id, value)
+                return self.current_accept_msg
+
+
+    def prepare(self):
+        '''
+        Returns a new Prepare message with a proposal id higher than
+        that of any observed proposals. A side effect of this method is
+        to clear the leader flag if it is currently set.
+        '''
+
+        self.leader              = False
+        self.promises_received   = set()
+        self.nacks_received      = set()
+        self.proposal_id         = ProposalID(self.highest_proposal_id.number + 1, self.network_uid)
+        self.highest_proposal_id = self.proposal_id
+        self.current_prepare_msg = Prepare(self.network_uid, self.proposal_id)
+
+        return self.current_prepare_msg
+
+    def observe_proposal(self, proposal_id):
+        '''
+        Optional method used to update the proposal counter as proposals are
+        seen on the network.  When co-located with Acceptors and/or Learners,
+        this method may be used to avoid a message delay when attempting to
+        assume leadership (guaranteed NACK if the proposal number is too low).
+        This method is automatically called for all received Promise and Nack
+        messages.
+        '''
+        if proposal_id > self.highest_proposal_id:
+            self.highest_proposal_id = proposal_id
+
+            
+    def receive_nack(self, msg):
+        '''
+        Returns a new Prepare message if the number of Nacks received reaches
+        a quorum.
+        '''
+        self.observe_proposal( msg.promised_proposal_id )
+        
+        if msg.proposal_id == self.proposal_id and self.nacks_received is not None:
+            self.nacks_received.add( msg.from_uid )
+
+            if len(self.nacks_received) == self.quorum_size:
+                return self.prepare() # Lost leadership or failed to acquire it
+
+
+    def receive_promise(self, msg):
+        '''
+        Returns an Accept messages if a quorum of Promise messages is achieved
+        '''
+        self.observe_proposal( msg.proposal_id )
+
+        if not self.leader and msg.proposal_id == self.proposal_id and msg.from_uid not in self.promises_received:
+
+            self.promises_received.add( msg.from_uid )
+
+            if msg.last_accepted_id > self.highest_accepted_id:
+                self.highest_accepted_id = msg.last_accepted_id
+                if msg.last_accepted_value is not None:
+                    self.proposed_value = msg.last_accepted_value
+
+            if len(self.promises_received) == self.quorum_size:
+                self.leader = True
+
+                if self.proposed_value is not None:
+                    self.current_accept_msg = Accept(self.network_uid, self.proposal_id, self.proposed_value)
+        
+        return self.current_accept_msg
+
+
+
 
 
 class SmartMeter (practical.Node):
@@ -46,4 +119,50 @@ class SmartMeter (practical.Node):
 
     active = True
 
-    
+    def __init__(self, network_uid, promised_id=None, accepted_id=None, accepted_value=None):
+        '''
+        promised_id, accepted_id, and accepted_value should be provided if and only if this
+        instance is recovering from persistent state.
+        '''
+        self.network_uid    = network_uid
+        self.promised_id    = promised_id
+        self.accepted_id    = accepted_id
+        self.accepted_value = accepted_value
+
+    def receive_prepare(self, msg):
+        '''
+        Returns either a Promise or a Nack in response. The Acceptor's state must be persisted to disk
+        prior to transmitting the Promise message.
+        '''
+        if msg.proposal_id >= self.promised_id:
+            self.promised_id = msg.proposal_id
+            return Promise(self.network_uid, msg.from_uid, self.promised_id, self.accepted_id, self.accepted_value)
+        else:
+            return Nack(self.network_uid, msg.from_uid, msg.proposal_id, self.promised_id)
+
+                    
+    def receive_accept(self, msg):
+        '''
+        Returns either an Accepted or Nack message in response. The Acceptor's state must be persisted
+        to disk prior to transmitting the Accepted message.
+        '''
+        if msg.proposal_id >= self.promised_id:
+            self.promised_id     = msg.proposal_id
+            self.accepted_id     = msg.proposal_id
+            self.accepted_value  = msg.proposal_value
+            return Accepted(self.network_uid, msg.proposal_id, msg.proposal_value)
+        else:
+            return Nack(self.network_uid, msg.from_uid, msg.proposal_id, self.promised_id)
+
+
+
+def main():
+    PRIVACY = .2
+    a = SubStation(1, 2)
+    b = SmartMeter(3)
+    c = SmartMeter(2)
+    a.propose_value(.1)
+
+
+if __name__ == '__main__':
+    main()
