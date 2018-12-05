@@ -4,9 +4,9 @@ simple heartbeating mechanism.
 '''
 import time
 
-from paxos import practical
+import practical
 
-from paxos.practical import ProposalID
+from practical import ProposalID
 
 
 class HeartbeatMessenger (practical.Messenger):
@@ -202,4 +202,8 @@ class HeartbeatNode (practical.Node):
             self.observe_proposal( from_uid, promised_id )
 
 
-    
+def main():
+    x = HeartbeatMessenger()
+    y = HeartbeatNode(x, 1, 2)
+    z = HeartbeatNode(x, 2, 2)
+
