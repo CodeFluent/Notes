@@ -9,7 +9,7 @@ Made by Wasfi Momen.
 """
 
 """
-REQUIRMENTS
+REQUIREMENTS
     - ~~Capitalizes strings~~
     - ~~Max 10 strings~~
     - ~~Client ask for termination~~ **"Appropiate message" to terminate is Ctrl+C**
