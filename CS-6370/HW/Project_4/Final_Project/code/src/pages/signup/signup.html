@@ -1,0 +1,52 @@
+<!--
+  Generated template for the SignupPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>signup</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <form #signupForm="ngForm" novalidate>
+    <ion-list>
+      <ion-item>
+        <ion-label stacked color="primary">Username</ion-label>
+        <ion-input [(ngModel)]="signup.username" name="username" type="text" #username="ngModel" required>
+        </ion-input>
+      </ion-item>
+      <p ion-text [hidden]="username.valid || submitted == false" color="danger" padding-left>
+        Username is required
+      </p>
+
+      <ion-item>
+        <ion-label stacked color="primary">Password</ion-label>
+        <ion-input [(ngModel)]="signup.password" name="password" type="password" #password="ngModel" required>
+        </ion-input>
+      </ion-item>
+      <p ion-text [hidden]="password.valid || submitted == false" color="danger" padding-left>
+        Password is required
+      </p>
+
+      <ion-item>
+        <ion-label stacked color="primary">Role</ion-label>
+        <ion-input [(ngModel)]="signup.role" name="password" type="text" #role="ngModel" required>
+        </ion-input>
+      </ion-item>
+      <p ion-text [hidden]="role.valid || submitted == false" color="danger" padding-left>
+        Role is required
+      </p>
+    </ion-list>
+
+    <div padding>
+      <button ion-button (click)="onSignUp(signupForm)" type="submit" block>Create</button>
+    </div>
+  </form>
+
+</ion-content>

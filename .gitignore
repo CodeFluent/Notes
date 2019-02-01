@@ -66,3 +66,18 @@ $RECYCLE.BIN/
 
 
 # End of https://www.gitignore.io/api/linux,macos,windows
+# Microsoft Office Temp Files
+
+*.tmp
+
+# Word temporary
+~$*.doc*
+
+# Excel temporary
+~$*.xls*
+
+# Excel Backup File
+*.xlk
+
+# PowerPoint temporary
+~$*.ppt*

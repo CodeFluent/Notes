@@ -1,0 +1,13 @@
+page-home {}
+
+.ios,
+.md {
+  page-home {
+    map-drawer {
+      background-color: #34495e !important;
+    }
+    map-drawer .content {
+      padding: 20px;
+    }
+  }
+}

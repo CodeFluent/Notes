@@ -1,0 +1,10 @@
+page-feed {
+  .item-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    ion-card-content {
+      flex: 1 1 auto;
+    }
+  }
+}
