@@ -1,0 +1,47 @@
+here's the questions and short answers that I asked Cao (Paraphrasing a
+lot):
+
+
+1. *Are we to find a problem or improve the solution of the paper?*
+     ```For the project, your goal should be convincing the class of the
+problem presented
+     in the paper and your interpretation of the problem.```
+2. *Are queuing theory and network scheduling the same thing?*
+    ```Not exactly, they are not interchangeable terms but they do have
+some influence
+    over one another. Queuing is what we learned in class where we look
+at the length
+    of packets to determine scale. Network scheduling is considering
+action, how long
+    that action will take.```
+3. *Would improving the DAG schedule be good to implement?*
+    ```Yea, it'd be a good idea to look for improvement in a small
+section of the problem
+    or try to look at specific situation to improve. For example, the
+paper talks about
+    a general scenario that might fail in specific cases. Fixing the
+algo in a specific case
+    to the best small space is a good topic for a paper.```
+4. *How to model the problem in a VM or other sort of simulation?*
+    ```Try not to do scale since don't have resource, but you do have to
+just convince
+    that within a small space of the problem that you improved and show
+results
+    that it functions for larger scales through some metric.```
+5. *LP problem? There are lots of papers with LP?*
+     ```Lots of the paper has LP. Not expecting you to know the theory,
+but you can focus
+     on small section of LP. There are many variables you just need to
+focus on one and
+     provide implementation.```
+6. *Any suggestion for simulation software? Like GN3 in the HW, TA
+suggested NS2?*
+    ```Not familiar with many software and no knowledge of what'd work
+best. Just focus on
+    specific variables to simulate.```
+7. *Visualization for the problem?*
+    ```It is up to you to show how best to show the concepts of the
+paper. You can use
+    equations, but make sure the class understands.```
+
+
