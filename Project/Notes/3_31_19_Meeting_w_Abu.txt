@@ -1,0 +1,8 @@
+- Johnson control engineering and Siemens
+- Replacing w/cheap labor
+- Data protection with a  trust control structure is a key push
+   - Johnson control give a web portal in a JAR file to create a trust relation between the two parties
+   - Analytics are published between the plant to the server in a DISTRIBUTED system
+   - But still this data can be intercepted and used later to attack
+      - e.g. a bad programmer with low-level language access not knowing engineering principles
+        will create a bad program that can lead to dangerous race conditions 
