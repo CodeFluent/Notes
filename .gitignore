@@ -45,6 +45,7 @@ nosetests.xml
 # Microsoft Office Temp Files
 
 *.tmp
+/.vs
 
 # Word temporary
 ~$*.doc*
