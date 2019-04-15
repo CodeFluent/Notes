@@ -20,6 +20,27 @@ using namespace std;
 using namespace cv;
 
 
+const int SCALE_FACTOR = 2;
+
+/* 
+	Do a nearest neighbor interpolation. 
+
+	
+
+	- Get the size of the new image with the scaling factor.
+	- calculate the scaling ratio for all pixels
+	- loop over all pixels, round pixel postion/scaling factor to get new position
+
+*/
+void interpolate(int row, int col)
+{
+	Mat output_img;
+	output_img = Mat::zeros(row * SCALE_FACTOR, col * SCALE_FACTOR, CV_16F); 
+
+	//output_img = Mat::zeros()
+
+}
+
 int main()
 {
 
@@ -36,12 +57,15 @@ int main()
 	int rows = img.rows;
 	int cols = img.cols;
 
-	cv::Size s = img.size();		// gets image size
-	rows = s.height;				// gets image height
-	cols = s.width;					// gets image width
+	int type = img.type;
+
 
 	printf("%d \n", rows);
 	printf("%d \n", cols);
+	printf("%d \n", type);
+
+
+	interpolate(rows, cols);
 
 	// write out the image to the current directory
 	imwrite("output.jpg", img);
@@ -52,6 +76,7 @@ int main()
 
 	imshow(fileName, img); // original 
 	imshow("processed image (Press any key to exit)", img);  // processed
+
 
 	waitKey(0);
 
