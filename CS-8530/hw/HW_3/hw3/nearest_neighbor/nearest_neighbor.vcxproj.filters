@@ -9,5 +9,6 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="kodim02.png" />
+    <Image Include="kodim02.jpg" />
   </ItemGroup>
 </Project>

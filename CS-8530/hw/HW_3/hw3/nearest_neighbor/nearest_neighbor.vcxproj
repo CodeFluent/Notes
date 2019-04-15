@@ -103,6 +103,7 @@
     <ClCompile Include="nn.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="kodim02.jpg" />
     <Image Include="kodim02.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

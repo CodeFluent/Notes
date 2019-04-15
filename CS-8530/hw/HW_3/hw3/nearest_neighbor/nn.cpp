@@ -14,16 +14,21 @@
 
 
 
+
 using namespace std;
 using namespace cv;
-int main(int argc, char **argv)
+int main()
 {
-	// get the path of the image via the args.
-	// note that the image must be in the same directory.
-	char* fileName =  argv[1];	
 
+	char* fileName = "kodim02.jpg";
 
-	Mat img = imread(fileName, 1);		// uses opencv to parse in image
+	Mat img = imread(fileName, 1);		// uses opencv to parse in image. note the 1 flag means 3-channel BGR data. (actually BGR not RGB)
+
+	if (!img.data) // check for null image data
+	{
+		printf("No image data \n");
+		return -1; // exit with error
+	}
 
 	int rows = img.rows;
 	int cols = img.cols;
@@ -35,6 +40,17 @@ int main(int argc, char **argv)
 	printf("%d \n", rows);
 	printf("%d \n", cols);
 
+	// write out the image
+	imwrite("output.jpg", img);
+	
+	// GUI stuff
+	namedWindow(fileName);
+	namedWindow("image");
+
+	imshow(fileName, img);
+	imshow("image", img);
+
+	waitKey(0);
 
 
 
