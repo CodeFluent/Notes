@@ -18,10 +18,12 @@
 
 using namespace std;
 using namespace cv;
+
+
 int main()
 {
 
-	char* fileName = "kodim02.jpg";
+	const char* fileName = "kodim02.jpg";
 
 	Mat img = imread(fileName, 1);		// uses opencv to parse in image. note the 1 flag means 3-channel BGR data. (actually BGR not RGB)
 
@@ -46,10 +48,10 @@ int main()
 	
 	// GUI stuff
 	namedWindow(fileName);
-	namedWindow("processed image");
+	namedWindow("processed image (Press any key to exit)");
 
 	imshow(fileName, img); // original 
-	imshow("processed image", img);  // processed
+	imshow("processed image (Press any key to exit)", img);  // processed
 
 	waitKey(0);
 
