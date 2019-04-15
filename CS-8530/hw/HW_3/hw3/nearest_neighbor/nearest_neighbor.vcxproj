@@ -98,6 +98,7 @@
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <CudaCompile Include="hello_world.cu" />
     <CudaCompile Include="nn_kernel.cu" />
     <ClCompile Include="nn.cpp" />
   </ItemGroup>
