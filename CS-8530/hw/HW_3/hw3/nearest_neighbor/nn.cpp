@@ -16,15 +16,14 @@
 
 using namespace std;
 using namespace cv;
-int main()
+int main(int argc, char **argv)
 {
-	// input operation
-	string fileName;
+	// get the path of the image via the args.
+	// note that the image must be in the same directory.
+	char* fileName =  argv[1];	
 
-	cout << "Enter image file name, ex) img.jpg: " << endl;	// asks user to input filename
-	cin >> fileName;				// inputs user input into fileName
 
-	Mat img = imread(fileName);		// uses opencv to parse in image
+	Mat img = imread(fileName, 1);		// uses opencv to parse in image
 
 	int rows = img.rows;
 	int cols = img.cols;
