@@ -7,8 +7,9 @@
 //}
 
 
-#include<opencv2/opencv.hpp>
-#include<iostream>
+#include <opencv2/core/mat.hpp>
+#include <opencv2/highgui.hpp>
+#include <iostream>
 #include <fstream>
 #include <string>
 
@@ -40,15 +41,15 @@ int main()
 	printf("%d \n", rows);
 	printf("%d \n", cols);
 
-	// write out the image
+	// write out the image to the current directory
 	imwrite("output.jpg", img);
 	
 	// GUI stuff
 	namedWindow(fileName);
-	namedWindow("image");
+	namedWindow("processed image");
 
-	imshow(fileName, img);
-	imshow("image", img);
+	imshow(fileName, img); // original 
+	imshow("processed image", img);  // processed
 
 	waitKey(0);
 
