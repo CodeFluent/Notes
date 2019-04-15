@@ -102,6 +102,9 @@
     <CudaCompile Include="nn_kernel.cu" />
     <ClCompile Include="nn.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="kodim02.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="$(CUDAPropsPath)\CUDA 10.1.targets" />
