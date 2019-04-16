@@ -31,39 +31,55 @@ const char* FILENAME = "kodim02.jpg";
 	- loop over all pixels, round pixel postion/scaling factor to get new position
 
 */
-void interpolate(int row, int col, string type)
+void interpolate(Mat img)
 {	
+	// Get the size and type of the input image
+	int row = img.rows;
+	int col = img.cols * img.channels();
+	int type = img.type();
 
-	// Get the size of the new image
+	// Get the size of the output image
 	int nrows = row * SCALE_FACTOR; 
 	int ncol = col * SCALE_FACTOR;
 
 	// Allocate new image of kn x km size.
 	Mat output_img;
-	int image_type = atoi(type.c_str());
-	output_img = Mat::zeros(nrows, ncol, image_type); 
+	output_img = Mat::zeros(nrows, ncol, type); 
+
 
 	// Get the scaling factors for each pixel. 
-	// It will be the new image width/height divided by the old one.
+	// It will be the output image width/height divided by the old one.
 	float c_X = nrows / row;
 	float c_Y = ncol / col;
 
-	// Get the nearest neighboring pixel to assign to the new image.
-	int i, j; 
+	// Get the nearest neighboring pixel to assign to the output image.
+	int i, j; // output image indicies
+	float x, y; // input image indicies (float for approx position)
 	for (i = 0; i < nrows; ++i)
 	{
 		for (j = 0; j < ncol; ++j)
 		{
-			x = c_X *  
+			// Get the pixel positions.
+			// current pixel / scaling = new pixel to sample
+			x = i / c_X; 
+			y = j / c_Y;
+
+			// x, y are floats, so we round to pick nearest neighbor.
+			x = round(x);
+			y = round(y);
+
+
+			// Note that uchar is only used of CV_8U; check TODO in type2str()
+			output_img.at<cv::Vec3b>(i, j) = img.at<cv::Vec3b>(x, y);
+			
 		}
 	}
-	
-	
-
+	imwrite("output.jpg", output_img);
 
 }
+
 // From StackOverflow, getting image type to make sure correct data type
-// TODO: based on data type, return an array or struct with all required flags.
+// TODO: return struct with [string type, data type to scan with]
 string type2str(int type) {
 	string r;
 
@@ -83,7 +99,6 @@ string type2str(int type) {
 
 	r += "C";
 	r += (chans + '0');
-
 	return r;
 }
 
@@ -98,21 +113,19 @@ int main()
 	}
 
 	int rows = img.rows; // get the width of the image
-	int cols = img.cols; // get the height of the image
+	int cols = img.cols * img.channels(); // get the height of the image, BGR has 3 subcolumn channels
+	int type = img.type(); // get the type of image
 
-	int type = img.type(); // get the type of image.
 	string image_type = type2str(type);
 
 	printf("\nWidth %d ", rows);
 	printf("\nHeight %d ", cols);
-	printf("\nMatrix Type: %s ", image_type);
-
-
-
-	interpolate(rows, cols, image_type);
+	printf("\nMatrix Type: %s ", image_type.c_str());
+	   
+	interpolate(img);
 
 	// write out the image to the current directory
-	imwrite("output.jpg", img);
+	//imwrite("output.jpg", img);
 	
 	// GUI stuff
 	namedWindow(FILENAME);
