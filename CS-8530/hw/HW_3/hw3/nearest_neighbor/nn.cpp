@@ -1,12 +1,3 @@
-//#include <iostream>
-//using namespace std;
-//int main()
-//{
-//	cout << "Hello World";
-//	return 0;
-//}
-
-
 #include <opencv2/core/mat.hpp>
 #include <opencv2/highgui.hpp>
 #include <iostream>
@@ -69,8 +60,8 @@ void interpolate(Mat img)
 			y = round(y);
 
 
-			// Note that uchar is only used of CV_8U; check TODO in type2str()
-			output_img.at<cv::Vec3b>(i, j) = img.at<cv::Vec3b>(x, y);
+			// PROBLEM HERE. Pointer illegel access.
+			//output_img.at<cv::Vec3b>(i, j) = img.at<cv::Vec3b>(x, y);
 			
 		}
 	}
