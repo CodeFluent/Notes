@@ -14,28 +14,28 @@ using namespace cv;
 const int SCALE_FACTOR = 2;
 const char* FILENAME = "kodim02.jpg";
 
-/* 
-	Do a nearest neighbor interpolation. 
-	
+/*
+	Do a nearest neighbor interpolation.
+
 	- Get the size of the new image with the scaling factor.
 	- calculate the scaling ratio for all pixels
 	- loop over all pixels, round pixel postion/scaling factor to get new position
 
 */
 void interpolate(Mat img)
-{	
+{
 	// Get the size and type of the input image
 	int row = img.rows;
-	int col = img.cols * img.channels();
+	int col = img.cols;
 	int type = img.type();
 
 	// Get the size of the output image
-	int nrows = row * SCALE_FACTOR; 
+	int nrows = row * SCALE_FACTOR;
 	int ncol = col * SCALE_FACTOR;
 
 	// Allocate new image of kn x km size.
 	Mat output_img;
-	output_img = Mat::zeros(nrows, ncol, type); 
+	output_img = Mat::zeros(nrows, ncol, type);
 
 
 	// Get the scaling factors for each pixel. 
@@ -52,7 +52,7 @@ void interpolate(Mat img)
 		{
 			// Get the pixel positions.
 			// current pixel / scaling = new pixel to sample
-			x = i / c_X; 
+			x = i / c_X;
 			y = j / c_Y;
 
 			// x, y are floats, so we round to pick nearest neighbor.
@@ -62,7 +62,9 @@ void interpolate(Mat img)
 
 			// PROBLEM HERE. Pointer illegel access.
 			//output_img.at<cv::Vec3b>(i, j) = img.at<cv::Vec3b>(x, y);
+			Vec3b data = img.at<Vec3b>(y, x);
 			
+
 		}
 	}
 	imwrite("output.jpg", output_img);
@@ -104,7 +106,7 @@ int main()
 	}
 
 	int rows = img.rows; // get the width of the image
-	int cols = img.cols * img.channels(); // get the height of the image, BGR has 3 subcolumn channels
+	int cols = img.cols; // get the height of the image, BGR has 3 subcolumn channels
 	int type = img.type(); // get the type of image
 
 	string image_type = type2str(type);
@@ -112,12 +114,12 @@ int main()
 	printf("\nWidth %d ", rows);
 	printf("\nHeight %d ", cols);
 	printf("\nMatrix Type: %s ", image_type.c_str());
-	   
+
 	interpolate(img);
 
 	// write out the image to the current directory
 	//imwrite("output.jpg", img);
-	
+
 	// GUI stuff
 	namedWindow(FILENAME);
 	namedWindow("processed image (Press any key to exit)");
