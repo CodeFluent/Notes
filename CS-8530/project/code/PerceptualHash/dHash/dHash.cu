@@ -26,14 +26,26 @@
 __global__ void
 colorToGreyscale(unsigned char* rgb_image, unsigned char* grey_image, int height, int width ) {
 
-	long pointIndex = threadIdx.x + blockDim.x*blockIdx.x;
+	int col = threadIdx.x + blockIdx.x * blockDim.x;
+	int row = threadIdx.y + threadIdx.y * blockDim.y;
 
-	if (pointIndex < height * width) {
-		unsigned char imagePoint = rgb_image[pointIndex];
-		printf("%f", .21f * (imagePoint)+.71f * (imagePoint + 2) + .07f * (imagePoint + 3));
-		grey_image[pointIndex] = .21f * (imagePoint)+.71f * (imagePoint + 2) + .07f * (imagePoint + 3);
+	// data won't go outside the bounds of image
+	if (col < width && row < height) {
+
+		// get the pixel coordinate of the destination image 
+		int pixel_location = row * width + col;
+
+		// get the location of the starting pixel of the source image
+		int rgbChannel = pixel_location * CHANNELS;
+
+		// get each channel's color to use in the greyscale function
+		unsigned char r = rgb_image[rgbChannel];
+		unsigned char g = rgb_image[rgbChannel + 2];
+		unsigned char b = rgb_image[rgbChannel + 3];
+
+		// apply the greyscale function and store in the destination pointer
+		grey_image[pixel_location] = .21f * r + .71f * g + .07f * b;
 	}
-
 }
 
 
