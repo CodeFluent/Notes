@@ -59,14 +59,31 @@ void freeImages(uint8_t *image) {
 */
 int main() {
 
-	//intialize rgb image
 	int width, height, bpp = 0; // last one is bits per pixel
-	unsigned char* rgb_image = stbi_load("kodim02.png", &width, &height, &bpp, CHANNELS);
+	cudaError_t cudaStatus;
 
-	//intialize grey image
-	unsigned char* grey_image;
-	grey_image = (unsigned char *) malloc(width * height * 1);
+	// Allocate host images
+	unsigned char* h_rgb_image = stbi_load("kodim02.png", &width, &height, &bpp, CHANNELS);
+	unsigned char* h_grey_image = (unsigned char *)malloc(width * height * 1);
+	
+	// Allocate device images
+	unsigned char* d_rgb_image;
+	unsigned char* d_grey_image;
+	int rgb_size = sizeof(h_rgb_image);
+	int grey_size = sizeof(h_grey_image);
+	cudaMalloc((void**)&d_rgb_image, rgb_size);
+	cudaMalloc((void**)&d_grey_image, grey_size);
 
+
+	// Copy values from host to device
+	cudaMemcpy(d_rgb_image, &h_rgb_image, rgb_size, cudaMemcpyHostToDevice);
+
+	// Check to make sure everything went fine
+	cudaStatus = cudaGetLastError();
+	if (cudaStatus != cudaSuccess) {
+		fprintf(stderr, "malloc failed!");
+		return 1;
+	}
 
 	// intial 16x16 block size for the first two kernels.
 	dim3 gridSize(ceil(width / 16.0), ceil(height / 16.0), 1);
@@ -76,14 +93,6 @@ int main() {
 	colorToGreyscale << <gridSize, blockSize >> > (d_rgb_image, d_grey_image, height, width);
 
 
-	// Check for any errors launching the kernel
-	cudaStatus = cudaGetLastError();
-	if (cudaStatus != cudaSuccess) {
-		fprintf(stderr, "dHash launch failed: %s\n", cudaGetErrorString(cudaStatus));
-		// goto Error;
-	}
-
-	cudaError_t cudaStatus = dHash();
 	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "dHash failed!");
 		return 1;
