@@ -28,10 +28,8 @@ colorToGreyscale(unsigned char* rgb_image, unsigned char* grey_image, int height
 
 	int col = threadIdx.x + blockIdx.x * blockDim.x;
 	int row = threadIdx.y + threadIdx.y * blockDim.y;
-
 	// data won't go outside the bounds of image
 	if (col < width && row < height) {
-		
 		// get the pixel coordinate of the destination image 
 		int pixel_location = row * width + col;
 
@@ -53,6 +51,7 @@ colorToGreyscale(unsigned char* rgb_image, unsigned char* grey_image, int height
 void freeImages(uint8_t *image) {
 	stbi_image_free(image);
 }
+
 
 /*
 	Runs the entire file. Both intializes and frees resources.
@@ -77,6 +76,7 @@ int main() {
 
 	// Copy values from host to device
 	cudaMemcpy(d_rgb_image, &h_rgb_image, rgb_size, cudaMemcpyHostToDevice);
+	cudaMemcpy(d_grey_image, &d_grey_image, grey_size, cudaMemcpyHostToDevice);
 
 	// Check to make sure everything went fine
 	cudaStatus = cudaGetLastError();
@@ -92,13 +92,15 @@ int main() {
 	// launch kernel
 	colorToGreyscale << <gridSize, blockSize >> > (d_rgb_image, d_grey_image, height, width);
 
+	// copy device grey image back to host
+	cudaMemcpy(&d_grey_image, h_grey_image, grey_size, cudaMemcpyDeviceToHost);
 
 	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "dHash failed!");
 		return 1;
 	}
 
-	stbi_write_png("image.png", width, height, 1, grey_image, width*1);
+	stbi_write_png("image.png", width, height, 1, h_grey_image, width*1);
 
 	// According to template, Visual Profiler needs this to help profile.
 	cudaStatus = cudaDeviceReset();
@@ -107,8 +109,11 @@ int main() {
 		return 1;
 	}
 
-	//free images
-	freeImages(rgb_image);
+	//free images and arrays
+	freeImages(h_rgb_image);
+	freeImages(h_grey_image);
+
+
 	
 	return 0;
 }

@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dHash", "dHash\dHash.vcxproj", "{481132D2-F4AE-4143-9C99-54A21E818392}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BBMhash", "BBMhash\BBMhash.vcxproj", "{8B4754D0-9B7E-470E-AA94-68104C4D7E55}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -17,10 +15,6 @@ Global
 		{481132D2-F4AE-4143-9C99-54A21E818392}.Debug|x64.Build.0 = Debug|x64
 		{481132D2-F4AE-4143-9C99-54A21E818392}.Release|x64.ActiveCfg = Release|x64
 		{481132D2-F4AE-4143-9C99-54A21E818392}.Release|x64.Build.0 = Release|x64
-		{8B4754D0-9B7E-470E-AA94-68104C4D7E55}.Debug|x64.ActiveCfg = Debug|x64
-		{8B4754D0-9B7E-470E-AA94-68104C4D7E55}.Debug|x64.Build.0 = Debug|x64
-		{8B4754D0-9B7E-470E-AA94-68104C4D7E55}.Release|x64.ActiveCfg = Release|x64
-		{8B4754D0-9B7E-470E-AA94-68104C4D7E55}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
