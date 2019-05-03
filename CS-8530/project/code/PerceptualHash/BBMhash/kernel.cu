@@ -112,6 +112,8 @@ cudaError_t addWithCuda(int *c, const int *a, const int *b, unsigned int size)
         goto Error;
     }
 
+	printf("host: %d", c);
+
 Error:
     cudaFree(dev_c);
     cudaFree(dev_a);
