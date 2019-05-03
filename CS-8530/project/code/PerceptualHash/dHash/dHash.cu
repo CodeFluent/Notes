@@ -13,94 +13,42 @@
 #define CHANNELS 3 
 
 
-
-cudaError_t dHash(int height, int width, uint8_t *d_source, unsigned int *d_dest);
-
-unsigned int *dImage = NULL;   //storing final result
-
-
 /*
 	Converts image to greyscale. Same version as in the slides.
 	
 	Parameters:
-	d_source - pointer to source image in host memory
-	d_dest - pointer to destination image in device memory
-	width - width of the image
+	rgb_image - pointer to source image in host memory
+	grey_image - pointer to destination image in device memory
 	height - height of the image 
+	width - width of the image
 
 */
 __global__ void
-colorToGreyscale(int height, int width, uint8_t *d_source, unsigned int *d_dest) {
+colorToGreyscale(unsigned char* rgb_image, unsigned char* grey_image, int height, int width ) {
 
 	int col = threadIdx.x + blockIdx.x * blockDim.x;
 	int row = threadIdx.y + threadIdx.y * blockDim.y;
-
 
 	// data won't go outside the bounds of image
 	if (col < width && row < height) {
 		
 		// get the pixel coordinate of the destination image 
-		int grey_pixel_location = row * width + col;
-		
+		int pixel_location = row * width + col;
+
 		// get the location of the starting pixel of the source image
-		int rgbChannel = grey_pixel_location * CHANNELS;
+		int rgbChannel = pixel_location * CHANNELS;
 		
 		// get each channel's color to use in the greyscale function
-		unsigned char r = d_source[rgbChannel];
-		unsigned char g = d_source[rgbChannel + 2];
-		unsigned char b = d_source[rgbChannel + 3];
+		unsigned char r = rgb_image[rgbChannel];
+		unsigned char g = rgb_image[rgbChannel + 2];
+		unsigned char b = rgb_image[rgbChannel + 3];
 
 		// apply the greyscale function and store in the destination pointer
-		d_dest[grey_pixel_location] = .21f * r + .71f * g + .07f * b; 
+		grey_image[pixel_location] = .21f * r + .71f * g + .07f * b; 
 	}
 
 }
 
-//__global__ void
-//resize() {
-//
-//}
-//
-//__global__ void
-//difference() {
-//
-//}
-
-
-
-/*
-	Performs the hash operation on image
-
-	Launches the colorToGreyscale, resize, and difference kernels.
-	Also manages mallocs and error handling for each step.
-
-
-*/
-cudaError_t dHash(int height, int width, int bpp, uint8_t *d_source, unsigned int *d_dest) {
-
-
-
-	cudaError_t cudaStatus;
-
-
-	// intial 16x16 block size for the first two kernels.
-	dim3 gridSize(ceil(height / 16.0), ceil(width / 16.0), 1);
-	dim3 blockSize(16, 16, 1);
-
-
-
-	colorToGreyscale<<<gridSize, blockSize>>> (width, height, d_source, d_dest);
-
-
-	// Check for any errors launching the kernel
-	cudaStatus = cudaGetLastError();
-	if (cudaStatus != cudaSuccess) {
-		fprintf(stderr, "dHash launch failed: %s\n", cudaGetErrorString(cudaStatus));
-		// goto Error;
-	}
-
-	return cudaStatus;
-}
 
 void freeImages(uint8_t *image) {
 	stbi_image_free(image);
@@ -113,14 +61,29 @@ int main() {
 
 	//intialize rgb image
 	int width, height, bpp = 0; // last one is bits per pixel
-	uint8_t* rgb_image = stbi_load("kodim02.png", &width, &height, &bpp, CHANNELS);
+	unsigned char* rgb_image = stbi_load("kodim02.png", &width, &height, &bpp, CHANNELS);
 
-	//intialize 
-	uint8_t* grey_image;
-	grey_image = (uint8_t *) malloc(width * height * 1);
+	//intialize grey image
+	unsigned char* grey_image;
+	grey_image = (unsigned char *) malloc(width * height * 1);
 
 
-	cudaError_t cudaStatus = dHash(height, width, bpp, rgb_image, dImage);
+	// intial 16x16 block size for the first two kernels.
+	dim3 gridSize(ceil(width / 16.0), ceil(height / 16.0), 1);
+	dim3 blockSize(16, 16, 1);
+
+	// launch kernel
+	colorToGreyscale << <gridSize, blockSize >> > (d_rgb_image, d_grey_image, height, width);
+
+
+	// Check for any errors launching the kernel
+	cudaStatus = cudaGetLastError();
+	if (cudaStatus != cudaSuccess) {
+		fprintf(stderr, "dHash launch failed: %s\n", cudaGetErrorString(cudaStatus));
+		// goto Error;
+	}
+
+	cudaError_t cudaStatus = dHash();
 	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "dHash failed!");
 		return 1;
