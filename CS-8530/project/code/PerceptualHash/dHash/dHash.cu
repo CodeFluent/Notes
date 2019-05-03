@@ -3,12 +3,16 @@
 #include "device_launch_parameters.h"
 
 #include <stdint.h>
+#include <stdio.h>
+
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include <stb_image_write.h>
 
 #define CHANNELS 3 
 
-#include <stdio.h>
+
 
 cudaError_t dHash(int height, int width, uint8_t *d_source, unsigned int *d_dest);
 
@@ -68,6 +72,7 @@ colorToGreyscale(int height, int width, uint8_t *d_source, unsigned int *d_dest)
 	Performs the hash operation on image
 
 	Launches the colorToGreyscale, resize, and difference kernels.
+	Also manages mallocs and error handling for each step.
 
 
 */
@@ -97,21 +102,43 @@ cudaError_t dHash(int height, int width, int bpp, uint8_t *d_source, unsigned in
 	return cudaStatus;
 }
 
+void freeImages(uint8_t *image) {
+	stbi_image_free(image);
+}
 
+/*
+	Runs the entire file. Both intializes and frees resources.
+*/
 int main() {
 
-	int width, height, bpp; // last one is bits per pixel
-	uint8_t* rgb_image = stbi_load("kodim02.png", &width, &height, &bpp, 3);
+	//intialize rgb image
+	int width, height, bpp = 0; // last one is bits per pixel
+	uint8_t* rgb_image = stbi_load("kodim02.png", &width, &height, &bpp, CHANNELS);
+
+	//intialize 
+	uint8_t* grey_image;
+	grey_image = (uint8_t *) malloc(width * height * 1);
+
 
 	cudaError_t cudaStatus = dHash(height, width, bpp, rgb_image, dImage);
 	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "dHash failed!");
 		return 1;
 	}
+
+	stbi_write_png("image.png", width, height, 1, grey_image, width*1);
+
+	// According to template, Visual Profiler needs this to help profile.
+	cudaStatus = cudaDeviceReset();
+	if (cudaStatus != cudaSuccess) {
+		fprintf(stderr, "cudaDeviceReset failed!");
+		return 1;
+	}
+
+	//free images
+	freeImages(rgb_image);
 	
+	return 0;
 }
 
 
-void freeImages(uint8_t *image) {
-	stbi_image_free(image);
-}
