@@ -1,0 +1,69 @@
+architecture1.bmp
+	0330b8e7cc00b00e
+	0.0136831570
+architecture_2.bmp
+	ffff3cffe3d90000
+	0.0011802300
+bamarket115.bmp
+	813c24cbdb7e177c
+	0.0011930610
+butterflywallpaper.bmp
+	7801807ccf03fcfc
+	0.0018029050
+Chang_PermanentMidnightintheChairofJasperJohns_large.bmp
+	afd90008c8100000
+	0.0015074480
+damienhirst.bmp
+	be01003f00802333
+	0.0011305050
+damien_hirst.bmp
+	7eef81663c009800
+	0.0011167110
+damien_hirst_does_fashion_week.bmp
+	010200000824bd37
+	0.0008931130
+damien_hirst_virgin_mother.bmp
+	60f91bc071072d38
+	0.0032862930
+dhirst_a3b9ddea.bmp
+	813c2452a5dbc37e
+	0.0009893530
+diamondskull.bmp
+	7ee781e63c249900
+	0.0019636280
+doodle.bmp
+	5281225c4a7e3c81
+	0.0016351260
+england.bmp
+	ff18f36f899c3601
+	0.0014099240
+englandpath.bmp
+	fc8080e0590d13b0
+	0.0014400790
+Hhirst_BGE.bmp
+	00783c1a8405cbef
+	0.0032022430
+jasper_johns.bmp
+	5e7c05fafc00003c
+	0.0019681190
+johns_portrait_380x311.bmp
+	1e332cbcd1c1c697
+	0.0012633170
+latrobe.bmp
+	0000bd7e7f837eff
+	0.0010936130
+Scotland_castle_wedding.bmp
+	f60000041b78eee5
+	0.0008959990
+targetjasperjohns.bmp
+	bf665afd22b59943
+	0.0012171210
+Tower-Bridge-at-night--London--England_web.bmp
+	fff7b9084000040f
+	0.0017563890
+uk-golf-scotland.bmp
+	0380b8061f7fffb0
+	0.0011102950
+wallacestevens.bmp
+	9aacc4983647451e
+	0.0006595690
