@@ -51,7 +51,7 @@ colorToGreyscale(unsigned char* rgb_image, unsigned char* grey_image, int height
 }
 
 
-void freeImages(uint8_t *image) {
+void freeImages(unsigned char* image) {
 	stbi_image_free(image);
 }
 
@@ -59,15 +59,13 @@ void freeImages(uint8_t *image) {
 /*
 	Runs the entire file. Both intializes and frees resources.
 */
-int main() {
+void greyscale() {
 
 	int width, height, bpp = 0; // last one is bits per pixel
 	cudaError_t cudaStatus;
 
 	// Allocate host images
 	unsigned char* h_rgb_image = stbi_load("kodim02.png", &width, &height, &bpp, CHANNELS);
-	stbi_write_png("image.png", width, height, CHANNELS, h_rgb_image, width * CHANNELS);
-
 	unsigned char* h_grey_image = (unsigned char *)malloc(width * height * 1);
 	
 	// Allocate device images
@@ -97,15 +95,17 @@ int main() {
 	// launch kernel
 	colorToGreyscale << <gridSize, blockSize >> > (d_rgb_image, d_grey_image, height, width);
 
+	cudaDeviceSynchronize();
+
 	// copy device grey image back to host
 	cudaMemcpy(h_grey_image, d_grey_image, grey_size, cudaMemcpyDeviceToHost);
 
 	if (cudaStatus != cudaSuccess) {
-		fprintf(stderr, "dHash failed!");
+		fprintf(stderr, "greyscale failed!");
 		return 1;
 	}
 
-	//stbi_write_png("image.png", width, height, 3, h_grey_image, width*3);
+	stbi_write_png("image.png", width, height, 1, h_grey_image, width*1);
 
 	// According to template, Visual Profiler needs this to help profile.
 	cudaStatus = cudaDeviceReset();
