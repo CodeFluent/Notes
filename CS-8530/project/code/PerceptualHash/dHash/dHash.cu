@@ -88,7 +88,7 @@ int main() {
 	}
 
 	// intial 16x16 block size for the first two kernels.
-	dim3 gridSize(ceil(width / 16.0), ceil(height / 16.0), 1);
+	dim3 gridSize((width + 16 - 1) / 16, (height + 16 - 1) / 16);
 	dim3 blockSize(16, 16, 1);
 
 	// launch kernel
